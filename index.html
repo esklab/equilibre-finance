@@ -680,14 +680,23 @@
                         <option ng-repeat="cat in fc.allCategories" value="{{cat}}">{{cat}}</option>
                     </select>
 
+                    <!-- Input Fichier Import Caché -->
+                    <input type="file" id="importFileInput" accept=".csv, .json, text/csv, application/json" style="display:none" onchange="angular.element(this).scope().fc.handleFileImport(this)">
+
+                    <!-- Import CSV -->
+                    <button type="button" ng-click="fc.triggerImport()" title="Importer un fichier CSV ou JSON"
+                        class="geo-btn bg-white px-3 py-1.5 font-bold hover:bg-slate-50 flex items-center gap-1">
+                        <span>📥</span> Import CSV
+                    </button>
+
                     <!-- Export CSV -->
-                    <button ng-click="fc.exportCSV()" title="Exporter en CSV"
-                        class="geo-btn bg-white px-3 py-1.5 font-bold hover:bg-slate-50">
-                        Export CSV
+                    <button type="button" ng-click="fc.exportCSV()" title="Exporter en CSV"
+                        class="geo-btn bg-white px-3 py-1.5 font-bold hover:bg-slate-50 flex items-center gap-1">
+                        <span>📤</span> Export CSV
                     </button>
 
                     <!-- Bouton Nouveau -->
-                    <button ng-click="fc.openModal('expense')"
+                    <button type="button" ng-click="fc.openModal('expense')"
                         class="geo-btn bg-slate-900 text-white px-3 py-1.5 font-bold uppercase">
                         + Ajouter
                     </button>
@@ -2123,6 +2132,191 @@ create policy "User can manage their own transactions" on transactions for all u
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
+            };
+
+            // Importation CSV / JSON
+            vm.triggerImport = function () {
+                const input = document.getElementById('importFileInput');
+                if (input) input.click();
+            };
+
+            vm.handleFileImport = function (input) {
+                if (!input || !input.files || !input.files[0]) return;
+                const file = input.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $timeout(function () {
+                        try {
+                            const content = e.target.result;
+                            const isJson = file.name.endsWith('.json');
+                            let importedList = [];
+
+                            if (isJson) {
+                                const parsed = JSON.parse(content);
+                                importedList = Array.isArray(parsed) ? parsed : (parsed.transactions || []);
+                            } else {
+                                // Parsing CSV Intelligent
+                                const lines = content.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+                                if (lines.length === 0) {
+                                    alert('Le fichier est vide.');
+                                    return;
+                                }
+
+                                // Détection du délimiteur (; ou , ou tab)
+                                const firstLine = lines[0];
+                                const delimiter = (firstLine.includes(';') && (firstLine.split(';').length >= firstLine.split(',').length)) ? ';' : ',';
+
+                                function parseCsvLine(text) {
+                                    const result = [];
+                                    let cell = '';
+                                    let inQuotes = false;
+                                    for (let i = 0; i < text.length; i++) {
+                                        const c = text[i];
+                                        if (c === '"') {
+                                            if (inQuotes && text[i + 1] === '"') { cell += '"'; i++; }
+                                            else { inQuotes = !inQuotes; }
+                                        } else if (c === delimiter && !inQuotes) {
+                                            result.push(cell.trim());
+                                            cell = '';
+                                        } else {
+                                            cell += c;
+                                        }
+                                    }
+                                    result.push(cell.trim());
+                                    return result;
+                                }
+
+                                const headers = parseCsvLine(firstLine).map(h => h.toLowerCase().replace(/[^a-z0-9]/g, ''));
+                                
+                                let dateIdx = headers.findIndex(h => h.includes('date'));
+                                let typeIdx = headers.findIndex(h => h.includes('type'));
+                                let descIdx = headers.findIndex(h => h.includes('desc') || h.includes('motif') || h.includes('libelle'));
+                                let catIdx = headers.findIndex(h => h.includes('cat'));
+                                let amountIdx = headers.findIndex(h => h.includes('montant') || h.includes('amount') || h.includes('valeur'));
+
+                                // Fallback positions si headers non reconnus
+                                if (dateIdx === -1) dateIdx = 0;
+                                if (descIdx === -1) descIdx = (headers.length > 2) ? 2 : 1;
+                                if (catIdx === -1) catIdx = (headers.length > 3) ? 3 : descIdx;
+                                if (amountIdx === -1) amountIdx = headers.length - 1;
+
+                                const startRow = (headers.some(h => h.includes('date') || h.includes('montant') || h.includes('type'))) ? 1 : 0;
+
+                                for (let i = startRow; i < lines.length; i++) {
+                                    const cols = parseCsvLine(lines[i]);
+                                    if (cols.length < 2) continue;
+
+                                    let rawDate = cols[dateIdx] || new Date().toISOString().split('T')[0];
+                                    let rawType = (typeIdx !== -1 && cols[typeIdx]) ? cols[typeIdx].toLowerCase() : '';
+                                    let rawDesc = cols[descIdx] || 'Opération importée';
+                                    let rawCat = cols[catIdx] || 'Autre Dépense';
+                                    let rawAmountStr = (cols[amountIdx] || '0').replace(/\s+/g, '').replace(',', '.');
+                                    let rawAmount = parseFloat(rawAmountStr) || 0;
+
+                                    // Normalisation Date
+                                    let normDate = rawDate;
+                                    if (/^\d{2}\/\d{2}\/\d{4}$/.test(rawDate)) {
+                                        const [d, m, y] = rawDate.split('/');
+                                        normDate = `${y}-${m}-${d}`;
+                                    } else if (/^\d{2}-\d{2}-\d{4}$/.test(rawDate)) {
+                                        const [d, m, y] = rawDate.split('-');
+                                        normDate = `${y}-${m}-${d}`;
+                                    }
+
+                                    // Normalisation Type
+                                    let normType = 'expense';
+                                    if (rawType.includes('entree') || rawType.includes('gain') || rawType.includes('credit') || rawType.includes('income') || rawAmountStr.startsWith('+')) {
+                                        normType = 'income';
+                                    } else if (rawType.includes('sortie') || rawType.includes('debit') || rawType.includes('expense') || rawAmount < 0) {
+                                        normType = 'expense';
+                                    } else if (rawAmount > 0 && typeIdx === -1) {
+                                        normType = 'expense';
+                                    }
+
+                                    const rate = vm.currencies[vm.selectedCurrency].rate;
+                                    const amountEUR = Math.abs(rawAmount) / (cols[amountIdx].includes('EUR') ? 1.0 : rate);
+
+                                    if (amountEUR > 0) {
+                                        importedList.push({
+                                            type: normType,
+                                            amountEUR: amountEUR,
+                                            description: rawDesc,
+                                            category: rawCat,
+                                            date: normDate
+                                        });
+                                    }
+                                }
+                            }
+
+                            if (importedList.length === 0) {
+                                alert('Aucune opération valide trouvée dans le fichier.');
+                                return;
+                            }
+
+                            // Insertion des transactions et enregistrement des nouvelles catégories
+                            let newCatsAdded = 0;
+                            const supabaseBatch = [];
+
+                            importedList.forEach(item => {
+                                const newId = Date.now().toString() + '_' + Math.random().toString(36).substr(2, 5);
+                                const txItem = {
+                                    id: newId,
+                                    type: item.type || 'expense',
+                                    amountEUR: parseFloat(item.amountEUR) || 0,
+                                    description: item.description || 'Importé',
+                                    category: item.category || (item.type === 'income' ? 'Autre Entrée' : 'Autre Dépense'),
+                                    date: item.date || new Date().toISOString().split('T')[0]
+                                };
+
+                                vm.transactions.push(txItem);
+
+                                // Ajout automatique de catégorie si non existante
+                                const t = txItem.type;
+                                if (!vm.categories[t].includes(txItem.category)) {
+                                    if (!vm.customCategories[t]) vm.customCategories[t] = [];
+                                    vm.customCategories[t].push(txItem.category);
+                                    newCatsAdded++;
+                                }
+
+                                if (supabaseClient && vm.auth.currentUser && !vm.dbConfig.url.includes('demo-equilibre')) {
+                                    supabaseBatch.push({
+                                        id: newId,
+                                        user_id: vm.auth.currentUser.id,
+                                        type: txItem.type,
+                                        amount_eur: txItem.amountEUR,
+                                        description: txItem.description,
+                                        category: txItem.category,
+                                        date: txItem.date
+                                    });
+                                }
+                            });
+
+                            if (newCatsAdded > 0) {
+                                vm.saveCustomCategories();
+                                vm.refreshCategoryLists();
+                            }
+
+                            // Sauvegarde Supabase
+                            if (supabaseBatch.length > 0) {
+                                supabaseClient.from('transactions').insert(supabaseBatch).then(({ error }) => {
+                                    if (error) console.warn("Supabase batch import error:", error);
+                                });
+                            }
+
+                            vm.saveToStorage();
+                            vm.recalculate();
+                            input.value = ''; // Réinitialiser le sélecteur
+                            vm.showToast(`${importedList.length} opération(s) importée(s) avec succès !`, 'success');
+
+                        } catch (err) {
+                            console.error("Erreur lors de l'importation:", err);
+                            alert('Erreur lors de la lecture du fichier : ' + err.message);
+                        }
+                    });
+                };
+
+                reader.readAsText(file, 'UTF-8');
             };
 
             vm.onCurrencyChange = function () {
