@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="fr" ng-app="geoFinanceApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoFinance | Contrôle Financier AngularJS</title>
+
+    <!-- AngularJS CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        geo: {
+                            dark: '#090d16',
+                            surface: '#0f172a',
+                            panel: '#1e293b',
+                            border: '#334155',
+                            accent: '#6366f1',
+                            income: '#10b981',
+                            expense: '#f43f5e',
+                            warning: '#f59e0b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #090d16;
+            background-image:
+                radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.06) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.05) 0%, transparent 40%),
+                linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
+        }
+
+        .geo-box {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+        }
+
+        .geo-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 7px;
+            height: 7px;
+            border-top: 2px solid #6366f1;
+            border-left: 2px solid #6366f1;
+        }
+
+        .geo-box::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 7px;
+            height: 7px;
+            border-bottom: 2px solid #6366f1;
+            border-right: 2px solid #6366f1;
+        }
+
+        [ng-cloak] {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body ng-controller="FinanceController as fc" class="text-slate-100 font-sans min-h-screen flex flex-col antialiased"
+    ng-cloak>
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand -->
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-600/30 border border-indigo-400/30">
+                    <i data-lucide="shapes" class="w-6 h-6 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                        GEO<span class="text-indigo-400 font-extrabold">FINANCE</span>
+                        <span
+                            class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">AngularJS</span>
+                    </h1>
+                    <p class="text-xs font-mono text-slate-400">Contrôle Financier & Équilibre Géométrique</p>
+                </div>
+            </div>
+
+            <!-- Global Currency & Action -->
+            <div class="flex items-center gap-3">
+                <!-- Currency Selector (Two-Way Bound) -->
+                <div
+                    class="flex items-center bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 focus-within:border-indigo-500 transition-colors">
+                    <i data-lucide="coins" class="w-4 h-4 text-amber-400 mr-2"></i>
+                    <select ng-model="fc.selectedCurrency" ng-change="fc.onCurrencyChange()"
+                        class="bg-transparent text-sm font-bold text-white focus:outline-none cursor-pointer">
+                        <option ng-repeat="(code, data) in fc.currencies" value="{{code}}"
+                            class="bg-slate-900 text-white">
+                            {{data.name}} ({{data.symbol}})
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Add Button -->
+                <button ng-click="fc.openModal()"
+                    class="bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg shadow-indigo-600/30 transition-all active:scale-95">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                    <span class="hidden sm:inline">Nouvelle Opération</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full space-y-8">
+
+        <!-- TIMEFRAME FILTER BAR -->
+        <div
+            class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900/60 p-3 rounded-xl border border-slate-800">
+            <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
+                <button ng-click="fc.setPeriod('day')"
+                    ng-class="{'bg-indigo-600 text-white font-bold': fc.period === 'day', 'text-slate-400': fc.period !== 'day'}"
+                    class="px-4 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider transition-all">Aujourd'hui</button>
+                <button ng-click="fc.setPeriod('month')"
+                    ng-class="{'bg-indigo-600 text-white font-bold': fc.period === 'month', 'text-slate-400': fc.period !== 'month'}"
+                    class="px-4 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider transition-all">Ce
+                    Mois</button>
+                <button ng-click="fc.setPeriod('year')"
+                    ng-class="{'bg-indigo-600 text-white font-bold': fc.period === 'year', 'text-slate-400': fc.period !== 'year'}"
+                    class="px-4 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider transition-all">Cette
+                    Année</button>
+                <button ng-click="fc.setPeriod('all')"
+                    ng-class="{'bg-indigo-600 text-white font-bold': fc.period === 'all', 'text-slate-400': fc.period !== 'all'}"
+                    class="px-4 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider transition-all">Tout</button>
+            </div>
+
+            <!-- Currency Indicator & Exchange Rate -->
+            <div class="flex items-center gap-3 text-xs font-mono text-slate-400">
+                <span class="flex items-center gap-1.5">
+                    <i data-lucide="calendar" class="w-3.5 h-3.5 text-indigo-400"></i>
+                    <span>{{fc.getPeriodLabel()}}</span>
+                </span>
+                <span class="h-3 w-px bg-slate-700"></span>
+                <span class="flex items-center gap-1 text-emerald-400">
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                    <span>1 EUR = {{fc.currencies[fc.selectedCurrency].rate | number:2}}
+                        {{fc.currencies[fc.selectedCurrency].symbol}}</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- KPI SUMMARY CARDS (Geometric Balance Layout) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Solde Net Restant -->
+            <div class="geo-box p-6 rounded-xl">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-mono tracking-widest text-indigo-300 uppercase">Solde Net Restant</span>
+                    <div class="p-2 bg-indigo-500/10 rounded border border-indigo-500/20 text-indigo-400">
+                        <i data-lucide="scale" class="w-5 h-5"></i>
+                    </div>
+                </div>
+                <div class="text-3xl font-bold font-mono tracking-tight mb-2"
+                    ng-class="fc.stats.net >= 0 ? 'text-white' : 'text-rose-400'">
+                    {{fc.stats.net | geoFormat:fc.selectedCurrency:fc.currencies}}
+                </div>
+                <div class="flex items-center gap-2 text-xs font-medium text-slate-400">
+                    <span>Taux d'épargne :</span>
+                    <span class="font-bold font-mono text-emerald-400">{{fc.stats.savingsRate}}%</span>
+                </div>
+            </div>
+
+            <!-- Total Entrées -->
+            <div class="geo-box p-6 rounded-xl">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-mono tracking-widest text-emerald-300 uppercase">Total Rentrées (+
+                        Entrées)</span>
+                    <div class="p-2 bg-emerald-500/10 rounded border border-emerald-500/20 text-emerald-400">
+                        <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
+                    </div>
+                </div>
+                <div class="text-3xl font-bold font-mono tracking-tight text-emerald-400 mb-2">
+                    +{{fc.stats.income | geoFormat:fc.selectedCurrency:fc.currencies}}
+                </div>
+                <div class="text-xs font-medium text-slate-400">
+                    {{fc.stats.incomeCount}} rentrée(s) enregistrée(s)
+                </div>
+            </div>
+
+            <!-- Total Dépenses -->
+            <div class="geo-box p-6 rounded-xl">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-mono tracking-widest text-rose-300 uppercase">Total Dépenses (-
+                        Sorties)</span>
+                    <div class="p-2 bg-rose-500/10 rounded border border-rose-500/20 text-rose-400">
+                        <i data-lucide="arrow-down-left" class="w-5 h-5"></i>
+                    </div>
+                </div>
+                <div class="text-3xl font-bold font-mono tracking-tight text-rose-400 mb-2">
+                    -{{fc.stats.expense | geoFormat:fc.selectedCurrency:fc.currencies}}
+                </div>
+                <div class="text-xs font-medium text-slate-400">
+                    {{fc.stats.expenseCount}} sortie(s) enregistrée(s)
+                </div>
+            </div>
+        </div>
+
+        <!-- CHARTS SECTION -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="geo-box p-6 rounded-xl lg:col-span-2">
+                <div class="flex items-center justify-between mb-6 pb-3 border-b border-slate-800">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="bar-chart-3" class="w-5 h-5 text-indigo-400"></i>
+                        <h3 class="font-bold text-base text-white">Flux Entrées vs Dépenses</h3>
+                    </div>
+                    <span class="text-xs font-mono text-slate-400">{{fc.currencies[fc.selectedCurrency].symbol}}</span>
+                </div>
+                <div class="h-64 relative">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+
+            <div class="geo-box p-6 rounded-xl">
+                <div class="flex items-center justify-between mb-6 pb-3 border-b border-slate-800">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="pie-chart" class="w-5 h-5 text-indigo-400"></i>
+                        <h3 class="font-bold text-base text-white">Dépenses par Catégorie</h3>
+                    </div>
+                </div>
+                <div class="h-64 relative flex items-center justify-center">
+                    <canvas id="doughnutChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRANSACTIONS LIST TABLE -->
+        <div class="geo-box rounded-xl p-6">
+            <div
+                class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-800">
+                <div>
+                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i data-lucide="receipt-text" class="w-5 h-5 text-indigo-400"></i>
+                        Journal des Opérations
+                    </h2>
+                    <p class="text-xs text-slate-400">Suivi détaillé de vos rentrées et sorties</p>
+                </div>
+
+                <!-- Filters & Search Toolbar -->
+                <div class="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                    <div class="relative flex-1 sm:w-48">
+                        <input type="text" ng-model="fc.searchQuery" placeholder="Rechercher..."
+                            class="w-full bg-slate-900 border border-slate-700 rounded-lg pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+                        <i data-lucide="search" class="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-2.5"></i>
+                    </div>
+
+                    <select ng-model="fc.typeFilter"
+                        class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-indigo-500">
+                        <option value="all">Tous types</option>
+                        <option value="income">Entrées seulement</option>
+                        <option value="expense">Sorties seulement</option>
+                    </select>
+
+                    <button ng-click="fc.exportCSV()"
+                        class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors">
+                        <i data-lucide="download" class="w-3.5 h-3.5"></i> Export CSV
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr
+                            class="border-b border-slate-800 text-slate-400 font-mono text-[11px] uppercase tracking-wider">
+                            <th class="pb-3 px-3">Date</th>
+                            <th class="pb-3 px-3">Description / Motif</th>
+                            <th class="pb-3 px-3">Catégorie</th>
+                            <th class="pb-3 px-3">Type</th>
+                            <th class="pb-3 px-3 text-right">Montant ({{fc.currencies[fc.selectedCurrency].symbol}})
+                            </th>
+                            <th class="pb-3 px-3 text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/60 text-sm">
+                        <tr ng-repeat="tx in fc.getFilteredTransactions() | orderBy:'-date'"
+                            class="hover:bg-slate-800/40 transition-colors">
+                            <td class="py-3 px-3 font-mono text-xs text-slate-400 whitespace-nowrap">
+                                {{tx.date | date:'dd/MM/yyyy'}}
+                            </td>
+                            <td class="py-3 px-3 font-medium text-slate-200">
+                                {{tx.description}}
+                            </td>
+                            <td class="py-3 px-3">
+                                <span
+                                    class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-slate-800 text-slate-300 border border-slate-700">
+                                    {{tx.category}}
+                                </span>
+                            </td>
+                            <td class="py-3 px-3">
+                                <span class="inline-flex items-center gap-1 text-xs font-semibold"
+                                    ng-class="tx.type === 'income' ? 'text-emerald-400' : 'text-rose-400'">
+                                    {{tx.type === 'income' ? '+ Entrée' : '- Sortie'}}
+                                </span>
+                            </td>
+                            <td class="py-3 px-3 text-right font-mono font-bold"
+                                ng-class="tx.type === 'income' ? 'text-emerald-400' : 'text-rose-400'">
+                                {{tx.type === 'income' ? '+' : '-'}}{{tx.amountEUR |
+                                geoFormat:fc.selectedCurrency:fc.currencies}}
+                            </td>
+                            <td class="py-3 px-3 text-center">
+                                <button ng-click="fc.deleteTransaction(tx.id)"
+                                    class="p-1.5 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded transition-colors"
+                                    title="Supprimer">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State -->
+            <div ng-show="fc.getFilteredTransactions().length === 0" class="text-center py-12">
+                <i data-lucide="inbox" class="w-12 h-12 text-slate-600 mx-auto mb-3"></i>
+                <p class="text-slate-400 text-sm font-medium">Aucune opération trouvée pour cette période.</p>
+                <p class="text-slate-600 text-xs mt-1">Cliquez sur "+ Nouvelle Opération" pour enregistrer un flux.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- MODAL: ADD TRANSACTION -->
+    <div ng-show="fc.isModalOpen"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div
+            class="geo-box bg-slate-900 border border-slate-700 w-full max-w-lg rounded-2xl p-6 sm:p-8 shadow-2xl relative">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i data-lucide="plus-square" class="w-5 h-5 text-indigo-400"></i>
+                    Nouvelle Opération Financière
+                </h3>
+                <button ng-click="fc.closeModal()" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form ng-submit="fc.saveTransaction()" class="space-y-4">
+                <!-- Type Selection -->
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-2 uppercase">Type d'opération</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label
+                            ng-class="{'border-emerald-500 bg-emerald-950/30': fc.formData.type === 'income', 'border-slate-800 bg-slate-950': fc.formData.type !== 'income'}"
+                            class="flex items-center justify-center gap-2 p-3 border rounded-lg cursor-pointer transition-all">
+                            <input type="radio" ng-model="fc.formData.type" value="income" class="hidden">
+                            <span class="text-sm font-semibold text-emerald-400">+ Entrée d'argent</span>
+                        </label>
+                        <label
+                            ng-class="{'border-rose-500 bg-rose-950/30': fc.formData.type === 'expense', 'border-slate-800 bg-slate-950': fc.formData.type !== 'expense'}"
+                            class="flex items-center justify-center gap-2 p-3 border rounded-lg cursor-pointer transition-all">
+                            <input type="radio" ng-model="fc.formData.type" value="expense" class="hidden">
+                            <span class="text-sm font-semibold text-rose-400">- Dépense / Sortie</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Amount (Entered in Active Currency) -->
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1.5 uppercase">Montant en
+                        {{fc.currencies[fc.selectedCurrency].name}}
+                        ({{fc.currencies[fc.selectedCurrency].symbol}})</label>
+                    <div class="relative">
+                        <input type="number" step="any" min="0.01" ng-model="fc.formData.amount" required
+                            placeholder="0.00"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-lg pl-4 pr-16 py-2.5 font-mono text-lg font-bold text-white focus:outline-none focus:border-indigo-500">
+                        <span
+                            class="absolute right-4 top-3 text-xs font-mono font-bold text-slate-400">{{fc.currencies[fc.selectedCurrency].symbol}}</span>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1.5 uppercase">Motif / Pour quoi a servi
+                        l'argent ?</label>
+                    <input type="text" ng-model="fc.formData.description" required
+                        placeholder="Ex: Courses supermarché, Facture CIE/Sbee, Salaire, Vente..."
+                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500">
+                </div>
+
+                <!-- Category & Date -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-mono text-slate-400 mb-1.5 uppercase">Catégorie</label>
+                        <select ng-model="fc.formData.category" required
+                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                            <option ng-repeat="cat in fc.getCategories()" value="{{cat}}">{{cat}}</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-mono text-slate-400 mb-1.5 uppercase">Date</label>
+                        <input type="date" ng-model="fc.formData.date" required
+                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="pt-4 flex justify-end gap-3">
+                    <button type="button" ng-click="fc.closeModal()"
+                        class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-medium rounded-lg transition-colors">
+                        Annuler
+                    </button>
+                    <button type="submit"
+                        class="px-6 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold rounded-lg shadow-lg shadow-indigo-600/30 transition-all">
+                        Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ANGULARJS APP MODULE & CONTROLLER -->
+    <script>
+        const app = angular.module('geoFinanceApp', []);
+
+        // Custom Filter for Dynamic Currency Formatting
+        app.filter('geoFormat', function () {
+            return function (amountInEUR, selectedCurrency, currencies) {
+                if (amountInEUR === undefined || amountInEUR === null) return '0';
+                const curr = currencies[selectedCurrency] || currencies['EUR'];
+                const converted = amountInEUR * curr.rate;
+                const decimals = (selectedCurrency === 'XOF') ? 0 : 2;
+                return new Intl.NumberFormat('fr-FR', {
+                    minimumFractionDigits: decimals,
+                    maximumFractionDigits: decimals
+                }).format(converted) + ' ' + curr.symbol;
+            };
+        });
+
+        // Main AngularJS Controller
+        app.controller('FinanceController', ['$scope', '$timeout', function ($scope, $timeout) {
+            const vm = this;
+
+            // Supported Currencies & Live Exchange Rates (Base: 1 EUR)
+            vm.currencies = {
+                'XOF': { rate: 655.957, symbol: 'FCFA', name: 'Franc CFA' },
+                'EUR': { rate: 1.0, symbol: '€', name: 'Euro' },
+                'USD': { rate: 1.09, symbol: '$', name: 'Dollar US' },
+                'CAD': { rate: 1.48, symbol: 'C$', name: 'Dollar Canadien' },
+                'GBP': { rate: 0.85, symbol: '£', name: 'Livre Sterling' },
+                'MAD': { rate: 10.85, symbol: 'MAD', name: 'Dirham Marocain' }
+            };
+
+            vm.selectedCurrency = localStorage.getItem('geo_currency') || 'XOF';
+            vm.period = 'month'; // 'day', 'month', 'year', 'all'
+            vm.searchQuery = '';
+            vm.typeFilter = 'all';
+            vm.isModalOpen = false;
+
+            vm.categories = {
+                expense: ['Alimentation & Courses', 'Logement & Loyer', 'Factures & Électricité', 'Transport & Carburant', 'Santé & Soins', 'Loisirs & Sorties', 'Éducation', 'Achats Divers'],
+                income: ['Salaire & Paie', 'Ventes / Commerce', 'Prestations Freelance', 'Investissements', 'Cadeau / Soutien', 'Autre Rentrée']
+            };
+
+            // Form Model
+            vm.formData = {
+                type: 'expense',
+                amount: null,
+                description: '',
+                category: vm.categories.expense[0],
+                date: new Date()
+            };
+
+            // Load initial transactions (Canonical EUR amounts stored)
+            const savedData = localStorage.getItem('geo_transactions_angular');
+            if (savedData) {
+                vm.transactions = JSON.parse(savedData);
+            } else {
+                const today = new Date().toISOString().split('T')[0];
+                vm.transactions = [
+                    { id: '1', type: 'income', amountEUR: 1000, description: 'Salaire Mensuel', category: 'Salaire & Paie', date: today },
+                    { id: '2', type: 'expense', amountEUR: 150, description: 'Courses alimentaires', category: 'Alimentation & Courses', date: today },
+                    { id: '3', type: 'expense', amountEUR: 45, description: 'Transport et carburant', category: 'Transport & Carburant', date: today }
+                ];
+            }
+
+            // Stats Model
+            vm.stats = {
+                income: 0,
+                expense: 0,
+                net: 0,
+                incomeCount: 0,
+                expenseCount: 0,
+                savingsRate: 0
+            };
+
+            let barChartInstance = null;
+            let doughnutChartInstance = null;
+
+            vm.getCategories = function () {
+                return vm.categories[vm.formData.type] || [];
+            };
+
+            $scope.$watch(() => vm.formData.type, function (newType) {
+                if (newType && vm.categories[newType]) {
+                    vm.formData.category = vm.categories[newType][0];
+                }
+            });
+
+            vm.setPeriod = function (p) {
+                vm.period = p;
+                vm.recalculate();
+            };
+
+            vm.onCurrencyChange = function () {
+                localStorage.setItem('geo_currency', vm.selectedCurrency);
+                vm.recalculate();
+            };
+
+            vm.getPeriodLabel = function () {
+                const d = new Date();
+                if (vm.period === 'day') return "Aujourd'hui (" + d.toLocaleDateString('fr-FR') + ")";
+                if (vm.period === 'month') return "Mois de " + d.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+                if (vm.period === 'year') return "Année " + d.getFullYear();
+                return "Tout l'historique";
+            };
+
+            vm.getFilteredTransactions = function () {
+                const today = new Date();
+                const todayStr = today.toISOString().split('T')[0];
+                const currentMonthStr = todayStr.substring(0, 7);
+                const currentYearStr = todayStr.substring(0, 4);
+
+                return vm.transactions.filter(function (tx) {
+                    // Time filter
+                    if (vm.period === 'day' && tx.date !== todayStr) return false;
+                    if (vm.period === 'month' && !tx.date.startsWith(currentMonthStr)) return false;
+                    if (vm.period === 'year' && !tx.date.startsWith(currentYearStr)) return false;
+
+                    // Type filter
+                    if (vm.typeFilter !== 'all' && tx.type !== vm.typeFilter) return false;
+
+                    // Search filter
+                    if (vm.searchQuery) {
+                        const q = vm.searchQuery.toLowerCase();
+                        const matchDesc = tx.description.toLowerCase().includes(q);
+                        const matchCat = tx.category.toLowerCase().includes(q);
+                        if (!matchDesc && !matchCat) return false;
+                    }
+                    return true;
+                });
+            };
+
+            vm.recalculate = function () {
+                const filtered = vm.getFilteredTransactions();
+                let inc = 0, exp = 0, incCount = 0, expCount = 0;
+                const catMap = {};
+
+                filtered.forEach(function (tx) {
+                    if (tx.type === 'income') {
+                        inc += tx.amountEUR;
+                        incCount++;
+                    } else {
+                        exp += tx.amountEUR;
+                        expCount++;
+                        catMap[tx.category] = (catMap[tx.category] || 0) + (tx.amountEUR * vm.currencies[vm.selectedCurrency].rate);
+                    }
+                });
+
+                vm.stats.income = inc;
+                vm.stats.expense = exp;
+                vm.stats.net = inc - exp;
+                vm.stats.incomeCount = incCount;
+                vm.stats.expenseCount = expCount;
+                vm.stats.savingsRate = inc > 0 ? Math.max(0, Math.round(((inc - exp) / inc) * 100)) : 0;
+
+                $timeout(function () {
+                    vm.renderCharts(inc, exp, catMap);
+                    lucide.createIcons();
+                }, 50);
+            };
+
+            vm.renderCharts = function (incEUR, expEUR, catMap) {
+                const rate = vm.currencies[vm.selectedCurrency].rate;
+                const incLocal = incEUR * rate;
+                const expLocal = expEUR * rate;
+
+                // Bar Chart
+                const ctxBar = document.getElementById('barChart');
+                if (ctxBar) {
+                    if (barChartInstance) barChartInstance.destroy();
+                    barChartInstance = new Chart(ctxBar.getContext('2d'), {
+                        type: 'bar',
+                        data: {
+                            labels: ['Entrées', 'Sorties'],
+                            datasets: [{
+                                data: [incLocal, expLocal],
+                                backgroundColor: ['rgba(16, 185, 129, 0.85)', 'rgba(244, 63, 94, 0.85)'],
+                                borderColor: ['#10b981', '#f43f5e'],
+                                borderWidth: 1,
+                                borderRadius: 6
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: {
+                                y: {
+                                    grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                                    ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono' } }
+                                },
+                                x: { grid: { display: false }, ticks: { color: '#cbd5e1', font: { weight: 'bold' } } }
+                            }
+                        }
+                    });
+                }
+
+                // Doughnut Chart
+                const ctxDoughnut = document.getElementById('doughnutChart');
+                if (ctxDoughnut) {
+                    if (doughnutChartInstance) doughnutChartInstance.destroy();
+                    const labels = Object.keys(catMap);
+                    const data = Object.values(catMap);
+                    doughnutChartInstance = new Chart(ctxDoughnut.getContext('2d'), {
+                        type: 'doughnut',
+                        data: {
+                            labels: labels.length ? labels : ['Aucune dépense'],
+                            datasets: [{
+                                data: data.length ? data : [1],
+                                backgroundColor: ['#6366f1', '#f43f5e', '#f59e0b', '#10b981', '#06b6d4', '#8b5cf6', '#ec4899', '#64748b'],
+                                borderColor: '#0f172a',
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: { color: '#cbd5e1', font: { size: 10 }, boxWidth: 10 }
+                                }
+                            }
+                        }
+                    });
+                }
+            };
+
+            // Modal Handlers
+            vm.openModal = function () {
+                vm.formData.date = new Date();
+                vm.formData.amount = null;
+                vm.formData.description = '';
+                vm.isModalOpen = true;
+                $timeout(() => lucide.createIcons(), 50);
+            };
+
+            vm.closeModal = function () {
+                vm.isModalOpen = false;
+            };
+
+            // Save Transaction
+            vm.saveTransaction = function () {
+                if (!vm.formData.amount || vm.formData.amount <= 0) return;
+
+                const currRate = vm.currencies[vm.selectedCurrency].rate;
+                const amountEUR = vm.formData.amount / currRate;
+                const dateStr = vm.formData.date.toISOString().split('T')[0];
+
+                const newTx = {
+                    id: Date.now().toString(),
+                    type: vm.formData.type,
+                    amountEUR: amountEUR,
+                    description: vm.formData.description,
+                    category: vm.formData.category,
+                    date: dateStr
+                };
+
+                vm.transactions.push(newTx);
+                localStorage.setItem('geo_transactions_angular', JSON.stringify(vm.transactions));
+                vm.closeModal();
+                vm.recalculate();
+            };
+
+            // Delete
+            vm.deleteTransaction = function (id) {
+                if (confirm('Voulez-vous supprimer cette opération ?')) {
+                    vm.transactions = vm.transactions.filter(t => t.id !== id);
+                    localStorage.setItem('geo_transactions_angular', JSON.stringify(vm.transactions));
+                    vm.recalculate();
+                }
+            };
+
+            // CSV Export
+            vm.exportCSV = function () {
+                const curr = vm.currencies[vm.selectedCurrency];
+                let csv = "data:text/csv;charset=utf-8,Date,Type,Description,Categorie,Montant_" + vm.selectedCurrency + "\n";
+                vm.getFilteredTransactions().forEach(function (t) {
+                    const localAmount = (t.amountEUR * curr.rate).toFixed(2);
+                    csv += `"${t.date}","${t.type}","${t.description.replace(/"/g, '""')}","${t.category}","${localAmount}"\n`;
+                });
+                const link = document.createElement("a");
+                link.setAttribute("href", encodeURI(csv));
+                link.setAttribute("download", `finances_angular_${vm.selectedCurrency}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+
+            // Watch filters to refresh calculations
+            $scope.$watch(() => vm.searchQuery, () => vm.recalculate());
+            $scope.$watch(() => vm.typeFilter, () => vm.recalculate());
+
+            // Initialize
+            $timeout(function () {
+                vm.recalculate();
+                lucide.createIcons();
+            }, 100);
+        }]);
+    </script>
+</body>
+
+</html>
