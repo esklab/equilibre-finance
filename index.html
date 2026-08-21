@@ -121,13 +121,16 @@
         <div class="geo-card bg-white w-full max-w-md p-6 sm:p-8 relative">
             <div class="flex items-center justify-between border-b-2 border-slate-900 pb-4 mb-6">
                 <div>
-                    <span class="text-[9px] font-mono font-bold tracking-widest text-slate-500 uppercase">Synchronisation Cloud Supabase</span>
+                    <span
+                        class="text-[9px] font-mono font-bold tracking-widest text-slate-500 uppercase">Synchronisation
+                        Cloud Supabase</span>
                     <div class="flex items-center gap-1.5 mt-0.5">
                         <span class="text-xl font-extrabold tracking-tight text-slate-900">ÉQUILIBRE</span>
                         <span class="text-xs font-black px-1.5 py-0.5 bg-emerald-600 text-white">SUPABASE</span>
                     </div>
                 </div>
-                <div class="text-xs font-mono font-bold px-2.5 py-1 bg-emerald-100 border border-emerald-900 text-emerald-900">
+                <div
+                    class="text-xs font-mono font-bold px-2.5 py-1 bg-emerald-100 border border-emerald-900 text-emerald-900">
                     PostgreSQL
                 </div>
             </div>
@@ -180,13 +183,15 @@
                     <button type="submit" ng-disabled="fc.auth.loading"
                         class="geo-btn w-full py-3 bg-slate-900 text-white font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2">
                         <span ng-if="fc.auth.loading">Chargement...</span>
-                        <span ng-if="!fc.auth.loading">{{fc.auth.mode === 'login' ? 'Connexion à mon compte' : 'Créer mon compte'}}</span>
+                        <span ng-if="!fc.auth.loading">{{fc.auth.mode === 'login' ? 'Connexion à mon compte' : 'Créer
+                            mon compte'}}</span>
                         <span>→</span>
                     </button>
                 </div>
             </form>
 
-            <div class="mt-6 pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] font-mono">
+            <div
+                class="mt-6 pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] font-mono">
                 <button ng-click="fc.enableGuestMode()" class="text-slate-500 hover:text-slate-900 underline">
                     Mode Local / Hors-ligne (Sans compte)
                 </button>
@@ -206,7 +211,8 @@
             <!-- Logo & Titre -->
             <div class="flex items-center gap-3">
                 <div class="flex flex-col">
-                    <span class="text-[9px] font-mono font-bold tracking-widest text-slate-500 uppercase">Grand Livre Personnel</span>
+                    <span class="text-[9px] font-mono font-bold tracking-widest text-slate-500 uppercase">Grand Livre
+                        Personnel</span>
                     <div class="flex items-center gap-1.5">
                         <span class="text-xl font-extrabold tracking-tight text-slate-900">ÉQUILIBRE</span>
                         <span class="text-xs font-black px-1.5 py-0.5 bg-slate-900 text-white">v.02</span>
@@ -227,7 +233,8 @@
                 <button ng-click="fc.currentTab = 'summary'" class="pb-1 transition-colors uppercase relative"
                     ng-class="fc.currentTab === 'summary' ? 'text-slate-900 border-b-2 border-slate-900' : 'text-slate-400 hover:text-slate-700'">
                     03 / BILAN & TOTALS
-                    <span class="absolute -top-2 -right-3 text-[8px] bg-emerald-600 text-white px-1 font-sans rounded-none">NOUVEAU</span>
+                    <span
+                        class="absolute -top-2 -right-3 text-[8px] bg-emerald-600 text-white px-1 font-sans rounded-none">NOUVEAU</span>
                 </button>
                 <button ng-click="fc.currentTab = 'analytics'" class="pb-1 transition-colors uppercase"
                     ng-class="fc.currentTab === 'analytics' ? 'text-slate-900 border-b-2 border-slate-900' : 'text-slate-400 hover:text-slate-700'">
@@ -238,7 +245,8 @@
             <!-- Actions Utilisateur, Catégories, Devise & Saisie -->
             <div class="flex items-center gap-2 sm:gap-3">
                 <!-- Choix Devise -->
-                <div class="border-2 border-slate-900 bg-white px-2 py-1 flex items-center shadow-[2px_2px_0px_0px_#0f172a]">
+                <div
+                    class="border-2 border-slate-900 bg-white px-2 py-1 flex items-center shadow-[2px_2px_0px_0px_#0f172a]">
                     <select ng-model="fc.selectedCurrency" ng-change="fc.onCurrencyChange()"
                         class="text-xs font-bold font-mono bg-transparent outline-none cursor-pointer pr-1">
                         <option value="XOF">XOF (CFA)</option>
@@ -270,7 +278,8 @@
                         <span class="w-2 h-2 rounded-full"
                             ng-class="fc.auth.currentUser ? 'bg-emerald-500' : 'bg-amber-500'"></span>
                         <span class="hidden sm:inline max-w-[100px] truncate">
-                            {{fc.auth.currentUser ? (fc.auth.currentUser.user_metadata.display_name || fc.auth.currentUser.email.split('@')[0]) : 'Invité'}}
+                            {{fc.auth.currentUser ? (fc.auth.currentUser.user_metadata.display_name ||
+                            fc.auth.currentUser.email.split('@')[0]) : 'Invité'}}
                         </span>
                         <span>▾</span>
                     </button>
@@ -280,7 +289,8 @@
                         class="absolute right-0 mt-2 w-64 geo-card bg-white p-3 z-40 space-y-2 text-xs font-mono">
                         <div class="border-b border-slate-200 pb-2">
                             <div class="text-[10px] text-slate-400 uppercase font-bold">Connecté en tant que :</div>
-                            <div class="font-bold text-slate-900 truncate">{{fc.auth.currentUser ? fc.auth.currentUser.email : 'Mode Local (Non connecté)'}}</div>
+                            <div class="font-bold text-slate-900 truncate">{{fc.auth.currentUser ?
+                                fc.auth.currentUser.email : 'Mode Local (Non connecté)'}}</div>
                             <div class="text-[9px] text-emerald-600 mt-0.5 flex items-center gap-1"
                                 ng-if="fc.auth.currentUser">
                                 <span>⚡</span> Supabase PostgreSQL Cloud Sync
@@ -315,7 +325,8 @@
         </div>
 
         <!-- Navigation Mobile (Barre d'onglets défilante) -->
-        <div class="lg:hidden flex overflow-x-auto border-t border-slate-200 px-4 py-2 space-x-4 text-xs font-mono font-bold bg-slate-50">
+        <div
+            class="lg:hidden flex overflow-x-auto border-t border-slate-200 px-4 py-2 space-x-4 text-xs font-mono font-bold bg-slate-50">
             <button ng-click="fc.currentTab = 'dashboard'" class="whitespace-nowrap pb-1 uppercase"
                 ng-class="fc.currentTab === 'dashboard' ? 'text-slate-900 border-b-2 border-slate-900' : 'text-slate-400'">
                 01/Bord
@@ -346,11 +357,14 @@
 
             <!-- Titre de la vue & Période active -->
             <div>
-                <div class="text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase">Période d'Analyse Sélectionnée</div>
-                <div class="text-lg sm:text-xl font-black font-mono tracking-tight text-slate-900 flex items-center gap-2">
+                <div class="text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase">Période d'Analyse
+                    Sélectionnée</div>
+                <div
+                    class="text-lg sm:text-xl font-black font-mono tracking-tight text-slate-900 flex items-center gap-2">
                     <span>🗓 {{fc.getSelectedPeriodLabel()}}</span>
                     <span ng-if="fc.isCurrentMonthSelected()"
-                        class="text-[10px] font-mono px-2 py-0.5 bg-slate-900 text-white font-normal uppercase">En cours</span>
+                        class="text-[10px] font-mono px-2 py-0.5 bg-slate-900 text-white font-normal uppercase">En
+                        cours</span>
                 </div>
             </div>
 
@@ -422,7 +436,8 @@
                 <!-- 1. SOLDE GLOBAL CUMULÉ -->
                 <div class="geo-card-dark p-5 flex flex-col justify-between h-36">
                     <div class="flex items-center justify-between">
-                        <span class="text-[10px] font-mono font-bold tracking-widest text-slate-400 uppercase">Solde Net Période</span>
+                        <span class="text-[10px] font-mono font-bold tracking-widest text-slate-400 uppercase">Solde Net
+                            Période</span>
                         <span class="text-[10px] font-mono font-bold tracking-widest uppercase"
                             ng-class="fc.stats.periodNet >= 0 ? 'text-income' : 'text-expense'">
                             {{fc.stats.periodNet >= 0 ? 'POSITIF' : 'DÉFICIT'}}
@@ -440,7 +455,8 @@
                 <!-- 2. TOTAL ENTRÉES PÉRIODE -->
                 <div class="geo-card p-5 flex flex-col justify-between h-36">
                     <div class="flex items-center justify-between">
-                        <span class="text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase">Entrées Période</span>
+                        <span class="text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase">Entrées
+                            Période</span>
                         <span class="text-income font-black text-sm">↗</span>
                     </div>
                     <div class="text-2xl font-extrabold font-mono tracking-tight text-income">
@@ -454,7 +470,8 @@
                 <!-- 3. TOTAL SORTIES PÉRIODE -->
                 <div class="geo-card p-5 flex flex-col justify-between h-36">
                     <div class="flex items-center justify-between">
-                        <span class="text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase">Sorties Période</span>
+                        <span class="text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase">Sorties
+                            Période</span>
                         <span class="text-expense font-black text-sm">↙</span>
                     </div>
                     <div class="text-2xl font-extrabold font-mono tracking-tight text-expense">
@@ -468,7 +485,9 @@
                 <!-- 4. FLUX GLOBAL TOUT TEMPS -->
                 <div class="geo-card p-5 flex flex-col justify-between h-36">
                     <div class="flex items-center justify-between">
-                        <span class="text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase">Trésorerie Globale</span>
+                        <span
+                            class="text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase">Trésorerie
+                            Globale</span>
                         <span class="text-slate-900 text-xs">●</span>
                     </div>
                     <div class="text-2xl font-extrabold font-mono tracking-tight"
@@ -489,8 +508,10 @@
                 <div class="geo-card p-6 lg:col-span-2 flex flex-col justify-between">
                     <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                         <div>
-                            <div class="text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase">Activité Récente</div>
-                            <h3 class="text-sm font-extrabold font-mono tracking-wide text-slate-900 uppercase">Mouvements des 7 derniers jours</h3>
+                            <div class="text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase">
+                                Activité Récente</div>
+                            <h3 class="text-sm font-extrabold font-mono tracking-wide text-slate-900 uppercase">
+                                Mouvements des 7 derniers jours</h3>
                         </div>
                         <div class="text-xs font-mono font-bold text-slate-500">
                             Total: -{{fc.stats.sevenDaysTotal | geoFormat:fc.selectedCurrency:fc.currencies}}
@@ -499,7 +520,8 @@
 
                     <!-- 7 Barres de dépenses -->
                     <div class="grid grid-cols-7 gap-2 sm:gap-4 h-44 items-end pt-6 pb-2">
-                        <div ng-repeat="day in fc.sevenDaysActivity" class="flex flex-col items-center gap-2 h-full justify-end">
+                        <div ng-repeat="day in fc.sevenDaysActivity"
+                            class="flex flex-col items-center gap-2 h-full justify-end">
                             <div class="w-full bg-slate-100 border border-slate-300 rounded-none relative flex items-end justify-center overflow-hidden"
                                 style="height: 120px;">
                                 <div class="w-full transition-all duration-300"
@@ -519,22 +541,27 @@
                 <!-- Bilan Annuel Express -->
                 <div class="geo-card p-6 flex flex-col justify-between space-y-4">
                     <div>
-                        <div class="text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase">Période Annuelle</div>
-                        <h3 class="text-sm font-extrabold font-mono tracking-wide text-slate-900 uppercase">Cumul de l'année {{fc.filterYear}}</h3>
+                        <div class="text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase">Période
+                            Annuelle</div>
+                        <h3 class="text-sm font-extrabold font-mono tracking-wide text-slate-900 uppercase">Cumul de
+                            l'année {{fc.filterYear}}</h3>
                     </div>
 
                     <div class="space-y-3 font-mono text-xs">
                         <div class="flex items-center justify-between border-b border-slate-100 pb-2">
                             <span class="text-slate-500 uppercase">Total Entrées</span>
-                            <span class="font-bold text-income">+{{fc.stats.yearIncome | geoFormat:fc.selectedCurrency:fc.currencies}}</span>
+                            <span class="font-bold text-income">+{{fc.stats.yearIncome |
+                                geoFormat:fc.selectedCurrency:fc.currencies}}</span>
                         </div>
                         <div class="flex items-center justify-between border-b border-slate-100 pb-2">
                             <span class="text-slate-500 uppercase">Total Sorties</span>
-                            <span class="font-bold text-expense">-{{fc.stats.yearExpense | geoFormat:fc.selectedCurrency:fc.currencies}}</span>
+                            <span class="font-bold text-expense">-{{fc.stats.yearExpense |
+                                geoFormat:fc.selectedCurrency:fc.currencies}}</span>
                         </div>
                         <div class="flex items-center justify-between pt-1">
                             <span class="text-slate-900 font-extrabold uppercase">Reste Annuel</span>
-                            <span class="font-black text-sm" ng-class="fc.stats.yearNet >= 0 ? 'text-slate-900' : 'text-expense'">
+                            <span class="font-black text-sm"
+                                ng-class="fc.stats.yearNet >= 0 ? 'text-slate-900' : 'text-expense'">
                                 {{fc.stats.yearNet | geoFormat:fc.selectedCurrency:fc.currencies}}
                             </span>
                         </div>
@@ -547,7 +574,8 @@
                             <span class="font-extrabold text-slate-900">{{fc.stats.yearRatio}}%</span>
                         </div>
                         <div class="w-full bg-slate-200 h-2.5 border border-slate-900">
-                            <div class="bg-slate-900 h-full transition-all duration-300" style="width: {{fc.stats.yearRatio}}%"></div>
+                            <div class="bg-slate-900 h-full transition-all duration-300"
+                                style="width: {{fc.stats.yearRatio}}%"></div>
                         </div>
                     </div>
                 </div>
@@ -556,10 +584,13 @@
 
             <!-- DERNIÈRES OPÉRATIONS DE LA PÉRIODE -->
             <div class="geo-card p-6">
-                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4 pb-3 border-b-2 border-slate-900">
+                <div
+                    class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4 pb-3 border-b-2 border-slate-900">
                     <div>
-                        <div class="text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase">Opérations Récentes</div>
-                        <h2 class="text-sm font-extrabold font-mono tracking-wide text-slate-900 uppercase">Dernières opérations ({{fc.getSelectedPeriodLabel()}})</h2>
+                        <div class="text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase">Opérations
+                            Récentes</div>
+                        <h2 class="text-sm font-extrabold font-mono tracking-wide text-slate-900 uppercase">Dernières
+                            opérations ({{fc.getSelectedPeriodLabel()}})</h2>
                     </div>
                     <button ng-click="fc.currentTab = 'transactions'"
                         class="geo-btn bg-white px-3 py-1.5 text-xs font-mono font-bold uppercase text-slate-900 flex items-center gap-1 hover:bg-slate-50">
@@ -579,7 +610,8 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100">
-                            <tr ng-repeat="tx in fc.getPeriodTransactions() | orderBy:'-date' | limitTo:5" class="hover:bg-slate-50">
+                            <tr ng-repeat="tx in fc.getPeriodTransactions() | orderBy:'-date' | limitTo:5"
+                                class="hover:bg-slate-50">
                                 <td class="py-3 text-slate-500 font-bold">{{tx.date | date:'dd/MM/yyyy'}}</td>
                                 <td class="py-3 font-semibold text-slate-900">{{tx.description}}</td>
                                 <td class="py-3">
@@ -589,7 +621,8 @@
                                 </td>
                                 <td class="py-3 text-right font-black text-sm"
                                     ng-class="tx.type === 'income' ? 'text-income' : 'text-expense'">
-                                    {{tx.type === 'income' ? '+' : '-'}}{{tx.amountEUR | geoFormat:fc.selectedCurrency:fc.currencies}}
+                                    {{tx.type === 'income' ? '+' : '-'}}{{tx.amountEUR |
+                                    geoFormat:fc.selectedCurrency:fc.currencies}}
                                 </td>
                                 <td class="py-3 text-center space-x-2">
                                     <button ng-click="fc.editTransaction(tx)" title="Modifier"
@@ -614,12 +647,15 @@
         <!-- VUE 2 : TRANSACTIONS & HISTORIQUE AVANCÉ   -->
         <!-- ========================================== -->
         <div ng-show="fc.currentTab === 'transactions'" class="geo-card p-6 space-y-5">
-            <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 border-b-2 border-slate-900 pb-4">
+            <div
+                class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 border-b-2 border-slate-900 pb-4">
                 <div>
-                    <span class="text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase">Grand Livre Comptable</span>
+                    <span class="text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase">Grand Livre
+                        Comptable</span>
                     <h2 class="text-base font-black font-mono text-slate-900 uppercase">Historique des Opérations</h2>
                     <div class="text-xs font-mono text-slate-500 mt-0.5">
-                        {{fc.getFilteredTransactions().length}} opération(s) trouvée(s) | Période : <strong>{{fc.getSelectedPeriodLabel()}}</strong>
+                        {{fc.getFilteredTransactions().length}} opération(s) trouvée(s) | Période :
+                        <strong>{{fc.getSelectedPeriodLabel()}}</strong>
                     </div>
                 </div>
 
@@ -666,34 +702,44 @@
                             <th class="py-2.5 px-3 cursor-pointer hover:text-slate-900" ng-click="fc.sortBy('date')">
                                 Date <span ng-if="fc.sortField === 'date'">{{fc.sortReverse ? '▼' : '▲'}}</span>
                             </th>
-                            <th class="py-2.5 px-3 cursor-pointer hover:text-slate-900" ng-click="fc.sortBy('description')">
-                                Motif / Description <span ng-if="fc.sortField === 'description'">{{fc.sortReverse ? '▼' : '▲'}}</span>
+                            <th class="py-2.5 px-3 cursor-pointer hover:text-slate-900"
+                                ng-click="fc.sortBy('description')">
+                                Motif / Description <span ng-if="fc.sortField === 'description'">{{fc.sortReverse ? '▼'
+                                    : '▲'}}</span>
                             </th>
-                            <th class="py-2.5 px-3 cursor-pointer hover:text-slate-900" ng-click="fc.sortBy('category')">
-                                Catégorie <span ng-if="fc.sortField === 'category'">{{fc.sortReverse ? '▼' : '▲'}}</span>
+                            <th class="py-2.5 px-3 cursor-pointer hover:text-slate-900"
+                                ng-click="fc.sortBy('category')">
+                                Catégorie <span ng-if="fc.sortField === 'category'">{{fc.sortReverse ? '▼' :
+                                    '▲'}}</span>
                             </th>
                             <th class="py-2.5 px-3">Type</th>
-                            <th class="py-2.5 px-3 text-right cursor-pointer hover:text-slate-900" ng-click="fc.sortBy('amountEUR')">
-                                Montant ({{fc.currencies[fc.selectedCurrency].symbol}}) <span ng-if="fc.sortField === 'amountEUR'">{{fc.sortReverse ? '▼' : '▲'}}</span>
+                            <th class="py-2.5 px-3 text-right cursor-pointer hover:text-slate-900"
+                                ng-click="fc.sortBy('amountEUR')">
+                                Montant ({{fc.currencies[fc.selectedCurrency].symbol}}) <span
+                                    ng-if="fc.sortField === 'amountEUR'">{{fc.sortReverse ? '▼' : '▲'}}</span>
                             </th>
                             <th class="py-2.5 px-3 text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-200">
-                        <tr ng-repeat="tx in fc.getFilteredTransactions() | orderBy:fc.sortField:fc.sortReverse" class="hover:bg-slate-50">
-                            <td class="py-3 px-3 text-slate-600 font-bold whitespace-nowrap">{{tx.date | date:'dd/MM/yyyy'}}</td>
+                        <tr ng-repeat="tx in fc.getFilteredTransactions() | orderBy:fc.sortField:fc.sortReverse"
+                            class="hover:bg-slate-50">
+                            <td class="py-3 px-3 text-slate-600 font-bold whitespace-nowrap">{{tx.date |
+                                date:'dd/MM/yyyy'}}</td>
                             <td class="py-3 px-3 font-bold text-slate-900">{{tx.description}}</td>
                             <td class="py-3 px-3">
                                 <span class="border border-slate-900 px-2 py-0.5 text-[10px] font-bold bg-white">
                                     {{tx.category}}
                                 </span>
                             </td>
-                            <td class="py-3 px-3 font-bold uppercase text-[10px]" ng-class="tx.type === 'income' ? 'text-income' : 'text-expense'">
+                            <td class="py-3 px-3 font-bold uppercase text-[10px]"
+                                ng-class="tx.type === 'income' ? 'text-income' : 'text-expense'">
                                 {{tx.type === 'income' ? '● Entrée' : '● Sortie'}}
                             </td>
                             <td class="py-3 px-3 text-right font-black text-sm whitespace-nowrap"
                                 ng-class="tx.type === 'income' ? 'text-income' : 'text-expense'">
-                                {{tx.type === 'income' ? '+' : '-'}}{{tx.amountEUR | geoFormat:fc.selectedCurrency:fc.currencies}}
+                                {{tx.type === 'income' ? '+' : '-'}}{{tx.amountEUR |
+                                geoFormat:fc.selectedCurrency:fc.currencies}}
                             </td>
                             <td class="py-3 px-3 text-center whitespace-nowrap space-x-2">
                                 <button ng-click="fc.editTransaction(tx)" title="Modifier cette opération"
@@ -716,18 +762,24 @@
             </div>
 
             <!-- Sous-Totaux de la liste filtrée -->
-            <div class="border-t-2 border-slate-900 pt-4 grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-xs bg-slate-50 p-4">
-                <div class="flex items-center justify-between border-b sm:border-b-0 sm:border-r border-slate-300 sm:pr-4 pb-2 sm:pb-0">
+            <div
+                class="border-t-2 border-slate-900 pt-4 grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-xs bg-slate-50 p-4">
+                <div
+                    class="flex items-center justify-between border-b sm:border-b-0 sm:border-r border-slate-300 sm:pr-4 pb-2 sm:pb-0">
                     <span class="text-slate-500 uppercase">Total Entrées Filtrées :</span>
-                    <span class="font-extrabold text-income text-sm">+{{fc.filteredTotals.income | geoFormat:fc.selectedCurrency:fc.currencies}}</span>
+                    <span class="font-extrabold text-income text-sm">+{{fc.filteredTotals.income |
+                        geoFormat:fc.selectedCurrency:fc.currencies}}</span>
                 </div>
-                <div class="flex items-center justify-between border-b sm:border-b-0 sm:border-r border-slate-300 sm:pr-4 pb-2 sm:pb-0">
+                <div
+                    class="flex items-center justify-between border-b sm:border-b-0 sm:border-r border-slate-300 sm:pr-4 pb-2 sm:pb-0">
                     <span class="text-slate-500 uppercase">Total Sorties Filtrées :</span>
-                    <span class="font-extrabold text-expense text-sm">-{{fc.filteredTotals.expense | geoFormat:fc.selectedCurrency:fc.currencies}}</span>
+                    <span class="font-extrabold text-expense text-sm">-{{fc.filteredTotals.expense |
+                        geoFormat:fc.selectedCurrency:fc.currencies}}</span>
                 </div>
                 <div class="flex items-center justify-between">
                     <span class="text-slate-900 uppercase font-black">Solde Net Filtré :</span>
-                    <span class="font-black text-sm" ng-class="fc.filteredTotals.net >= 0 ? 'text-slate-900' : 'text-expense'">
+                    <span class="font-black text-sm"
+                        ng-class="fc.filteredTotals.net >= 0 ? 'text-slate-900' : 'text-expense'">
                         {{fc.filteredTotals.net | geoFormat:fc.selectedCurrency:fc.currencies}}
                     </span>
                 </div>
@@ -741,13 +793,17 @@
 
             <!-- BANNIÈRE BILAN PRINCIPAL -->
             <div class="geo-card p-6 bg-white border-2 border-slate-900">
-                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b-2 border-slate-900 pb-4 mb-6">
+                <div
+                    class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b-2 border-slate-900 pb-4 mb-6">
                     <div>
-                        <div class="text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase">Synthèse Globale & Flux</div>
-                        <h2 class="text-xl font-black font-mono text-slate-900 uppercase">BILAN DÉTAILLÉ : {{fc.getSelectedPeriodLabel()}}</h2>
+                        <div class="text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase">Synthèse
+                            Globale & Flux</div>
+                        <h2 class="text-xl font-black font-mono text-slate-900 uppercase">BILAN DÉTAILLÉ :
+                            {{fc.getSelectedPeriodLabel()}}</h2>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button ng-click="fc.openCategoryModal()" class="geo-btn bg-white text-slate-900 px-3 py-1 text-xs font-bold font-mono">
+                        <button ng-click="fc.openCategoryModal()"
+                            class="geo-btn bg-white text-slate-900 px-3 py-1 text-xs font-bold font-mono">
                             🏷 Gérer Catégories
                         </button>
                         <span class="px-3 py-1 bg-slate-900 text-white font-mono text-xs font-bold uppercase">
@@ -760,11 +816,15 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
 
                     <!-- BLOC 1 : TOTAL ENTRÉES -->
-                    <div class="p-5 border-2 border-emerald-800 bg-emerald-50/60 shadow-[4px_4px_0px_0px_#065f46] flex flex-col justify-between">
+                    <div
+                        class="p-5 border-2 border-emerald-800 bg-emerald-50/60 shadow-[4px_4px_0px_0px_#065f46] flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-[11px] font-mono font-bold tracking-wider text-emerald-950 uppercase">TOTAL DES ENTRÉES</span>
-                                <span class="text-xs font-black text-emerald-700 bg-white border border-emerald-800 px-2 py-0.5">RECETTES</span>
+                                <span
+                                    class="text-[11px] font-mono font-bold tracking-wider text-emerald-950 uppercase">TOTAL
+                                    DES ENTRÉES</span>
+                                <span
+                                    class="text-xs font-black text-emerald-700 bg-white border border-emerald-800 px-2 py-0.5">RECETTES</span>
                             </div>
                             <div class="text-3xl font-black font-mono tracking-tight text-emerald-600">
                                 +{{fc.stats.periodIncome | geoFormat:fc.selectedCurrency:fc.currencies}}
@@ -776,11 +836,15 @@
                     </div>
 
                     <!-- BLOC 2 : TOTAL SORTIES -->
-                    <div class="p-5 border-2 border-rose-800 bg-rose-50/60 shadow-[4px_4px_0px_0px_#9f1239] flex flex-col justify-between">
+                    <div
+                        class="p-5 border-2 border-rose-800 bg-rose-50/60 shadow-[4px_4px_0px_0px_#9f1239] flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-[11px] font-mono font-bold tracking-wider text-rose-950 uppercase">TOTAL DES SORTIES</span>
-                                <span class="text-xs font-black text-rose-700 bg-white border border-rose-800 px-2 py-0.5">DÉPENSES</span>
+                                <span
+                                    class="text-[11px] font-mono font-bold tracking-wider text-rose-950 uppercase">TOTAL
+                                    DES SORTIES</span>
+                                <span
+                                    class="text-xs font-black text-rose-700 bg-white border border-rose-800 px-2 py-0.5">DÉPENSES</span>
                             </div>
                             <div class="text-3xl font-black font-mono tracking-tight text-rose-600">
                                 -{{fc.stats.periodExpense | geoFormat:fc.selectedCurrency:fc.currencies}}
@@ -792,10 +856,13 @@
                     </div>
 
                     <!-- BLOC 3 : SOLDE NET / RÉSULTAT -->
-                    <div class="p-5 border-2 border-slate-900 bg-slate-900 text-white shadow-[4px_4px_0px_0px_#0f172a] flex flex-col justify-between">
+                    <div
+                        class="p-5 border-2 border-slate-900 bg-slate-900 text-white shadow-[4px_4px_0px_0px_#0f172a] flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-[11px] font-mono font-bold tracking-wider text-slate-300 uppercase">SOLDE NET RÉSULTANT</span>
+                                <span
+                                    class="text-[11px] font-mono font-bold tracking-wider text-slate-300 uppercase">SOLDE
+                                    NET RÉSULTANT</span>
                                 <span class="text-xs font-black px-2 py-0.5 border border-white"
                                     ng-class="fc.stats.periodNet >= 0 ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'">
                                     {{fc.stats.periodNet >= 0 ? 'EXCÉDENT' : 'DÉFICIT'}}
@@ -836,7 +903,8 @@
                             <h3 class="font-black font-mono text-xs uppercase text-slate-900">
                                 ↘ Répartition des Sorties par Catégorie
                             </h3>
-                            <span class="text-xs font-mono font-bold text-expense">-{{fc.stats.periodExpense | geoFormat:fc.selectedCurrency:fc.currencies}}</span>
+                            <span class="text-xs font-mono font-bold text-expense">-{{fc.stats.periodExpense |
+                                geoFormat:fc.selectedCurrency:fc.currencies}}</span>
                         </div>
 
                         <div class="space-y-4 font-mono text-xs">
@@ -845,14 +913,16 @@
                                     <span class="text-slate-800">{{item.category}}</span>
                                     <div class="space-x-2">
                                         <span class="text-slate-400 text-[11px]">({{item.percentage}}%)</span>
-                                        <span class="text-rose-600">-{{item.amount | geoFormat:fc.selectedCurrency:fc.currencies}}</span>
+                                        <span class="text-rose-600">-{{item.amount |
+                                            geoFormat:fc.selectedCurrency:fc.currencies}}</span>
                                     </div>
                                 </div>
                                 <div class="w-full bg-slate-100 h-2 border border-slate-300">
                                     <div class="bg-rose-500 h-full" style="width: {{item.percentage}}%"></div>
                                 </div>
                             </div>
-                            <div ng-if="fc.categoryBreakdown.expense.length === 0" class="py-6 text-center text-slate-400">
+                            <div ng-if="fc.categoryBreakdown.expense.length === 0"
+                                class="py-6 text-center text-slate-400">
                                 Aucune dépense enregistrée sur cette période.
                             </div>
                         </div>
@@ -864,7 +934,8 @@
                             <h3 class="font-black font-mono text-xs uppercase text-slate-900">
                                 ↗ Répartition des Entrées par Catégorie
                             </h3>
-                            <span class="text-xs font-mono font-bold text-income">+{{fc.stats.periodIncome | geoFormat:fc.selectedCurrency:fc.currencies}}</span>
+                            <span class="text-xs font-mono font-bold text-income">+{{fc.stats.periodIncome |
+                                geoFormat:fc.selectedCurrency:fc.currencies}}</span>
                         </div>
 
                         <div class="space-y-4 font-mono text-xs">
@@ -873,14 +944,16 @@
                                     <span class="text-slate-800">{{item.category}}</span>
                                     <div class="space-x-2">
                                         <span class="text-slate-400 text-[11px]">({{item.percentage}}%)</span>
-                                        <span class="text-emerald-600">+{{item.amount | geoFormat:fc.selectedCurrency:fc.currencies}}</span>
+                                        <span class="text-emerald-600">+{{item.amount |
+                                            geoFormat:fc.selectedCurrency:fc.currencies}}</span>
                                     </div>
                                 </div>
                                 <div class="w-full bg-slate-100 h-2 border border-slate-300">
                                     <div class="bg-emerald-500 h-full" style="width: {{item.percentage}}%"></div>
                                 </div>
                             </div>
-                            <div ng-if="fc.categoryBreakdown.income.length === 0" class="py-6 text-center text-slate-400">
+                            <div ng-if="fc.categoryBreakdown.income.length === 0"
+                                class="py-6 text-center text-slate-400">
                                 Aucune entrée enregistrée sur cette période.
                             </div>
                         </div>
@@ -924,7 +997,8 @@
         <div class="geo-card bg-white w-full max-w-md p-6 relative">
             <div class="flex items-center justify-between border-b-2 border-slate-900 pb-3 mb-4">
                 <h3 class="text-sm font-black font-mono uppercase text-slate-900">
-                    {{fc.isEditing ? '✎ Modifier l\'Opération' : (fc.formData.type === 'income' ? '+ Noter une Entrée' : '- Noter une Dépense')}}
+                    {{fc.isEditing ? '✎ Modifier l\'Opération' : (fc.formData.type === 'income' ? '+ Noter une Entrée' :
+                    '- Noter une Dépense')}}
                 </h3>
                 <button ng-click="fc.closeModal()" class="text-slate-500 font-bold hover:text-slate-900">✕</button>
             </div>
@@ -1019,7 +1093,8 @@
         <div class="geo-card bg-white w-full max-w-lg p-6 relative max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b-2 border-slate-900 pb-3 mb-4">
                 <div>
-                    <span class="text-[9px] font-mono font-bold tracking-widest text-slate-500 uppercase">Personnalisation</span>
+                    <span
+                        class="text-[9px] font-mono font-bold tracking-widest text-slate-500 uppercase">Personnalisation</span>
                     <h3 class="text-sm font-black font-mono uppercase text-slate-900">🏷 Gestion des Catégories</h3>
                 </div>
                 <button ng-click="fc.closeCategoryModal()"
@@ -1100,7 +1175,9 @@
         <div class="geo-card bg-white w-full max-w-lg p-6 relative max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b-2 border-slate-900 pb-3 mb-4">
                 <div>
-                    <span class="text-[9px] font-mono font-bold tracking-widest text-slate-500 uppercase">Synchronisation Cloud PostgreSQL</span>
+                    <span
+                        class="text-[9px] font-mono font-bold tracking-widest text-slate-500 uppercase">Synchronisation
+                        Cloud PostgreSQL</span>
                     <h3 class="text-sm font-black font-mono uppercase text-slate-900">⚡ Configuration Supabase</h3>
                 </div>
                 <button ng-click="fc.closeSupabaseConfigModal()"
@@ -1109,13 +1186,15 @@
 
             <div class="space-y-4 font-mono text-xs text-slate-700">
                 <p>
-                    L'application utilise <strong>Supabase</strong> (PostgreSQL) pour stocker vos comptes et vos écritures en temps réel.
+                    L'application utilise <strong>Supabase</strong> (PostgreSQL) pour stocker vos comptes et vos
+                    écritures en temps réel.
                 </p>
 
                 <div class="p-3 bg-emerald-50 border-2 border-emerald-900 text-emerald-950 text-[11px] space-y-1">
                     <p class="font-bold">Comment obtenir vos clés Supabase (Gratuit en 2 min) :</p>
                     <ol class="list-decimal list-inside space-y-0.5">
-                        <li>Créez un projet sur <a href="https://supabase.com" target="_blank" class="underline font-bold text-emerald-800">supabase.com</a></li>
+                        <li>Créez un projet sur <a href="https://supabase.com" target="_blank"
+                                class="underline font-bold text-emerald-800">supabase.com</a></li>
                         <li>Allez dans <strong>Project Settings</strong> > <strong>API</strong></li>
                         <li>Copiez la <strong>Project URL</strong> et la clé <strong>anon / public</strong></li>
                     </ol>
@@ -1124,25 +1203,31 @@
                 <!-- Formulaire Clés Supabase -->
                 <form ng-submit="fc.saveCustomSupabaseConfig()" class="space-y-3">
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Project URL (Supabase)</label>
-                        <input type="url" ng-model="fc.dbConfig.url" required placeholder="https://xyzcompany.supabase.co"
-                            class="geo-input w-full p-2 font-mono">
+                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Project URL
+                            (Supabase)</label>
+                        <input type="url" ng-model="fc.dbConfig.url" required
+                            placeholder="https://xyzcompany.supabase.co" class="geo-input w-full p-2 font-mono">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Anon / Public API Key</label>
-                        <input type="text" ng-model="fc.dbConfig.anonKey" required placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Anon / Public API
+                            Key</label>
+                        <input type="text" ng-model="fc.dbConfig.anonKey" required
+                            placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                             class="geo-input w-full p-2 font-mono">
                     </div>
 
                     <!-- Script SQL d'installation pour Supabase -->
                     <div class="pt-2">
                         <div class="flex items-center justify-between mb-1">
-                            <span class="text-[10px] font-bold text-slate-500 uppercase">Script SQL (À exécuter dans l'éditeur SQL Supabase)</span>
-                            <button type="button" ng-click="fc.copySqlSchema()" class="text-[10px] text-indigo-600 hover:underline font-bold">
+                            <span class="text-[10px] font-bold text-slate-500 uppercase">Script SQL (À exécuter dans
+                                l'éditeur SQL Supabase)</span>
+                            <button type="button" ng-click="fc.copySqlSchema()"
+                                class="text-[10px] text-indigo-600 hover:underline font-bold">
                                 📋 Copier le code SQL
                             </button>
                         </div>
-                        <textarea readonly rows="4" class="w-full bg-slate-900 text-emerald-400 p-2 text-[10px] font-mono border-2 border-slate-900 outline-none">-- Exécuter dans SQL Editor sur supabase.com
+                        <textarea readonly rows="4"
+                            class="w-full bg-slate-900 text-emerald-400 p-2 text-[10px] font-mono border-2 border-slate-900 outline-none">-- Exécuter dans SQL Editor sur supabase.com
 create table if not exists transactions (
   id text primary key,
   user_id uuid references auth.users not null,
@@ -1399,8 +1484,8 @@ create policy "User can manage their own transactions" on transactions for all u
 
             const savedSupabaseConfig = localStorage.getItem('geo_custom_supabase_config');
             const defaultSupabaseConfig = {
-                url: "https://demo-equilibre.supabase.co",
-                anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.DEMO_KEY"
+                url: "https://nzojddctqhgzcwyewghk.supabase.co",
+                anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56b2pkZGN0cWhnemN3eWV3Z2hrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODczMDU2MjUsImV4cCI6MjEwMjg4MTYyNX0.FDB6zRjmaO4ESAsSooR559FAqDUb6wTSlEb2fLWeZS8"
             };
 
             vm.dbConfig = savedSupabaseConfig ? JSON.parse(savedSupabaseConfig) : { ...defaultSupabaseConfig };
@@ -1409,9 +1494,10 @@ create policy "User can manage their own transactions" on transactions for all u
 
             vm.initSupabase = function () {
                 try {
-                    if (window.supabase && vm.dbConfig.url && vm.dbConfig.anonKey) {
-                        supabaseClient = window.supabase.createClient(vm.dbConfig.url, vm.dbConfig.anonKey);
-                        
+                    let cleanUrl = (vm.dbConfig.url || '').trim().replace(/\/rest\/v1\/?$/, '').replace(/\/+$/, '');
+                    if (window.supabase && cleanUrl && vm.dbConfig.anonKey) {
+                        supabaseClient = window.supabase.createClient(cleanUrl, vm.dbConfig.anonKey);
+
                         // Récupérer la session existante
                         supabaseClient.auth.getSession().then(({ data: { session } }) => {
                             $timeout(() => {
