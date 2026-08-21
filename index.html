@@ -1527,9 +1527,31 @@ create policy "User can manage their own transactions" on transactions for all u
 
             vm.initSupabase = function () {
                 try {
+                    // Détecter les erreurs et tokens dans le fragment URL (#error= ou #access_token=)
+                    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+                    const urlError = hashParams.get('error');
+                    const urlErrorDesc = hashParams.get('error_description');
+                    const urlAccessToken = hashParams.get('access_token');
+
+                    if (urlError) {
+                        // Nettoyer le hash de l'URL proprement
+                        history.replaceState(null, '', window.location.pathname + window.location.search);
+                        const isExpired = urlErrorDesc && urlErrorDesc.includes('expired');
+                        $timeout(() => {
+                            vm.auth.error = isExpired
+                                ? 'Ce lien a expiré. Veuillez demander un nouveau lien de réinitialisation.'
+                                : (urlErrorDesc ? decodeURIComponent(urlErrorDesc).replace(/\+/g, ' ') : 'Lien invalide.');
+                        });
+                    }
+
                     let cleanUrl = (vm.dbConfig.url || '').trim().replace(/\/rest\/v1\/?$/, '').replace(/\/+$/, '');
                     if (window.supabase && cleanUrl && vm.dbConfig.anonKey) {
                         supabaseClient = window.supabase.createClient(cleanUrl, vm.dbConfig.anonKey);
+
+                        // Si un access_token est présent dans l'URL, laisser Supabase le traiter
+                        if (urlAccessToken) {
+                            history.replaceState(null, '', window.location.pathname + window.location.search);
+                        }
 
                         // Récupérer la session existante
                         supabaseClient.auth.getSession().then(({ data: { session } }) => {
@@ -1648,14 +1670,22 @@ create policy "User can manage their own transactions" on transactions for all u
 
             vm.resetPassword = function () {
                 if (!vm.auth.email) {
-                    alert('Veuillez saisir votre adresse email.');
+                    alert('Veuillez saisir votre adresse email d\'abord.');
                     return;
                 }
                 if (supabaseClient) {
-                    supabaseClient.auth.resetPasswordForEmail(vm.auth.email)
+                    // Utiliser l'URL réelle de la page (Vercel ou locale) comme redirectTo
+                    const redirectTo = window.location.origin + window.location.pathname;
+                    supabaseClient.auth.resetPasswordForEmail(vm.auth.email, { redirectTo: redirectTo })
                         .then(({ error }) => {
-                            if (error) alert('Erreur: ' + error.message);
-                            else alert('Un email de réinitialisation vous a été envoyé.');
+                            $timeout(() => {
+                                if (error) {
+                                    vm.auth.error = 'Erreur: ' + error.message;
+                                } else {
+                                    vm.auth.error = null;
+                                    vm.showToast('Email de réinitialisation envoyé ! Vérifiez votre boîte mail.');
+                                }
+                            });
                         });
                 }
             };
