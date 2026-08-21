@@ -176,21 +176,26 @@
                             class="text-[9px] text-blue-600 hover:underline cursor-pointer">Oublié ?</span>
                     </div>
                     <div class="relative">
-                        <input ng-attr-type="{{fc.auth.showPassword ? 'text' : 'password'}}"
-                            ng-model="fc.auth.password" required minlength="6" placeholder="••••••••"
+                        <input ng-attr-type="{{fc.auth.showPassword ? 'text' : 'password'}}" ng-model="fc.auth.password"
+                            required minlength="6" placeholder="••••••••"
                             class="geo-input w-full p-2.5 pr-10 bg-white font-sans font-medium text-slate-900">
                         <button type="button" ng-click="fc.auth.showPassword = !fc.auth.showPassword"
                             class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-900 transition-colors"
                             title="{{fc.auth.showPassword ? 'Masquer' : 'Afficher'}} le mot de passe">
                             <!-- Oeil ouvert -->
-                            <svg ng-if="!fc.auth.showPassword" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                <circle cx="12" cy="12" r="3"/>
+                            <svg ng-if="!fc.auth.showPassword" xmlns="http://www.w3.org/2000/svg" width="17" height="17"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                <circle cx="12" cy="12" r="3" />
                             </svg>
                             <!-- Oeil barré -->
-                            <svg ng-if="fc.auth.showPassword" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
-                                <line x1="1" y1="1" x2="23" y2="23"/>
+                            <svg ng-if="fc.auth.showPassword" xmlns="http://www.w3.org/2000/svg" width="17" height="17"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                                <line x1="1" y1="1" x2="23" y2="23" />
                             </svg>
                         </button>
                     </div>
@@ -699,7 +704,8 @@
                     </select>
 
                     <!-- Input Fichier Import Caché -->
-                    <input type="file" id="importFileInput" accept=".csv, .json, text/csv, application/json" style="display:none" onchange="angular.element(this).scope().fc.handleFileImport(this)">
+                    <input type="file" id="importFileInput" accept=".csv, .json, text/csv, application/json"
+                        style="display:none" onchange="angular.element(this).scope().fc.handleFileImport(this)">
 
                     <!-- Import CSV -->
                     <button type="button" ng-click="fc.triggerImport()" title="Importer un fichier CSV ou JSON"
@@ -2206,7 +2212,7 @@ create policy "User can manage their own transactions" on transactions for all u
                                 }
 
                                 const headers = parseCsvLine(firstLine).map(h => h.toLowerCase().replace(/[^a-z0-9]/g, ''));
-                                
+
                                 let dateIdx = headers.findIndex(h => h.includes('date'));
                                 let typeIdx = headers.findIndex(h => h.includes('type'));
                                 let descIdx = headers.findIndex(h => h.includes('desc') || h.includes('motif') || h.includes('libelle'));
