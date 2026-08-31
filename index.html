@@ -572,8 +572,8 @@
                         <p class="text-xs text-slate-400 font-medium">{{fc.weekRangeLabel || fc.t('weeklyOverview')}}</p>
                     </div>
 
-                    <div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 text-white text-xs font-black self-start sm:self-auto shadow-sm">
-                        <i data-lucide="calendar" class="w-3.5 h-3.5 text-emerald-400"></i>
+                    <div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-xs font-black self-start sm:self-auto shadow-xs">
+                        <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-rose-600"></i>
                         <span>-{{fc.weekTotalExpense | geoFormat:fc.selectedCurrency:fc.currencies}}</span>
                     </div>
                 </div>
@@ -584,15 +584,16 @@
                         class="flex flex-col items-center gap-1.5 justify-end cursor-pointer group"
                         title="{{item.fullDate}}: Dépenses -{{item.expense | geoFormat:fc.selectedCurrency:fc.currencies}} | Entrées +{{item.income | geoFormat:fc.selectedCurrency:fc.currencies}}">
                         
-                        <!-- Montant au hover / tooltips -->
-                        <span class="text-[9px] sm:text-[10px] font-mono font-bold text-slate-400 group-hover:text-slate-900 transition-colors">
+                        <!-- Montant au hover / tooltips en ROUGE pour dépense -->
+                        <span class="text-[9px] sm:text-[10px] font-mono font-bold transition-colors"
+                            ng-class="item.expense > 0 ? 'text-rose-600 font-black' : 'text-slate-400'">
                             {{item.expense > 0 ? (item.expense | geoFormat:fc.selectedCurrency:fc.currencies) : '-'}}
                         </span>
 
                         <div class="w-full bg-slate-100 rounded-full relative flex items-end justify-center overflow-hidden group-hover:bg-slate-200 transition-all h-28 sm:h-32 max-w-[32px] sm:max-w-[42px] mx-auto"
                             ng-class="{'ring-2 ring-emerald-500 ring-offset-1': item.isToday}">
                             <div class="w-full rounded-full transition-all duration-500"
-                                ng-class="item.isToday ? 'bg-emerald-500 shadow-sm' : (item.expense > 0 ? 'bg-slate-900' : 'bg-slate-300')"
+                                ng-class="item.isToday ? 'bg-emerald-500 shadow-sm' : (item.expense > 0 ? 'bg-rose-500' : 'bg-slate-300')"
                                 style="height: {{item.percentage}}%;">
                             </div>
                         </div>
@@ -612,7 +613,7 @@
                 <div class="text-[11px] text-slate-400 flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
                     <div class="flex items-center gap-3">
                         <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span> {{fc.t('todayLabel')}}</span>
-                        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-slate-900 inline-block"></span> {{fc.t('expenseType')}}</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-rose-500 inline-block"></span> {{fc.t('expenseType')}}</span>
                     </div>
                     <span class="italic text-[10px] text-slate-400">⚡ {{fc.t('weeklyOverview')}}</span>
                 </div>
@@ -686,9 +687,9 @@
                     <div ng-repeat="tx in fc.getFilteredTransactions() | orderBy:'-date' | limitTo:5"
                         class="py-3.5 flex items-center justify-between hover:bg-slate-50/60 rounded-2xl px-2 transition-colors">
                         <div class="flex items-center gap-3.5">
-                            <div class="w-10 h-10 rounded-2xl flex items-center justify-center text-sm font-bold"
-                                ng-class="tx.type === 'income' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-slate-100 text-slate-700'">
-                                <i data-lucide="{{tx.type === 'income' ? 'arrow-down-left' : 'shopping-bag'}}"
+                            <div class="w-10 h-10 rounded-2xl flex items-center justify-center text-sm font-bold shadow-sm"
+                                ng-class="tx.type === 'income' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-rose-50 text-rose-600 border border-rose-100'">
+                                <i data-lucide="{{tx.type === 'income' ? 'arrow-down-left' : 'arrow-up-right'}}"
                                     class="w-4 h-4"></i>
                             </div>
                             <div>
@@ -701,12 +702,14 @@
                         <div class="flex items-center gap-3">
                             <div class="text-right">
                                 <div class="text-sm font-black font-mono"
-                                    ng-class="tx.type === 'income' ? 'text-emerald-600' : 'text-slate-900'">
+                                    ng-class="tx.type === 'income' ? 'text-emerald-600' : 'text-rose-600'">
                                     {{tx.type === 'income' ? '+' : '-'}}{{tx.amountEUR |
                                     geoFormat:fc.selectedCurrency:fc.currencies}}
                                 </div>
-                                <span class="text-[10px] text-slate-400 font-bold uppercase">{{tx.type === 'income' ?
-                                    fc.t('incomeType') : fc.t('expenseType')}}</span>
+                                <span class="text-[10px] font-bold uppercase"
+                                    ng-class="tx.type === 'income' ? 'text-emerald-600' : 'text-rose-500'">
+                                    {{tx.type === 'income' ? fc.t('incomeType') : fc.t('expenseType')}}
+                                </span>
                             </div>
                             <button ng-click="fc.openEditModal(tx)"
                                 class="text-slate-400 hover:text-indigo-600 p-1 transition-colors" title="Modifier">
@@ -806,7 +809,7 @@
 
                 <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                     <input type="text" ng-model="fc.searchQuery" placeholder="{{fc.t('searchPlaceholder')}}..."
-                        class="px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:border-slate-900 flex-1 sm:w-40">
+                        class="px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:border-slate-900 flex-1 sm:w-36">
 
                     <select ng-model="fc.typeFilter"
                         class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold outline-none">
@@ -815,9 +818,21 @@
                         <option value="expense">{{fc.t('expenseOnly')}}</option>
                     </select>
 
+                    <!-- Import CSV (Input masqué + bouton) -->
+                    <input type="file" id="csvFileInput" accept=".csv,text/csv" class="hidden"
+                        onchange="angular.element(this).scope().fc.handleCSVUpload(this)">
+
+                    <button ng-click="fc.triggerImportCSV()"
+                        class="px-3 py-2 bg-slate-900 hover:bg-black rounded-xl text-xs font-bold text-white flex items-center gap-1.5 shadow-sm transition-all"
+                        title="Importer un fichier CSV de transactions">
+                        <i data-lucide="upload" class="w-3.5 h-3.5 text-emerald-400"></i> {{fc.t('importCSV')}}
+                    </button>
+
+                    <!-- Export CSV -->
                     <button ng-click="fc.exportCSV()"
-                        class="px-3 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs font-bold text-slate-700 flex items-center gap-1">
-                        <i data-lucide="download" class="w-3.5 h-3.5"></i> CSV
+                        class="px-3 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs font-bold text-slate-700 flex items-center gap-1.5 transition-all"
+                        title="Exporter en CSV">
+                        <i data-lucide="download" class="w-3.5 h-3.5"></i> {{fc.t('exportCSV')}}
                     </button>
                 </div>
             </div>
@@ -827,8 +842,8 @@
                     class="py-3.5 flex items-center justify-between hover:bg-slate-50/70 rounded-2xl px-2 transition-colors">
                     <div class="flex items-center gap-3.5">
                         <div class="w-11 h-11 rounded-2xl flex items-center justify-center text-sm font-bold shadow-sm"
-                            ng-class="tx.type === 'income' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-slate-100 text-slate-700'">
-                            <i data-lucide="{{tx.type === 'income' ? 'arrow-down-left' : 'shopping-bag'}}"
+                            ng-class="tx.type === 'income' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-rose-50 text-rose-600 border border-rose-100'">
+                            <i data-lucide="{{tx.type === 'income' ? 'arrow-down-left' : 'arrow-up-right'}}"
                                 class="w-5 h-5"></i>
                         </div>
                         <div>
@@ -841,12 +856,14 @@
                     <div class="flex items-center gap-3 sm:gap-4">
                         <div class="text-right">
                             <div class="text-sm font-black font-mono"
-                                ng-class="tx.type === 'income' ? 'text-emerald-600' : 'text-slate-900'">
+                                ng-class="tx.type === 'income' ? 'text-emerald-600' : 'text-rose-600'">
                                 {{tx.type === 'income' ? '+' : '-'}}{{tx.amountEUR |
                                 geoFormat:fc.selectedCurrency:fc.currencies}}
                             </div>
-                            <span class="text-[10px] text-slate-400 font-bold uppercase">{{tx.type === 'income' ?
-                                fc.t('incomeType') : fc.t('expenseType')}}</span>
+                            <span class="text-[10px] font-bold uppercase"
+                                ng-class="tx.type === 'income' ? 'text-emerald-600' : 'text-rose-500'">
+                                {{tx.type === 'income' ? fc.t('incomeType') : fc.t('expenseType')}}
+                            </span>
                         </div>
                         <button ng-click="fc.openEditModal(tx)"
                             class="text-slate-400 hover:text-indigo-600 transition-colors p-1" title="Modifier">
@@ -1328,7 +1345,9 @@
                     daysRemaining: 'Jours restants',
                     btnCreateGoal: 'Créer l\'objectif',
                     btnReset: 'Réinitialiser',
-                    btnSave: 'Enregistrer'
+                    btnSave: 'Enregistrer',
+                    importCSV: 'Importer CSV',
+                    exportCSV: 'Exporter CSV'
                 },
                 en: {
                     fintechWallet: 'Fintech Wallet',
@@ -1430,7 +1449,9 @@
                     daysRemaining: 'Days remaining',
                     btnCreateGoal: 'Create Goal',
                     btnReset: 'Reset',
-                    btnSave: 'Save'
+                    btnSave: 'Save',
+                    importCSV: 'Import CSV',
+                    exportCSV: 'Export CSV'
                 }
             };
 
@@ -2301,6 +2322,156 @@
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
+            };
+
+            // Importation CSV intelligente
+            vm.triggerImportCSV = function () {
+                const el = document.getElementById('csvFileInput');
+                if (el) el.click();
+            };
+
+            vm.handleCSVUpload = function (input) {
+                if (!input.files || input.files.length === 0) return;
+                const file = input.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const text = e.target.result;
+                    const lines = text.split(/\r?\n/).filter(line => line.trim().length > 0);
+                    if (lines.length <= 1) {
+                        $timeout(() => vm.showToast(vm.currentLang === 'fr' ? 'Fichier CSV vide ou invalide.' : 'Empty or invalid CSV file.', 'error'));
+                        input.value = '';
+                        return;
+                    }
+
+                    // Détection du délimiteur (; ou , ou tabulation)
+                    const headerLine = lines[0];
+                    const delimiter = headerLine.includes(';') ? ';' : (headerLine.includes('\t') ? '\t' : ',');
+
+                    // Découpage des en-têtes
+                    const headers = headerLine.split(delimiter).map(h => h.replace(/^["']|["']$/g, '').trim().toLowerCase());
+
+                    let dateIdx = headers.findIndex(h => h.includes('date'));
+                    let typeIdx = headers.findIndex(h => h.includes('type'));
+                    let descIdx = headers.findIndex(h => h.includes('desc') || h.includes('motif') || h.includes('libell') || h.includes('nom'));
+                    let catIdx = headers.findIndex(h => h.includes('cat'));
+                    let amountIdx = headers.findIndex(h => h.includes('montant') || h.includes('amount') || h.includes('valeur') || h.includes('somme'));
+
+                    if (amountIdx === -1 && headers.length >= 2) amountIdx = headers.length - 1;
+                    if (dateIdx === -1) dateIdx = 0;
+                    if (descIdx === -1 && headers.length > 2) descIdx = 2;
+                    if (catIdx === -1 && headers.length > 3) catIdx = 3;
+
+                    const rate = vm.currencies[vm.selectedCurrency].rate;
+                    const newTransactions = [];
+                    const rowsToInsert = [];
+
+                    for (let i = 1; i < lines.length; i++) {
+                        const line = lines[i].trim();
+                        if (!line) continue;
+
+                        // Parse de ligne avec gestion des guillemets
+                        let cols = [];
+                        let inQuotes = false;
+                        let curCol = '';
+                        for (let c = 0; c < line.length; c++) {
+                            const char = line[c];
+                            if (char === '"' || char === "'") {
+                                inQuotes = !inQuotes;
+                            } else if (char === delimiter && !inQuotes) {
+                                cols.push(curCol.trim());
+                                curCol = '';
+                            } else {
+                                curCol += char;
+                            }
+                        }
+                        cols.push(curCol.trim());
+                        cols = cols.map(c => c.replace(/^["']|["']$/g, '').trim());
+
+                        if (cols.length <= 1) continue;
+
+                        // Extraction du montant
+                        let rawAmtStr = (amountIdx >= 0 && cols[amountIdx]) ? cols[amountIdx] : '0';
+                        rawAmtStr = rawAmtStr.replace(/[^\d.,-]/g, '').replace(',', '.');
+                        let rawAmt = parseFloat(rawAmtStr);
+                        if (isNaN(rawAmt) || rawAmt === 0) continue;
+
+                        // Extraction du type
+                        let rawType = (typeIdx >= 0 && cols[typeIdx]) ? cols[typeIdx].toLowerCase() : '';
+                        let txType = 'expense';
+                        if (rawType.includes('inc') || rawType.includes('entr') || rawType.includes('gain') || (rawAmt > 0 && rawType === '+')) {
+                            txType = 'income';
+                        } else if (rawType.includes('exp') || rawType.includes('dép') || rawType.includes('sort') || rawAmt < 0) {
+                            txType = 'expense';
+                        } else if (rawAmt < 0) {
+                            txType = 'expense';
+                        }
+
+                        const absAmountEUR = Math.abs(rawAmt) / rate;
+
+                        // Extraction de la date
+                        let rawDate = (dateIdx >= 0 && cols[dateIdx]) ? cols[dateIdx] : '';
+                        let formattedDate = formatLocalDate(new Date());
+                        if (rawDate) {
+                            if (/^\d{4}-\d{2}-\d{2}$/.test(rawDate)) {
+                                formattedDate = rawDate;
+                            } else if (/^\d{2}[\/\-]\d{2}[\/\-]\d{4}$/.test(rawDate)) {
+                                const parts = rawDate.split(/[\/\-]/);
+                                formattedDate = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+                            }
+                        }
+
+                        // Description & Catégorie
+                        let rawDesc = (descIdx >= 0 && cols[descIdx]) ? cols[descIdx] : (txType === 'income' ? 'Entrée importée' : 'Dépense importée');
+                        let rawCat = (catIdx >= 0 && cols[catIdx]) ? cols[catIdx] : (txType === 'income' ? 'Autre Entrée' : 'Autre Dépense');
+
+                        const txId = (Date.now() + i).toString();
+                        const txObj = {
+                            id: txId,
+                            type: txType,
+                            amountEUR: absAmountEUR,
+                            description: rawDesc,
+                            category: rawCat,
+                            date: formattedDate
+                        };
+
+                        newTransactions.push(txObj);
+
+                        if (supabaseClient && vm.auth.currentUser) {
+                            rowsToInsert.push({
+                                id: txId,
+                                user_id: vm.auth.currentUser.id,
+                                type: txType,
+                                amount_eur: absAmountEUR,
+                                description: rawDesc,
+                                category: rawCat,
+                                date: formattedDate
+                            });
+                        }
+                    }
+
+                    $timeout(() => {
+                        if (newTransactions.length > 0) {
+                            vm.transactions = [...newTransactions, ...vm.transactions];
+                            vm.saveToStorage();
+                            vm.buildAvailablePeriods();
+                            vm.recalculate();
+
+                            if (rowsToInsert.length > 0 && supabaseClient) {
+                                supabaseClient.from('transactions').insert(rowsToInsert).then();
+                            }
+
+                            vm.showToast(vm.currentLang === 'fr' 
+                                ? `✅ ${newTransactions.length} opérations importées avec succès !` 
+                                : `✅ ${newTransactions.length} transactions imported successfully!`);
+                        } else {
+                            vm.showToast(vm.currentLang === 'fr' ? 'Aucune opération valide trouvée dans le CSV.' : 'No valid transactions found in CSV.', 'error');
+                        }
+                        input.value = '';
+                    });
+                };
+
+                reader.readAsText(file);
             };
 
             vm.openSupabaseConfigModal = function () {
