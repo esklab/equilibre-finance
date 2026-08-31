@@ -564,53 +564,66 @@
 
             </div>
 
-            <!-- 3. GRAPHIQUE MENSUEL DYNAMIQUE : 12 MOIS COMPLETS (JANVIER À DÉCEMBRE) -->
-            <div class="fintech-card p-6 space-y-4">
+            <!-- 3. GRAPHIQUE HEBDOMADAIRE : LUNDI À DIMANCHE -->
+            <div class="fintech-card p-5 sm:p-6 space-y-4">
                 <div
                     class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
                     <div>
-                        <h3 class="text-base font-black text-slate-900 tracking-tight">{{fc.t('savingAnalytics')}}</h3>
-                        <p class="text-xs text-slate-400 font-medium">{{fc.t('monthlyEvolution')}} (12 Mois -
-                            {{fc.selectedYear}})</p>
+                        <h3 class="text-base font-black text-slate-900 tracking-tight">{{fc.t('weeklyAnalytics')}}</h3>
+                        <p class="text-xs text-slate-400 font-medium">{{fc.t('weeklyEvolution')}}</p>
                     </div>
 
-                    <div
-                        class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-black self-start sm:self-auto">
-                        <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
-                        <span>{{fc.stats.periodSavingRate}}% {{fc.t('savingsRate')}}</span>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-bold text-slate-500">{{fc.t('weekTotal')}} :</span>
+                        <span
+                            class="px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-xs font-black font-mono">
+                            -{{fc.weeklyStats.totalExpense | geoFormat:fc.selectedCurrency:fc.currencies}}
+                        </span>
                     </div>
                 </div>
 
-                <!-- 12 Barres Mensuelles : Janvier à Décembre en une seule ligne fluide -->
-                <div class="grid grid-cols-12 gap-1 sm:gap-2 items-end pt-3 pb-2 w-full">
-                    <div ng-repeat="item in fc.monthlyPillBars" ng-click="fc.selectMonthFromChart(item.monthIndex)"
-                        class="flex flex-col items-center gap-1 justify-end cursor-pointer group"
-                        title="{{item.fullLabel}}: Dépenses -{{item.amount | geoFormat:fc.selectedCurrency:fc.currencies}} | Entrées +{{item.income | geoFormat:fc.selectedCurrency:fc.currencies}}">
-                        <div class="w-full bg-slate-100 rounded-full relative flex items-end justify-center overflow-hidden group-hover:bg-slate-200 transition-all h-24 sm:h-28 max-w-[26px] sm:max-w-[36px] mx-auto"
-                            ng-class="{'ring-2 ring-slate-950 ring-offset-1': item.isSelected}">
+                <!-- 7 Barres Hebdomadaires : Lundi à Dimanche -->
+                <div class="grid grid-cols-7 gap-2 sm:gap-4 items-end pt-3 pb-2 w-full">
+                    <div ng-repeat="item in fc.weeklyPillBars"
+                        class="flex flex-col items-center gap-1.5 justify-end group cursor-default"
+                        title="{{item.fullLabel}}: Dépenses -{{item.expense | geoFormat:fc.selectedCurrency:fc.currencies}} | Entrées +{{item.income | geoFormat:fc.selectedCurrency:fc.currencies}}">
+
+                        <!-- Pilule interactive Hebdomadaire -->
+                        <div class="w-full bg-slate-100 rounded-full relative flex items-end justify-center overflow-hidden group-hover:bg-slate-200 transition-all h-28 sm:h-32 max-w-[34px] sm:max-w-[44px] mx-auto"
+                            ng-class="{'ring-2 ring-emerald-500 ring-offset-2': item.isToday}">
                             <div class="w-full rounded-full transition-all duration-500"
-                                ng-class="item.isSelected ? 'bg-slate-950' : (item.isCurrentMonth ? 'bg-emerald-500' : 'bg-slate-700')"
+                                ng-class="item.isToday ? 'bg-emerald-500 shadow-md shadow-emerald-500/30' : (item.expense > 0 ? 'bg-slate-900' : 'bg-slate-300')"
                                 style="height: {{item.percentage}}%;">
                             </div>
                         </div>
-                        <span class="text-[7.5px] sm:text-[10px] font-bold uppercase transition-colors text-center w-full truncate tracking-tighter sm:tracking-normal"
-                            ng-class="item.isSelected ? 'text-slate-950 font-black' : (item.isCurrentMonth ? 'text-emerald-600 font-black underline' : 'text-slate-400 group-hover:text-slate-700')">
-                            {{item.label}}
-                        </span>
+
+                        <!-- Libellé du jour (ex: LUN + Numéro du jour) -->
+                        <div class="flex flex-col items-center leading-none mt-0.5">
+                            <span class="text-[10px] sm:text-xs font-bold uppercase transition-colors"
+                                ng-class="item.isToday ? 'text-emerald-600 font-black' : 'text-slate-500'">
+                                {{item.label}}
+                            </span>
+                            <span class="text-[9px] font-mono text-slate-400 font-semibold mt-1"
+                                ng-class="item.isToday ? 'text-emerald-700 font-bold' : ''">
+                                {{item.dayNumber}}
+                            </span>
+                        </div>
                     </div>
                 </div>
 
                 <div
                     class="text-[11px] text-slate-400 flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
                     <div class="flex items-center gap-3">
-                        <span class="flex items-center gap-1.5"><span
-                                class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
-                            {{fc.t('currentMonth')}}</span>
-                        <span class="flex items-center gap-1.5"><span
-                                class="w-2 h-2 rounded-full bg-slate-950 inline-block"></span>
-                            {{fc.t('selectedMonth')}}</span>
+                        <span class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+                            {{fc.t('today')}}
+                        </span>
+                        <span class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-slate-900 inline-block"></span>
+                            {{fc.t('expenseDays')}}
+                        </span>
                     </div>
-                    <span class="italic text-[10px] text-slate-400">💡 {{fc.t('chartHint')}}</span>
+                    <span class="italic text-[10px] text-slate-400">💡 {{fc.t('weeklyHint')}}</span>
                 </div>
             </div>
 
@@ -865,21 +878,75 @@
         <!-- ========================================== -->
         <!-- ONGLET 4 : ANALYSES & GRAPHIQUES           -->
         <!-- ========================================== -->
-        <div ng-show="fc.currentTab === 'analytics'" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="fintech-card p-6 space-y-4">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-sm font-black text-slate-900">{{fc.t('fluxIncomeExpense')}}</h3>
-                    <span class="text-xs font-bold text-slate-400">{{fc.getPeriodLabel()}}</span>
+        <div ng-show="fc.currentTab === 'analytics'" class="space-y-6">
+
+            <!-- 1. GRAPHIQUE MENSUEL DYNAMIQUE : 12 MOIS COMPLETS (JANVIER À DÉCEMBRE) -->
+            <div class="fintech-card p-5 sm:p-6 space-y-4">
+                <div
+                    class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                    <div>
+                        <h3 class="text-base font-black text-slate-900 tracking-tight">{{fc.t('savingAnalytics')}}</h3>
+                        <p class="text-xs text-slate-400 font-medium">{{fc.t('monthlyEvolution')}} (12 Mois -
+                            {{fc.selectedYear}})</p>
+                    </div>
+
+                    <div
+                        class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-black self-start sm:self-auto">
+                        <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+                        <span>{{fc.stats.periodSavingRate}}% {{fc.t('savingsRate')}}</span>
+                    </div>
                 </div>
-                <div class="h-64"><canvas id="analyticsBarChart"></canvas></div>
+
+                <!-- 12 Barres Mensuelles : Janvier à Décembre en une seule ligne fluide -->
+                <div class="grid grid-cols-12 gap-1 sm:gap-2 items-end pt-3 pb-2 w-full">
+                    <div ng-repeat="item in fc.monthlyPillBars" ng-click="fc.selectMonthFromChart(item.monthIndex)"
+                        class="flex flex-col items-center gap-1 justify-end cursor-pointer group"
+                        title="{{item.fullLabel}}: Dépenses -{{item.amount | geoFormat:fc.selectedCurrency:fc.currencies}} | Entrées +{{item.income | geoFormat:fc.selectedCurrency:fc.currencies}}">
+                        <div class="w-full bg-slate-100 rounded-full relative flex items-end justify-center overflow-hidden group-hover:bg-slate-200 transition-all h-24 sm:h-28 max-w-[26px] sm:max-w-[36px] mx-auto"
+                            ng-class="{'ring-2 ring-slate-950 ring-offset-1': item.isSelected}">
+                            <div class="w-full rounded-full transition-all duration-500"
+                                ng-class="item.isSelected ? 'bg-slate-950' : (item.isCurrentMonth ? 'bg-emerald-500' : 'bg-slate-700')"
+                                style="height: {{item.percentage}}%;">
+                            </div>
+                        </div>
+                        <span class="text-[7.5px] sm:text-[10px] font-bold uppercase transition-colors text-center w-full truncate tracking-tighter sm:tracking-normal"
+                            ng-class="item.isSelected ? 'text-slate-950 font-black' : (item.isCurrentMonth ? 'text-emerald-600 font-black underline' : 'text-slate-400 group-hover:text-slate-700')">
+                            {{item.label}}
+                        </span>
+                    </div>
+                </div>
+
+                <div
+                    class="text-[11px] text-slate-400 flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                    <div class="flex items-center gap-3">
+                        <span class="flex items-center gap-1.5"><span
+                                class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+                            {{fc.t('currentMonth')}}</span>
+                        <span class="flex items-center gap-1.5"><span
+                                class="w-2 h-2 rounded-full bg-slate-950 inline-block"></span>
+                            {{fc.t('selectedMonth')}}</span>
+                    </div>
+                    <span class="italic text-[10px] text-slate-400">💡 {{fc.t('chartHint')}}</span>
+                </div>
             </div>
 
-            <div class="fintech-card p-6 space-y-4">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-sm font-black text-slate-900">{{fc.t('categoryBreakdown')}}</h3>
-                    <span class="text-xs font-bold text-slate-400">{{fc.getPeriodLabel()}}</span>
+            <!-- 2. GRAPHIQUES COMPARATIFS (FLUX & CATÉGORIES) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="fintech-card p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm font-black text-slate-900">{{fc.t('fluxIncomeExpense')}}</h3>
+                        <span class="text-xs font-bold text-slate-400">{{fc.getPeriodLabel()}}</span>
+                    </div>
+                    <div class="h-64"><canvas id="analyticsBarChart"></canvas></div>
                 </div>
-                <div class="h-64 flex items-center justify-center"><canvas id="analyticsDoughnutChart"></canvas></div>
+
+                <div class="fintech-card p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm font-black text-slate-900">{{fc.t('categoryBreakdown')}}</h3>
+                        <span class="text-xs font-bold text-slate-400">{{fc.getPeriodLabel()}}</span>
+                    </div>
+                    <div class="h-64 flex items-center justify-center"><canvas id="analyticsDoughnutChart"></canvas></div>
+                </div>
             </div>
         </div>
 
@@ -1216,6 +1283,12 @@
                     currentMonth: 'Mois actuel',
                     selectedMonth: 'Mois sélectionné',
                     chartHint: 'Cliquez sur un mois pour filtrer instantanément.',
+                    weeklyAnalytics: 'Analytique Hebdomadaire',
+                    weeklyEvolution: 'Cette semaine (Lundi au Dimanche)',
+                    weekTotal: 'Total Semaine',
+                    today: 'Aujourd\'hui',
+                    expenseDays: 'Dépenses',
+                    weeklyHint: 'Dépenses quotidiennes de la semaine en cours.',
                     btnTopUp: 'Entrée',
                     btnSend: 'Dépense',
                     btnCategories: 'Catégories',
@@ -1314,6 +1387,12 @@
                     currentMonth: 'Current month',
                     selectedMonth: 'Selected month',
                     chartHint: 'Click on any month to filter instantly.',
+                    weeklyAnalytics: 'Weekly Analytics',
+                    weeklyEvolution: 'This week (Monday to Sunday)',
+                    weekTotal: 'Week Total',
+                    today: 'Today',
+                    expenseDays: 'Expenses',
+                    weeklyHint: 'Daily spending overview for the current week.',
                     btnTopUp: 'Top up',
                     btnSend: 'Send',
                     btnCategories: 'Categories',
