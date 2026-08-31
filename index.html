@@ -564,66 +564,57 @@
 
             </div>
 
-            <!-- 3. GRAPHIQUE HEBDOMADAIRE : LUNDI À DIMANCHE -->
-            <div class="fintech-card p-5 sm:p-6 space-y-4">
-                <div
-                    class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <!-- 3. GRAPHIQUE HEBDOMADAIRE (LUNDI À DIMANCHE) -->
+            <div class="fintech-card p-6 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
                     <div>
                         <h3 class="text-base font-black text-slate-900 tracking-tight">{{fc.t('weeklyAnalytics')}}</h3>
-                        <p class="text-xs text-slate-400 font-medium">{{fc.t('weeklyEvolution')}}</p>
+                        <p class="text-xs text-slate-400 font-medium">{{fc.weekRangeLabel || fc.t('weeklyOverview')}}</p>
                     </div>
 
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs font-bold text-slate-500">{{fc.t('weekTotal')}} :</span>
-                        <span
-                            class="px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-xs font-black font-mono">
-                            -{{fc.weeklyStats.totalExpense | geoFormat:fc.selectedCurrency:fc.currencies}}
-                        </span>
+                    <div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 text-white text-xs font-black self-start sm:self-auto shadow-sm">
+                        <i data-lucide="calendar" class="w-3.5 h-3.5 text-emerald-400"></i>
+                        <span>-{{fc.weekTotalExpense | geoFormat:fc.selectedCurrency:fc.currencies}}</span>
                     </div>
                 </div>
 
                 <!-- 7 Barres Hebdomadaires : Lundi à Dimanche -->
                 <div class="grid grid-cols-7 gap-2 sm:gap-4 items-end pt-3 pb-2 w-full">
                     <div ng-repeat="item in fc.weeklyPillBars"
-                        class="flex flex-col items-center gap-1.5 justify-end group cursor-default"
-                        title="{{item.fullLabel}}: Dépenses -{{item.expense | geoFormat:fc.selectedCurrency:fc.currencies}} | Entrées +{{item.income | geoFormat:fc.selectedCurrency:fc.currencies}}">
+                        class="flex flex-col items-center gap-1.5 justify-end cursor-pointer group"
+                        title="{{item.fullDate}}: Dépenses -{{item.expense | geoFormat:fc.selectedCurrency:fc.currencies}} | Entrées +{{item.income | geoFormat:fc.selectedCurrency:fc.currencies}}">
+                        
+                        <!-- Montant au hover / tooltips -->
+                        <span class="text-[9px] sm:text-[10px] font-mono font-bold text-slate-400 group-hover:text-slate-900 transition-colors">
+                            {{item.expense > 0 ? (item.expense | geoFormat:fc.selectedCurrency:fc.currencies) : '-'}}
+                        </span>
 
-                        <!-- Pilule interactive Hebdomadaire -->
-                        <div class="w-full bg-slate-100 rounded-full relative flex items-end justify-center overflow-hidden group-hover:bg-slate-200 transition-all h-28 sm:h-32 max-w-[34px] sm:max-w-[44px] mx-auto"
-                            ng-class="{'ring-2 ring-emerald-500 ring-offset-2': item.isToday}">
+                        <div class="w-full bg-slate-100 rounded-full relative flex items-end justify-center overflow-hidden group-hover:bg-slate-200 transition-all h-28 sm:h-32 max-w-[32px] sm:max-w-[42px] mx-auto"
+                            ng-class="{'ring-2 ring-emerald-500 ring-offset-1': item.isToday}">
                             <div class="w-full rounded-full transition-all duration-500"
-                                ng-class="item.isToday ? 'bg-emerald-500 shadow-md shadow-emerald-500/30' : (item.expense > 0 ? 'bg-slate-900' : 'bg-slate-300')"
+                                ng-class="item.isToday ? 'bg-emerald-500 shadow-sm' : (item.expense > 0 ? 'bg-slate-900' : 'bg-slate-300')"
                                 style="height: {{item.percentage}}%;">
                             </div>
                         </div>
 
-                        <!-- Libellé du jour (ex: LUN + Numéro du jour) -->
-                        <div class="flex flex-col items-center leading-none mt-0.5">
-                            <span class="text-[10px] sm:text-xs font-bold uppercase transition-colors"
-                                ng-class="item.isToday ? 'text-emerald-600 font-black' : 'text-slate-500'">
+                        <div class="flex flex-col items-center">
+                            <span class="text-[10px] sm:text-xs font-black uppercase transition-colors"
+                                ng-class="item.isToday ? 'text-emerald-600 underline font-black' : 'text-slate-700'">
                                 {{item.label}}
                             </span>
-                            <span class="text-[9px] font-mono text-slate-400 font-semibold mt-1"
-                                ng-class="item.isToday ? 'text-emerald-700 font-bold' : ''">
-                                {{item.dayNumber}}
+                            <span class="text-[9px] font-bold text-slate-400 -mt-0.5">
+                                {{item.dayNum}}
                             </span>
                         </div>
                     </div>
                 </div>
 
-                <div
-                    class="text-[11px] text-slate-400 flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                <div class="text-[11px] text-slate-400 flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
                     <div class="flex items-center gap-3">
-                        <span class="flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
-                            {{fc.t('today')}}
-                        </span>
-                        <span class="flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full bg-slate-900 inline-block"></span>
-                            {{fc.t('expenseDays')}}
-                        </span>
+                        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span> {{fc.t('todayLabel')}}</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-slate-900 inline-block"></span> {{fc.t('expenseType')}}</span>
                     </div>
-                    <span class="italic text-[10px] text-slate-400">💡 {{fc.t('weeklyHint')}}</span>
+                    <span class="italic text-[10px] text-slate-400">⚡ {{fc.t('weeklyOverview')}}</span>
                 </div>
             </div>
 
@@ -876,22 +867,20 @@
         </div>
 
         <!-- ========================================== -->
+        <!-- ========================================== -->
         <!-- ONGLET 4 : ANALYSES & GRAPHIQUES           -->
         <!-- ========================================== -->
         <div ng-show="fc.currentTab === 'analytics'" class="space-y-6">
 
             <!-- 1. GRAPHIQUE MENSUEL DYNAMIQUE : 12 MOIS COMPLETS (JANVIER À DÉCEMBRE) -->
-            <div class="fintech-card p-5 sm:p-6 space-y-4">
-                <div
-                    class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <div class="fintech-card p-6 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
                     <div>
                         <h3 class="text-base font-black text-slate-900 tracking-tight">{{fc.t('savingAnalytics')}}</h3>
-                        <p class="text-xs text-slate-400 font-medium">{{fc.t('monthlyEvolution')}} (12 Mois -
-                            {{fc.selectedYear}})</p>
+                        <p class="text-xs text-slate-400 font-medium">{{fc.t('monthlyEvolution')}} (12 Mois - {{fc.selectedYear}})</p>
                     </div>
 
-                    <div
-                        class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-black self-start sm:self-auto">
+                    <div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-black self-start sm:self-auto">
                         <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
                         <span>{{fc.stats.periodSavingRate}}% {{fc.t('savingsRate')}}</span>
                     </div>
@@ -916,21 +905,16 @@
                     </div>
                 </div>
 
-                <div
-                    class="text-[11px] text-slate-400 flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                <div class="text-[11px] text-slate-400 flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
                     <div class="flex items-center gap-3">
-                        <span class="flex items-center gap-1.5"><span
-                                class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
-                            {{fc.t('currentMonth')}}</span>
-                        <span class="flex items-center gap-1.5"><span
-                                class="w-2 h-2 rounded-full bg-slate-950 inline-block"></span>
-                            {{fc.t('selectedMonth')}}</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span> {{fc.t('currentMonth')}}</span>
+                        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-slate-950 inline-block"></span> {{fc.t('selectedMonth')}}</span>
                     </div>
                     <span class="italic text-[10px] text-slate-400">💡 {{fc.t('chartHint')}}</span>
                 </div>
             </div>
 
-            <!-- 2. GRAPHIQUES COMPARATIFS (FLUX & CATÉGORIES) -->
+            <!-- 2. DIAGRAMMES FLUX & RÉPARTITION -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="fintech-card p-6 space-y-4">
                     <div class="flex items-center justify-between">
@@ -948,6 +932,7 @@
                     <div class="h-64 flex items-center justify-center"><canvas id="analyticsDoughnutChart"></canvas></div>
                 </div>
             </div>
+
         </div>
 
     </main>
@@ -1283,12 +1268,6 @@
                     currentMonth: 'Mois actuel',
                     selectedMonth: 'Mois sélectionné',
                     chartHint: 'Cliquez sur un mois pour filtrer instantanément.',
-                    weeklyAnalytics: 'Analytique Hebdomadaire',
-                    weeklyEvolution: 'Cette semaine (Lundi au Dimanche)',
-                    weekTotal: 'Total Semaine',
-                    today: 'Aujourd\'hui',
-                    expenseDays: 'Dépenses',
-                    weeklyHint: 'Dépenses quotidiennes de la semaine en cours.',
                     btnTopUp: 'Entrée',
                     btnSend: 'Dépense',
                     btnCategories: 'Catégories',
@@ -1298,6 +1277,10 @@
                     txRecorded: 'enregistrée(s)',
                     savingAnalytics: 'Analytique Mensuelle',
                     monthlyEvolution: 'Mouvement Mensuel',
+                    weeklyAnalytics: 'Analytique Hebdomadaire',
+                    weeklyOverview: 'Semaine en cours (Lundi à Dimanche)',
+                    todayLabel: 'Aujourd\'hui',
+                    weekSpent: 'Dépensé cette semaine',
                     savingsRate: 'Épargne',
                     yourGoals: 'Vos Objectifs & Projets',
                     viewAll: 'Voir tout',
@@ -1387,12 +1370,6 @@
                     currentMonth: 'Current month',
                     selectedMonth: 'Selected month',
                     chartHint: 'Click on any month to filter instantly.',
-                    weeklyAnalytics: 'Weekly Analytics',
-                    weeklyEvolution: 'This week (Monday to Sunday)',
-                    weekTotal: 'Week Total',
-                    today: 'Today',
-                    expenseDays: 'Expenses',
-                    weeklyHint: 'Daily spending overview for the current week.',
                     btnTopUp: 'Top up',
                     btnSend: 'Send',
                     btnCategories: 'Categories',
@@ -1402,6 +1379,10 @@
                     txRecorded: 'recorded',
                     savingAnalytics: 'Saving Analytics',
                     monthlyEvolution: 'Monthly Overview',
+                    weeklyAnalytics: 'Weekly Analytics',
+                    weeklyOverview: 'Current week (Monday to Sunday)',
+                    todayLabel: 'Today',
+                    weekSpent: 'Spent this week',
                     savingsRate: 'Saved',
                     yourGoals: 'Your Goals',
                     viewAll: 'View all',
@@ -2181,6 +2162,78 @@
                     isSelected: (idx === selectedMonthIdx),
                     percentage: monthlyExpenses[idx] > 0 ? Math.max(20, Math.round((monthlyExpenses[idx] / maxMonthAmount) * 100)) : 10
                 }));
+
+                // Calcul Hebdomadaire : Lundi à Dimanche de la semaine en cours
+                const dayLabelsFR = ['LUN', 'MAR', 'MER', 'JEU', 'VEN', 'SAM', 'DIM'];
+                const dayLabelsEN = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+                const activeDayLabels = (vm.currentLang === 'fr') ? dayLabelsFR : dayLabelsEN;
+
+                const curDayOfWeek = todayObj.getDay(); // 0 is Sunday, 1 is Monday...
+                const distToMonday = (curDayOfWeek === 0 ? -6 : 1 - curDayOfWeek);
+                const mondayDate = new Date(todayObj);
+                mondayDate.setDate(todayObj.getDate() + distToMonday);
+
+                const sundayDate = new Date(mondayDate);
+                sundayDate.setDate(mondayDate.getDate() + 6);
+
+                const mNameFR = fullMonthLabelsFR[mondayDate.getMonth()];
+                const sNameFR = fullMonthLabelsFR[sundayDate.getMonth()];
+                const mNameEN = fullMonthLabelsEN[mondayDate.getMonth()];
+                const sNameEN = fullMonthLabelsEN[sundayDate.getMonth()];
+
+                if (vm.currentLang === 'fr') {
+                    vm.weekRangeLabel = (mondayDate.getMonth() === sundayDate.getMonth())
+                        ? `Semaine du ${mondayDate.getDate()} au ${sundayDate.getDate()} ${mNameFR}`
+                        : `Semaine du ${mondayDate.getDate()} ${mNameFR} au ${sundayDate.getDate()} ${sNameFR}`;
+                } else {
+                    vm.weekRangeLabel = (mondayDate.getMonth() === sundayDate.getMonth())
+                        ? `Week of ${mNameEN} ${mondayDate.getDate()} - ${sundayDate.getDate()}`
+                        : `Week of ${mNameEN} ${mondayDate.getDate()} - ${sNameEN} ${sundayDate.getDate()}`;
+                }
+
+                let maxDayAmount = 1;
+                let weekExpTotal = 0;
+                let weekIncTotal = 0;
+                const weekDays = [];
+
+                for (let dIdx = 0; dIdx < 7; dIdx++) {
+                    const thisD = new Date(mondayDate);
+                    thisD.setDate(mondayDate.getDate() + dIdx);
+                    const dStr = formatLocalDate(thisD);
+                    let dayExp = 0;
+                    let dayInc = 0;
+
+                    vm.transactions.forEach(t => {
+                        if (t.date === dStr) {
+                            if (t.type === 'expense') dayExp += t.amountEUR;
+                            else if (t.type === 'income') dayInc += t.amountEUR;
+                        }
+                    });
+
+                    if (dayExp > maxDayAmount) maxDayAmount = dayExp;
+                    weekExpTotal += dayExp;
+                    weekIncTotal += dayInc;
+
+                    weekDays.push({
+                        dayIndex: dIdx,
+                        label: activeDayLabels[dIdx],
+                        dayNum: thisD.getDate(),
+                        dateStr: dStr,
+                        fullDate: dStr,
+                        expense: dayExp,
+                        income: dayInc,
+                        isToday: (dStr === formatLocalDate(todayObj)),
+                        percentage: 0
+                    });
+                }
+
+                weekDays.forEach(w => {
+                    w.percentage = w.expense > 0 ? Math.max(20, Math.round((w.expense / maxDayAmount) * 100)) : 10;
+                });
+
+                vm.weeklyPillBars = weekDays;
+                vm.weekTotalExpense = weekExpTotal;
+                vm.weekTotalIncome = weekIncTotal;
 
                 $timeout(() => {
                     vm.renderCharts(pInc, pExp, pCatMap);
