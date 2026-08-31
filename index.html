@@ -799,7 +799,7 @@
         <!-- ========================================== -->
         <div ng-show="fc.currentTab === 'transactions'" class="fintech-card p-6 space-y-6">
             <div
-                class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
                 <div>
                     <h2 class="text-lg font-black text-slate-900 tracking-tight">{{fc.t('txJournal')}}</h2>
                     <p class="text-xs text-slate-400 font-medium">{{fc.getFilteredTransactions().length}}
@@ -807,67 +807,45 @@
                             ng-if="fc.selectedMonthYear !== 'all'">({{fc.getPeriodLabel()}})</span></p>
                 </div>
 
-                <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
-                    <!-- Recherche textuelle -->
+                <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                     <input type="text" ng-model="fc.searchQuery" placeholder="{{fc.t('searchPlaceholder')}}..."
-                        class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:border-slate-900 flex-1 sm:w-32">
+                        class="px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:border-slate-900 flex-1 sm:w-36">
 
-                    <!-- Filtre Type (Tous / Entrées / Dépenses) -->
-                    <select ng-model="fc.typeFilter"
-                        class="px-2.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold outline-none cursor-pointer">
+                    <!-- Filtre par Type -->
+                    <select ng-model="fc.typeFilter" ng-change="fc.categoryFilter = 'all'"
+                        class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold outline-none cursor-pointer">
                         <option value="all">{{fc.t('allTypes')}}</option>
                         <option value="income">{{fc.t('incomeOnly')}}</option>
                         <option value="expense">{{fc.t('expenseOnly')}}</option>
                     </select>
 
-                    <!-- Filtre Catégories -->
+                    <!-- Filtre par Catégorie -->
                     <select ng-model="fc.categoryFilter"
-                        class="px-2.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold outline-none cursor-pointer max-w-[130px] truncate">
+                        class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold outline-none cursor-pointer max-w-[150px] truncate">
                         <option value="all">{{fc.t('allCategories')}}</option>
-                        <option ng-repeat="cat in fc.getAllFilterCategories()" value="{{cat}}">{{cat}}</option>
+                        <option ng-repeat="cat in fc.getAvailableCategoriesFilter()" value="{{cat}}">{{cat}}</option>
                     </select>
-
-                    <!-- Sélecteur de Mode d'Affichage (Liste vs Groupé par Catégories) -->
-                    <div class="flex bg-slate-100 p-1 rounded-xl text-xs font-bold">
-                        <button type="button" ng-click="fc.journalViewMode = 'list'"
-                            class="px-2.5 py-1.5 rounded-lg transition-all flex items-center gap-1"
-                            ng-class="fc.journalViewMode === 'list' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-900'"
-                            title="Vue chronologique">
-                            <i data-lucide="list" class="w-3.5 h-3.5"></i>
-                            <span class="hidden sm:inline">{{fc.t('viewList')}}</span>
-                        </button>
-                        <button type="button" ng-click="fc.journalViewMode = 'grouped'"
-                            class="px-2.5 py-1.5 rounded-lg transition-all flex items-center gap-1"
-                            ng-class="fc.journalViewMode === 'grouped' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-900'"
-                            title="Classer par catégories">
-                            <i data-lucide="layers" class="w-3.5 h-3.5"></i>
-                            <span class="hidden sm:inline">{{fc.t('viewGrouped')}}</span>
-                        </button>
-                    </div>
 
                     <!-- Import CSV (Input masqué + bouton) -->
                     <input type="file" id="csvFileInput" accept=".csv,text/csv" class="hidden"
                         onchange="angular.element(this).scope().fc.handleCSVUpload(this)">
 
                     <button ng-click="fc.triggerImportCSV()"
-                        class="px-2.5 py-2 bg-slate-900 hover:bg-black rounded-xl text-xs font-bold text-white flex items-center gap-1 shadow-sm transition-all"
-                        title="Importer un fichier CSV">
-                        <i data-lucide="upload" class="w-3.5 h-3.5 text-emerald-400"></i>
-                        <span class="hidden sm:inline">{{fc.t('importCSV')}}</span>
+                        class="px-3 py-2 bg-slate-900 hover:bg-black rounded-xl text-xs font-bold text-white flex items-center gap-1.5 shadow-sm transition-all"
+                        title="Importer un fichier CSV de transactions">
+                        <i data-lucide="upload" class="w-3.5 h-3.5 text-emerald-400"></i> {{fc.t('importCSV')}}
                     </button>
 
                     <!-- Export CSV -->
                     <button ng-click="fc.exportCSV()"
-                        class="px-2.5 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs font-bold text-slate-700 flex items-center gap-1 transition-all"
+                        class="px-3 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs font-bold text-slate-700 flex items-center gap-1.5 transition-all"
                         title="Exporter en CSV">
-                        <i data-lucide="download" class="w-3.5 h-3.5"></i>
-                        <span class="hidden sm:inline">{{fc.t('exportCSV')}}</span>
+                        <i data-lucide="download" class="w-3.5 h-3.5"></i> {{fc.t('exportCSV')}}
                     </button>
                 </div>
             </div>
 
-            <!-- VUE 1 : LISTE CHRONOLOGIQUE CLASSIQUE -->
-            <div ng-if="fc.journalViewMode === 'list'" class="divide-y divide-slate-100">
+            <div class="divide-y divide-slate-100">
                 <div ng-repeat="tx in fc.getFilteredTransactions() | orderBy:'-date'"
                     class="py-3.5 flex items-center justify-between hover:bg-slate-50/70 rounded-2xl px-2 transition-colors">
                     <div class="flex items-center gap-3.5">
@@ -907,60 +885,6 @@
                 </div>
 
                 <div ng-if="fc.getFilteredTransactions().length === 0"
-                    class="py-12 text-center text-slate-400 text-xs font-semibold">
-                    {{fc.t('noTxFound')}}
-                </div>
-            </div>
-
-            <!-- VUE 2 : GROUPÉE ET CLASSÉE PAR CATÉGORIE -->
-            <div ng-if="fc.journalViewMode === 'grouped'" class="space-y-4">
-                <div ng-repeat="grp in fc.getGroupedTransactionsByCategory()"
-                    class="bg-slate-50/70 border border-slate-200/70 rounded-2xl p-4 space-y-3">
-                    
-                    <!-- En-tête Catégorie avec Total -->
-                    <div class="flex items-center justify-between border-b border-slate-200/60 pb-2.5">
-                        <div class="flex items-center gap-2.5">
-                            <div class="w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold shadow-xs"
-                                ng-class="grp.type === 'income' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'">
-                                <i data-lucide="{{grp.type === 'income' ? 'arrow-down-left' : 'arrow-up-right'}}" class="w-4 h-4"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-sm font-black text-slate-900">{{grp.category}}</h3>
-                                <p class="text-[11px] text-slate-400 font-medium">{{grp.transactions.length}} {{fc.t('operationsCount')}}</p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-sm font-black font-mono"
-                                ng-class="grp.type === 'income' ? 'text-emerald-600' : 'text-rose-600'">
-                                {{grp.type === 'income' ? '+' : '-'}}{{grp.totalEUR | geoFormat:fc.selectedCurrency:fc.currencies}}
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Liste des opérations sous cette catégorie -->
-                    <div class="divide-y divide-slate-100/80">
-                        <div ng-repeat="tx in grp.transactions" class="py-2 flex items-center justify-between hover:bg-white/70 px-2 rounded-xl transition-colors">
-                            <div>
-                                <h4 class="text-xs font-bold text-slate-900">{{tx.description}}</h4>
-                                <p class="text-[10px] text-slate-400 font-medium">{{tx.date | date:'dd MMM yyyy'}}</p>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <span class="text-xs font-mono font-black"
-                                    ng-class="tx.type === 'income' ? 'text-emerald-600' : 'text-rose-600'">
-                                    {{tx.type === 'income' ? '+' : '-'}}{{tx.amountEUR | geoFormat:fc.selectedCurrency:fc.currencies}}
-                                </span>
-                                <button ng-click="fc.openEditModal(tx)" class="text-slate-400 hover:text-indigo-600 p-1" title="Modifier">
-                                    <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
-                                </button>
-                                <button ng-click="fc.deleteTransaction(tx.id)" class="text-slate-300 hover:text-rose-600 p-1" title="Supprimer">
-                                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div ng-if="fc.getGroupedTransactionsByCategory().length === 0"
                     class="py-12 text-center text-slate-400 text-xs font-semibold">
                     {{fc.t('noTxFound')}}
                 </div>
@@ -1432,10 +1356,7 @@
                     btnSave: 'Enregistrer',
                     importCSV: 'Importer CSV',
                     exportCSV: 'Exporter CSV',
-                    allCategories: 'Toutes catégories',
-                    viewList: 'Liste',
-                    viewGrouped: 'Par Catégories',
-                    operationsCount: 'opération(s)'
+                    allCategories: 'Toutes les catégories'
                 },
                 en: {
                     fintechWallet: 'Fintech Wallet',
@@ -1540,10 +1461,7 @@
                     btnSave: 'Save',
                     importCSV: 'Import CSV',
                     exportCSV: 'Export CSV',
-                    allCategories: 'All Categories',
-                    viewList: 'List',
-                    viewGrouped: 'By Categories',
-                    operationsCount: 'operation(s)'
+                    allCategories: 'All Categories'
                 }
             };
 
@@ -1600,7 +1518,6 @@
             vm.searchQuery = '';
             vm.typeFilter = 'all';
             vm.categoryFilter = 'all';
-            vm.journalViewMode = 'list';
 
             // Devises avec taux de référence
             vm.currencies = {
@@ -2166,6 +2083,16 @@
                 }
             };
 
+            vm.getAvailableCategoriesFilter = function () {
+                if (vm.typeFilter === 'expense') {
+                    return vm.categories.expense || [];
+                } else if (vm.typeFilter === 'income') {
+                    return vm.categories.income || [];
+                } else {
+                    return Array.from(new Set([...(vm.categories.expense || []), ...(vm.categories.income || [])]));
+                }
+            };
+
             vm.getFilteredTransactions = function () {
                 return vm.transactions.filter(t => {
                     if (vm.typeFilter !== 'all' && t.type !== vm.typeFilter) return false;
@@ -2177,38 +2104,6 @@
                     }
                     return true;
                 });
-            };
-
-            // Méthode pour obtenir les transactions groupées et classées par catégorie
-            vm.getGroupedTransactionsByCategory = function () {
-                const filtered = vm.getFilteredTransactions();
-                const groups = {};
-
-                filtered.forEach(tx => {
-                    const cat = tx.category || (tx.type === 'income' ? 'Autre Entrée' : 'Autre Dépense');
-                    if (!groups[cat]) {
-                        groups[cat] = {
-                            category: cat,
-                            type: tx.type,
-                            totalEUR: 0,
-                            transactions: []
-                        };
-                    }
-                    groups[cat].transactions.push(tx);
-                    groups[cat].totalEUR += tx.amountEUR;
-                });
-
-                // Retourne la liste ordonnée par montant total décroissant
-                return Object.values(groups).sort((a, b) => b.totalEUR - a.totalEUR);
-            };
-
-            // Liste dynamique de toutes les catégories pour le filtre
-            vm.getAllFilterCategories = function () {
-                const cats = new Set();
-                if (vm.categories && vm.categories.expense) vm.categories.expense.forEach(c => cats.add(c));
-                if (vm.categories && vm.categories.income) vm.categories.income.forEach(c => cats.add(c));
-                (vm.transactions || []).forEach(t => { if (t.category) cats.add(t.category); });
-                return Array.from(cats).sort();
             };
 
             let barChart = null;
