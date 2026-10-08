@@ -513,6 +513,83 @@
                 </div>
             </div>
 
+            <!-- ========================================== -->
+            <!-- NOUVELLE SECTION : MES PORTEFEUILLES       -->
+            <!-- ========================================== -->
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 class="text-base font-black text-slate-900 tracking-tight">{{fc.t('wallets')}}</h3>
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200/80 text-slate-700 font-mono">
+                                {{fc.wallets.length}}
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-400 font-medium">{{fc.t('walletsSubtitle')}}</p>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <!-- Bouton Virement rapide -->
+                        <button ng-click="fc.openModal('transfer')"
+                            class="px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center gap-1.5 transition-all shadow-xs"
+                            title="{{fc.t('transferFunds')}}">
+                            <i data-lucide="arrow-left-right" class="w-3.5 h-3.5"></i>
+                            <span>{{fc.t('transfer')}}</span>
+                        </button>
+                        <!-- Bouton Gérer / Créer Portefeuille -->
+                        <button ng-click="fc.openWalletModal()"
+                            class="px-3 py-1.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-800 text-xs font-bold flex items-center gap-1.5 transition-all shadow-xs"
+                            title="{{fc.t('walletManageTitle')}}">
+                            <i data-lucide="wallet" class="w-3.5 h-3.5 text-slate-700"></i>
+                            <span>{{fc.t('btnManageWallets')}}</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Grille des Cartes Portefeuilles -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div ng-repeat="w in fc.wallets"
+                        ng-click="fc.filterByWalletAndGo(w.id)"
+                        class="fintech-card p-4 bg-white hover:border-slate-400 hover:shadow-md cursor-pointer transition-all relative overflow-hidden group">
+                        <div class="flex items-start justify-between mb-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-10 h-10 rounded-2xl flex items-center justify-center font-bold text-sm shadow-xs"
+                                    ng-class="{
+                                        'bg-emerald-50 text-emerald-600 border border-emerald-100': w.type === 'cash',
+                                        'bg-indigo-50 text-indigo-600 border border-indigo-100': w.type === 'bank',
+                                        'bg-amber-50 text-amber-600 border border-amber-100': w.type === 'mobile_money',
+                                        'bg-purple-50 text-purple-600 border border-purple-100': w.type === 'other'
+                                    }">
+                                    <i data-lucide="{{w.icon || 'wallet'}}" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs font-black text-slate-900 group-hover:text-indigo-600 transition-colors">
+                                        {{fc.getWalletName(w.id)}}
+                                    </h4>
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                        {{w.type === 'bank' ? fc.t('typeBank') : (w.type === 'mobile_money' ? fc.t('typeMomo') : (w.type === 'cash' ? fc.t('typeCash') : fc.t('typeOther')))}}
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                                ng-class="w.currentBalanceEUR >= 0 ? 'bg-slate-100 text-slate-600' : 'bg-rose-50 text-rose-600'">
+                                {{fc.getWalletShare(w)}}%
+                            </span>
+                        </div>
+
+                        <div class="mt-3 flex items-baseline justify-between">
+                            <div class="text-lg font-black font-mono tracking-tight"
+                                ng-class="w.currentBalanceEUR < 0 ? 'text-rose-600' : 'text-slate-900'">
+                                {{w.currentBalanceEUR | geoFormat:fc.selectedCurrency:fc.currencies}}
+                            </div>
+                            <span class="text-[10px] font-semibold text-slate-400 group-hover:text-slate-700 flex items-center gap-0.5 transition-colors">
+                                {{fc.t('btnHistory')}} <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- 2. TOTAL DES CHOSES DÉPENSÉES & REVENUS (SYNTHÈSE DU MOIS / PÉRIODE) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
@@ -688,27 +765,49 @@
                         class="py-3.5 flex items-center justify-between hover:bg-slate-50/60 rounded-2xl px-2 transition-colors">
                         <div class="flex items-center gap-3.5">
                             <div class="w-10 h-10 rounded-2xl flex items-center justify-center text-sm font-bold shadow-sm"
-                                ng-class="tx.type === 'income' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-rose-50 text-rose-600 border border-rose-100'">
-                                <i data-lucide="{{tx.type === 'income' ? 'arrow-down-left' : 'arrow-up-right'}}"
+                                ng-class="{
+                                    'bg-emerald-50 text-emerald-600 border border-emerald-100': tx.type === 'income',
+                                    'bg-rose-50 text-rose-600 border border-rose-100': tx.type === 'expense',
+                                    'bg-indigo-50 text-indigo-600 border border-indigo-100': tx.type === 'transfer'
+                                }">
+                                <i data-lucide="{{tx.type === 'transfer' ? 'arrow-left-right' : (tx.type === 'income' ? 'arrow-down-left' : 'arrow-up-right')}}"
                                     class="w-4 h-4"></i>
                             </div>
                             <div>
                                 <h4 class="text-sm font-bold text-slate-900">{{tx.description}}</h4>
-                                <p class="text-xs text-slate-400 font-medium">{{tx.category}} • {{tx.date | date:'dd MMM
-                                    yyyy'}}</p>
+                                <p class="text-xs text-slate-400 font-medium">
+                                    <span ng-if="tx.type === 'transfer'">
+                                        ⇄ {{fc.getWalletName(tx.walletId)}} ➔ {{fc.getWalletName(tx.walletToId)}}
+                                    </span>
+                                    <span ng-if="tx.type !== 'transfer'">
+                                        {{tx.category}} • {{fc.getWalletName(tx.walletId)}}
+                                    </span>
+                                    • {{tx.date | date:'dd MMM yyyy'}}
+                                    <span ng-if="tx.type === 'transfer' && tx.feeEUR > 0" class="text-rose-500 font-bold ml-1">
+                                        (Frais: {{tx.feeEUR | geoFormat:fc.selectedCurrency:fc.currencies}})
+                                    </span>
+                                </p>
                             </div>
                         </div>
 
                         <div class="flex items-center gap-3">
                             <div class="text-right">
                                 <div class="text-sm font-black font-mono"
-                                    ng-class="tx.type === 'income' ? 'text-emerald-600' : 'text-rose-600'">
-                                    {{tx.type === 'income' ? '+' : '-'}}{{tx.amountEUR |
+                                    ng-class="{
+                                        'text-emerald-600': tx.type === 'income',
+                                        'text-rose-600': tx.type === 'expense',
+                                        'text-indigo-600': tx.type === 'transfer'
+                                    }">
+                                    {{tx.type === 'income' ? '+' : (tx.type === 'expense' ? '-' : '⇄ ')}}{{tx.amountEUR |
                                     geoFormat:fc.selectedCurrency:fc.currencies}}
                                 </div>
                                 <span class="text-[10px] font-bold uppercase"
-                                    ng-class="tx.type === 'income' ? 'text-emerald-600' : 'text-rose-500'">
-                                    {{tx.type === 'income' ? fc.t('incomeType') : fc.t('expenseType')}}
+                                    ng-class="{
+                                        'text-emerald-600': tx.type === 'income',
+                                        'text-rose-500': tx.type === 'expense',
+                                        'text-indigo-600': tx.type === 'transfer'
+                                    }">
+                                    {{tx.type === 'income' ? fc.t('incomeType') : (tx.type === 'expense' ? fc.t('expenseType') : fc.t('transfer'))}}
                                 </span>
                             </div>
                             <button ng-click="fc.openEditModal(tx)"
@@ -817,6 +916,14 @@
                         <option value="all">{{fc.t('allTypes')}}</option>
                         <option value="income">{{fc.t('incomeOnly')}}</option>
                         <option value="expense">{{fc.t('expenseOnly')}}</option>
+                        <option value="transfer">{{fc.t('transfer')}}</option>
+                    </select>
+
+                    <!-- Filtre par Portefeuille -->
+                    <select ng-model="fc.walletFilter"
+                        class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold outline-none cursor-pointer max-w-[150px] truncate">
+                        <option value="all">{{fc.t('allWallets')}}</option>
+                        <option ng-repeat="w in fc.wallets" value="{{w.id}}">{{fc.getWalletName(w.id)}}</option>
                     </select>
 
                     <!-- Filtre par Catégorie -->
@@ -850,27 +957,49 @@
                     class="py-3.5 flex items-center justify-between hover:bg-slate-50/70 rounded-2xl px-2 transition-colors">
                     <div class="flex items-center gap-3.5">
                         <div class="w-11 h-11 rounded-2xl flex items-center justify-center text-sm font-bold shadow-sm"
-                            ng-class="tx.type === 'income' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-rose-50 text-rose-600 border border-rose-100'">
-                            <i data-lucide="{{tx.type === 'income' ? 'arrow-down-left' : 'arrow-up-right'}}"
+                            ng-class="{
+                                'bg-emerald-50 text-emerald-600 border border-emerald-100': tx.type === 'income',
+                                'bg-rose-50 text-rose-600 border border-rose-100': tx.type === 'expense',
+                                'bg-indigo-50 text-indigo-600 border border-indigo-100': tx.type === 'transfer'
+                            }">
+                            <i data-lucide="{{tx.type === 'transfer' ? 'arrow-left-right' : (tx.type === 'income' ? 'arrow-down-left' : 'arrow-up-right')}}"
                                 class="w-5 h-5"></i>
                         </div>
                         <div>
                             <h4 class="text-sm font-bold text-slate-900">{{tx.description}}</h4>
-                            <p class="text-xs text-slate-400 font-medium">{{tx.category}} • {{tx.date | date:'dd MMM
-                                yyyy'}}</p>
+                            <p class="text-xs text-slate-400 font-medium">
+                                <span ng-if="tx.type === 'transfer'">
+                                    ⇄ {{fc.getWalletName(tx.walletId)}} ➔ {{fc.getWalletName(tx.walletToId)}}
+                                </span>
+                                <span ng-if="tx.type !== 'transfer'">
+                                    {{tx.category}} • {{fc.getWalletName(tx.walletId)}}
+                                </span>
+                                • {{tx.date | date:'dd MMM yyyy'}}
+                                <span ng-if="tx.type === 'transfer' && tx.feeEUR > 0" class="text-rose-500 font-bold ml-1">
+                                    (Frais: {{tx.feeEUR | geoFormat:fc.selectedCurrency:fc.currencies}})
+                                </span>
+                            </p>
                         </div>
                     </div>
 
                     <div class="flex items-center gap-3 sm:gap-4">
                         <div class="text-right">
                             <div class="text-sm font-black font-mono"
-                                ng-class="tx.type === 'income' ? 'text-emerald-600' : 'text-rose-600'">
-                                {{tx.type === 'income' ? '+' : '-'}}{{tx.amountEUR |
+                                ng-class="{
+                                    'text-emerald-600': tx.type === 'income',
+                                    'text-rose-600': tx.type === 'expense',
+                                    'text-indigo-600': tx.type === 'transfer'
+                                }">
+                                {{tx.type === 'income' ? '+' : (tx.type === 'expense' ? '-' : '⇄ ')}}{{tx.amountEUR |
                                 geoFormat:fc.selectedCurrency:fc.currencies}}
                             </div>
                             <span class="text-[10px] font-bold uppercase"
-                                ng-class="tx.type === 'income' ? 'text-emerald-600' : 'text-rose-500'">
-                                {{tx.type === 'income' ? fc.t('incomeType') : fc.t('expenseType')}}
+                                ng-class="{
+                                    'text-emerald-600': tx.type === 'income',
+                                    'text-rose-500': tx.type === 'expense',
+                                    'text-indigo-600': tx.type === 'transfer'
+                                }">
+                                {{tx.type === 'income' ? fc.t('incomeType') : (tx.type === 'expense' ? fc.t('expenseType') : fc.t('transfer'))}}
                             </span>
                         </div>
                         <button ng-click="fc.openEditModal(tx)"
@@ -1005,27 +1134,33 @@
         <div class="fintech-card bg-white w-full max-w-md p-7 relative shadow-2xl">
             <div class="flex items-center justify-between mb-6">
                 <h3 class="text-lg font-black text-slate-900">
-                    {{fc.editingTxId ? fc.t('modalEditTitle') : (fc.formData.type === 'income' ?
-                    fc.t('modalIncomeTitle') : fc.t('modalExpenseTitle'))}}
+                    {{fc.editingTxId ? fc.t('modalEditTitle') : (fc.formData.type === 'transfer' ? fc.t('modalTransferTitle') : (fc.formData.type === 'income' ? fc.t('modalIncomeTitle') : fc.t('modalExpenseTitle')))}}
                 </h3>
                 <button ng-click="fc.closeModal()"
                     class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-900">✕</button>
             </div>
 
             <form ng-submit="fc.saveTransaction()" class="space-y-4 text-xs font-semibold">
+                <!-- Sélecteur à 3 options : Gain / Dépense / Transfert -->
                 <div class="flex bg-slate-100 p-1 rounded-2xl">
-                    <button type="button" ng-click="fc.formData.type = 'income'"
-                        class="flex-1 py-2.5 rounded-xl transition-all font-bold"
+                    <button type="button" ng-click="fc.setFormType('income')"
+                        class="flex-1 py-2.5 rounded-xl transition-all font-bold text-center"
                         ng-class="fc.formData.type === 'income' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-500'">
                         + {{fc.t('incomeGain')}}
                     </button>
-                    <button type="button" ng-click="fc.formData.type = 'expense'"
-                        class="flex-1 py-2.5 rounded-xl transition-all font-bold"
+                    <button type="button" ng-click="fc.setFormType('expense')"
+                        class="flex-1 py-2.5 rounded-xl transition-all font-bold text-center"
                         ng-class="fc.formData.type === 'expense' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500'">
                         - {{fc.t('expenseSpend')}}
                     </button>
+                    <button type="button" ng-click="fc.setFormType('transfer')"
+                        class="flex-1 py-2.5 rounded-xl transition-all font-bold text-center"
+                        ng-class="fc.formData.type === 'transfer' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500'">
+                        ⇄ {{fc.t('transfer')}}
+                    </button>
                 </div>
 
+                <!-- Montant Principal -->
                 <div>
                     <label class="block text-slate-500 mb-1 pl-1">{{fc.t('amountIn')}}
                         {{fc.currencies[fc.selectedCurrency].symbol}}</label>
@@ -1033,31 +1168,83 @@
                         class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-xl font-black font-mono text-slate-900 outline-none focus:border-slate-900 focus:bg-white">
                 </div>
 
-                <div>
-                    <label class="block text-slate-500 mb-1 pl-1">{{fc.t('descriptionLabel')}}</label>
-                    <input type="text" ng-model="fc.formData.description" required
-                        placeholder="Ex: Facture, Courses, Salaire..."
-                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium outline-none focus:border-slate-900 focus:bg-white">
+                <!-- Cas 1 : Transfert Interne entre Portefeuilles -->
+                <div ng-if="fc.formData.type === 'transfer'" class="space-y-3">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-slate-500 mb-1 pl-1">{{fc.t('transferFrom')}}</label>
+                            <select ng-model="fc.formData.walletId" required
+                                class="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold outline-none cursor-pointer">
+                                <option ng-repeat="w in fc.wallets" value="{{w.id}}" ng-disabled="w.id === fc.formData.walletToId">
+                                    {{fc.getWalletName(w.id)}} ({{w.currentBalanceEUR | geoFormat:fc.selectedCurrency:fc.currencies}})
+                                </option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-slate-500 mb-1 pl-1">{{fc.t('transferTo')}}</label>
+                            <select ng-model="fc.formData.walletToId" required
+                                class="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold outline-none cursor-pointer">
+                                <option ng-repeat="w in fc.wallets" value="{{w.id}}" ng-disabled="w.id === fc.formData.walletId">
+                                    {{fc.getWalletName(w.id)}} ({{w.currentBalanceEUR | geoFormat:fc.selectedCurrency:fc.currencies}})
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Frais de Transfert -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1 pl-1">
+                            <label class="text-slate-500">{{fc.t('transferFees')}} ({{fc.currencies[fc.selectedCurrency].symbol}})</label>
+                            <span class="text-[10px] text-slate-400">{{fc.t('feesHint')}}</span>
+                        </div>
+                        <input type="number" step="any" min="0" ng-model="fc.formData.fee" placeholder="0.00"
+                            class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold font-mono text-slate-900 outline-none focus:border-slate-900 focus:bg-white">
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-3">
+                <!-- Cas 2 : Entrée ou Dépense classique -->
+                <div ng-if="fc.formData.type !== 'transfer'" class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-slate-500 mb-1 pl-1">{{fc.t('categoryLabel')}}</label>
-                        <select ng-model="fc.formData.category"
-                            class="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold outline-none">
-                            <option ng-repeat="c in fc.getCategories()" value="{{c}}">{{c}}</option>
+                        <label class="block text-slate-500 mb-1 pl-1">
+                            {{fc.formData.type === 'income' ? fc.t('walletDestLabel') : fc.t('walletSourceLabel')}}
+                        </label>
+                        <select ng-model="fc.formData.walletId" required
+                            class="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold outline-none cursor-pointer">
+                            <option ng-repeat="w in fc.wallets" value="{{w.id}}">
+                                {{fc.getWalletName(w.id)}} ({{w.currentBalanceEUR | geoFormat:fc.selectedCurrency:fc.currencies}})
+                            </option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-slate-500 mb-1 pl-1">{{fc.t('dateLabel')}}</label>
-                        <input type="date" ng-model="fc.formData.dateObj" required
-                            class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold outline-none">
+                        <label class="block text-slate-500 mb-1 pl-1">{{fc.t('categoryLabel')}}</label>
+                        <select ng-model="fc.formData.category"
+                            class="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold outline-none cursor-pointer">
+                            <option ng-repeat="c in fc.getCategories()" value="{{c}}">{{c}}</option>
+                        </select>
                     </div>
+                </div>
+
+                <!-- Motif / Description (NON OBLIGATOIRE !) -->
+                <div>
+                    <div class="flex items-center justify-between mb-1 pl-1">
+                        <label class="text-slate-500">{{fc.t('descriptionLabel')}}</label>
+                        <span class="text-[10px] text-slate-400 font-normal">({{fc.t('optional')}})</span>
+                    </div>
+                    <input type="text" ng-model="fc.formData.description"
+                        placeholder="{{fc.formData.type === 'transfer' ? ('Transfert ' + fc.getWalletName(fc.formData.walletId) + ' ➔ ' + fc.getWalletName(fc.formData.walletToId)) : ('Ex: Facture, Courses, Salaire... (' + fc.t('optional') + ')')}}"
+                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium outline-none focus:border-slate-900 focus:bg-white">
+                </div>
+
+                <!-- Date -->
+                <div>
+                    <label class="block text-slate-500 mb-1 pl-1">{{fc.t('dateLabel')}}</label>
+                    <input type="date" ng-model="fc.formData.dateObj" required
+                        class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold outline-none">
                 </div>
 
                 <button type="submit"
                     class="w-full py-4 bg-slate-950 text-white rounded-2xl font-bold text-sm shadow-lg hover:bg-slate-800 transition-all mt-2">
-                    {{fc.editingTxId ? fc.t('btnUpdate') : fc.t('saveOperation')}}
+                    {{fc.editingTxId ? fc.t('btnUpdate') : (fc.formData.type === 'transfer' ? fc.t('btnTransfer') : fc.t('saveOperation'))}}
                 </button>
             </form>
         </div>
@@ -1112,6 +1299,105 @@
                             ng-click="fc.deleteCustomCategory(fc.catManageTab, cat)"
                             class="text-rose-500 hover:text-rose-700 font-bold px-1">
                             ✕
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================================================== -->
+    <!-- MODALE : GESTION DES PORTEFEUILLES                   -->
+    <!-- ==================================================== -->
+    <div ng-show="fc.isWalletModalOpen"
+        class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="fintech-card bg-white w-full max-w-md p-7 relative shadow-2xl max-h-[85vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-xl bg-slate-900 text-white flex items-center justify-center">
+                        <i data-lucide="wallet" class="w-4 h-4"></i>
+                    </div>
+                    <h3 class="text-base font-black text-slate-900">{{fc.t('walletManageTitle')}}</h3>
+                </div>
+                <button ng-click="fc.closeWalletModal()"
+                    class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-900 font-bold">✕</button>
+            </div>
+
+            <!-- Formulaire d'ajout d'un portefeuille -->
+            <form ng-submit="fc.addNewWallet()" class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-100 mb-5">
+                <div class="text-xs font-bold text-slate-700 flex items-center gap-1.5 mb-1">
+                    <i data-lucide="plus-circle" class="w-4 h-4 text-emerald-600"></i>
+                    <span>{{fc.t('newWalletTitle')}}</span>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-500 mb-1 pl-1">{{fc.t('walletName')}}</label>
+                    <input type="text" ng-model="fc.newWalletForm.name" required
+                        placeholder="Ex: Wave, Orange Money, Ecobank, Coffre..."
+                        class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-bold outline-none focus:border-slate-900">
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-500 mb-1 pl-1">{{fc.t('walletType')}}</label>
+                        <select ng-model="fc.newWalletForm.type"
+                            class="w-full px-2.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-bold outline-none">
+                            <option value="mobile_money">📱 {{fc.t('typeMomo')}}</option>
+                            <option value="bank">🏦 {{fc.t('typeBank')}}</option>
+                            <option value="cash">💵 {{fc.t('typeCash')}}</option>
+                            <option value="other">💳 {{fc.t('typeOther')}}</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-500 mb-1 pl-1">{{fc.t('initialBalance')}} ({{fc.currencies[fc.selectedCurrency].symbol}})</label>
+                        <input type="number" step="any" min="0" ng-model="fc.newWalletForm.initialBalance" placeholder="0"
+                            class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-black font-mono outline-none focus:border-slate-900">
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="w-full py-2.5 bg-slate-950 hover:bg-slate-800 text-white font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-1.5 shadow-sm mt-1">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                    <span>{{fc.t('btnAdd')}}</span>
+                </button>
+            </form>
+
+            <!-- Liste des portefeuilles existants -->
+            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 pl-1">
+                {{fc.t('wallets')}} ({{fc.wallets.length}})
+            </div>
+
+            <div class="divide-y divide-slate-100 max-h-60 overflow-y-auto">
+                <div ng-repeat="w in fc.wallets"
+                    class="py-3 flex items-center justify-between text-xs font-bold">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs shadow-xs"
+                            ng-class="{
+                                'bg-emerald-50 text-emerald-600': w.type === 'cash',
+                                'bg-indigo-50 text-indigo-600': w.type === 'bank',
+                                'bg-amber-50 text-amber-600': w.type === 'mobile_money',
+                                'bg-purple-50 text-purple-600': w.type === 'other'
+                            }">
+                            <i data-lucide="{{w.icon || 'wallet'}}" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <div class="text-slate-900 font-black">{{fc.getWalletName(w.id)}}</div>
+                            <div class="text-[10px] text-slate-400 font-mono">
+                                Solde : <span class="font-bold text-slate-700">{{w.currentBalanceEUR | geoFormat:fc.selectedCurrency:fc.currencies}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <span ng-if="w.id === 'wallet_cash' || w.id === 'wallet_bank' || w.id === 'wallet_momo'"
+                            class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-bold">
+                            Système
+                        </span>
+                        <button ng-if="w.id !== 'wallet_cash' && w.id !== 'wallet_bank' && w.id !== 'wallet_momo'"
+                            ng-click="fc.deleteWallet(w.id)"
+                            class="text-rose-500 hover:text-rose-700 font-bold p-1 transition-colors" title="Supprimer">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
                         </button>
                     </div>
                 </div>
@@ -1356,7 +1642,40 @@
                     btnSave: 'Enregistrer',
                     importCSV: 'Importer CSV',
                     exportCSV: 'Exporter CSV',
-                    allCategories: 'Toutes les catégories'
+                    allCategories: 'Toutes les catégories',
+                    wallets: 'Mes Portefeuilles',
+                    walletsSubtitle: 'Comptes bancaires, espèces & mobile money',
+                    newWallet: 'Nouveau Portefeuille',
+                    newWalletTitle: 'Créer un Portefeuille',
+                    walletManageTitle: 'Gestion des Portefeuilles',
+                    transfer: 'Transfert',
+                    transferFunds: 'Virement / Transfert Interne',
+                    modalTransferTitle: 'Transférer entre Comptes (⇄)',
+                    transferFrom: 'Compte Source (Sortie)',
+                    transferTo: 'Compte Destinataire (Entrée)',
+                    transferFees: 'Frais éventuels',
+                    feesHint: '0 si gratuit (déduit du compte source)',
+                    optional: 'optionnel',
+                    walletCash: 'Espèces',
+                    walletBank: 'Banque',
+                    walletMomo: 'Mobile Money',
+                    allWallets: 'Tous les comptes',
+                    walletLabel: 'Portefeuille / Compte',
+                    walletSourceLabel: 'Compte débité',
+                    walletDestLabel: 'Compte crédité',
+                    initialBalance: 'Solde de départ',
+                    walletName: 'Nom du compte',
+                    walletType: 'Type de compte',
+                    btnManageWallets: 'Gérer les comptes',
+                    btnTransfer: 'Valider le transfert',
+                    typeCash: 'Espèces (Cash)',
+                    typeBank: 'Compte Bancaire',
+                    typeMomo: 'Mobile Money (Wave/OM/MoMo)',
+                    typeOther: 'Autre compte',
+                    diffWalletsRequired: 'Veuillez sélectionner deux portefeuilles distincts.',
+                    categorySynced: 'Catégorie enregistrée dans la base de données !',
+                    walletCreated: 'Portefeuille créé avec succès !',
+                    transferCompleted: 'Transfert réalisé avec succès !'
                 },
                 en: {
                     fintechWallet: 'Fintech Wallet',
@@ -1461,7 +1780,40 @@
                     btnSave: 'Save',
                     importCSV: 'Import CSV',
                     exportCSV: 'Export CSV',
-                    allCategories: 'All Categories'
+                    allCategories: 'All Categories',
+                    wallets: 'My Wallets',
+                    walletsSubtitle: 'Bank accounts, cash & mobile money',
+                    newWallet: 'New Wallet',
+                    newWalletTitle: 'Create a Wallet',
+                    walletManageTitle: 'Wallet Management',
+                    transfer: 'Transfer',
+                    transferFunds: 'Internal Transfer',
+                    modalTransferTitle: 'Transfer between Accounts (⇄)',
+                    transferFrom: 'Source Account (From)',
+                    transferTo: 'Destination Account (To)',
+                    transferFees: 'Transfer fees',
+                    feesHint: '0 if free (debited from source)',
+                    optional: 'optional',
+                    walletCash: 'Cash',
+                    walletBank: 'Bank',
+                    walletMomo: 'Mobile Money',
+                    allWallets: 'All accounts',
+                    walletLabel: 'Wallet / Account',
+                    walletSourceLabel: 'Debited account',
+                    walletDestLabel: 'Credited account',
+                    initialBalance: 'Starting balance',
+                    walletName: 'Account name',
+                    walletType: 'Type',
+                    btnManageWallets: 'Manage accounts',
+                    btnTransfer: 'Execute transfer',
+                    typeCash: 'Cash',
+                    typeBank: 'Bank Account',
+                    typeMomo: 'Mobile Money (Wave/OM/MoMo)',
+                    typeOther: 'Other account',
+                    diffWalletsRequired: 'Please select two different wallets.',
+                    categorySynced: 'Category saved to database!',
+                    walletCreated: 'Wallet created successfully!',
+                    transferCompleted: 'Transfer completed successfully!'
                 }
             };
 
@@ -1518,6 +1870,21 @@
             vm.searchQuery = '';
             vm.typeFilter = 'all';
             vm.categoryFilter = 'all';
+            vm.walletFilter = 'all';
+
+            // Portefeuilles
+            vm.defaultWallets = [
+                { id: 'wallet_cash', name: 'Espèces', type: 'cash', icon: 'banknote', color: 'emerald', initialBalanceEUR: 0 },
+                { id: 'wallet_bank', name: 'Banque', type: 'bank', icon: 'landmark', color: 'indigo', initialBalanceEUR: 0 },
+                { id: 'wallet_momo', name: 'Mobile Money', type: 'mobile_money', icon: 'smartphone', color: 'amber', initialBalanceEUR: 0 }
+            ];
+            vm.wallets = [];
+            vm.isWalletModalOpen = false;
+            vm.newWalletForm = {
+                name: '',
+                type: 'mobile_money',
+                initialBalance: null
+            };
 
             // Devises avec taux de référence
             vm.currencies = {
@@ -1560,9 +1927,12 @@
             vm.formData = {
                 type: 'expense',
                 amount: null,
+                fee: null,
                 description: '',
                 category: vm.categories.expense[0],
-                dateObj: new Date()
+                dateObj: new Date(),
+                walletId: 'wallet_cash',
+                walletToId: 'wallet_momo'
             };
 
             // Objectifs
@@ -1682,7 +2052,7 @@
                 vm.recalculate();
             };
 
-            // Catégories Personnalisées
+            // Catégories Personnalisées & Synchronisation Supabase
             vm.loadCustomCategories = function () {
                 const saved = localStorage.getItem('geo_custom_categories_v2');
                 if (saved) {
@@ -1723,6 +2093,22 @@
                 vm.customCategories[type].push(name);
                 vm.saveCustomCategories();
                 vm.refreshCategoryLists();
+
+                // Synchronisation Cloud avec la table 'categories'
+                if (supabaseClient && vm.auth.currentUser) {
+                    const catId = Date.now().toString();
+                    supabaseClient.from('categories').insert([{
+                        id: catId,
+                        user_id: vm.auth.currentUser.id,
+                        name: name,
+                        type: type
+                    }]).then(({ error }) => {
+                        if (!error) {
+                            vm.showToast(vm.t('categorySynced'));
+                        }
+                    });
+                }
+
                 vm.newCategoryName = '';
                 vm.showToast(vm.currentLang === 'fr' ? `Catégorie "${name}" ajoutée !` : `Category "${name}" added!`);
                 vm.recalculate();
@@ -1733,8 +2119,182 @@
                     vm.customCategories[type] = vm.customCategories[type].filter(c => c !== name);
                     vm.saveCustomCategories();
                     vm.refreshCategoryLists();
+
+                    if (supabaseClient && vm.auth.currentUser) {
+                        supabaseClient.from('categories').delete()
+                            .eq('user_id', vm.auth.currentUser.id)
+                            .eq('name', name)
+                            .eq('type', type).then();
+                    }
+
                     vm.recalculate();
                 }
+            };
+
+            vm.loadSupabaseCategories = function () {
+                if (!supabaseClient || !vm.auth.currentUser) return;
+                supabaseClient.from('categories').select('*').then(({ data, error }) => {
+                    $timeout(() => {
+                        if (!error && data && data.length > 0) {
+                            if (!vm.customCategories) vm.customCategories = { expense: [], income: [] };
+                            data.forEach(r => {
+                                if (r.type && vm.customCategories[r.type]) {
+                                    if (!vm.customCategories[r.type].includes(r.name)) {
+                                        vm.customCategories[r.type].push(r.name);
+                                    }
+                                }
+                            });
+                            vm.saveCustomCategories();
+                            vm.refreshCategoryLists();
+                        }
+                    });
+                });
+            };
+
+            // ==========================================
+            // GESTION DES PORTEFEUILLES (WALLETS)
+            // ==========================================
+            vm.loadWallets = function () {
+                const saved = localStorage.getItem('geo_salung_wallets_v2');
+                if (saved) {
+                    try {
+                        vm.wallets = JSON.parse(saved);
+                    } catch (e) {
+                        vm.wallets = angular.copy(vm.defaultWallets);
+                    }
+                } else {
+                    vm.wallets = angular.copy(vm.defaultWallets);
+                }
+            };
+
+            vm.saveWallets = function () {
+                localStorage.setItem('geo_salung_wallets_v2', JSON.stringify(vm.wallets));
+            };
+
+            vm.loadSupabaseWallets = function () {
+                if (!supabaseClient || !vm.auth.currentUser) return;
+                supabaseClient.from('wallets').select('*').then(({ data, error }) => {
+                    $timeout(() => {
+                        if (!error && data && data.length > 0) {
+                            const map = {};
+                            vm.wallets.forEach(w => { map[w.id] = w; });
+                            data.forEach(r => {
+                                map[r.id] = {
+                                    id: r.id,
+                                    name: r.name,
+                                    type: r.type,
+                                    initialBalanceEUR: parseFloat(r.initial_balance_eur) || 0,
+                                    icon: r.icon || 'wallet',
+                                    color: r.color || 'emerald'
+                                };
+                            });
+                            vm.wallets = Object.values(map);
+                            vm.saveWallets();
+                            vm.recalculate();
+                        }
+                    });
+                });
+            };
+
+            vm.getWalletName = function (id) {
+                if (!id) return vm.t('walletCash');
+                const w = (vm.wallets || []).find(item => item.id === id);
+                if (!w) return id;
+                if (w.id === 'wallet_cash') return vm.t('walletCash');
+                if (w.id === 'wallet_bank') return vm.t('walletBank');
+                if (w.id === 'wallet_momo') return vm.t('walletMomo');
+                return w.name;
+            };
+
+            vm.getWalletIcon = function (id) {
+                const w = (vm.wallets || []).find(item => item.id === id);
+                return w ? (w.icon || 'wallet') : 'wallet';
+            };
+
+            vm.getWalletShare = function (w) {
+                if (!vm.totalWalletsBalance || vm.totalWalletsBalance <= 0) return 0;
+                if (!w.currentBalanceEUR || w.currentBalanceEUR <= 0) return 0;
+                return Math.round((w.currentBalanceEUR / vm.totalWalletsBalance) * 100);
+            };
+
+            vm.openWalletModal = function () {
+                vm.newWalletForm = { name: '', type: 'mobile_money', initialBalance: null };
+                vm.isWalletModalOpen = true;
+                $timeout(() => lucide.createIcons(), 50);
+            };
+
+            vm.closeWalletModal = function () {
+                vm.isWalletModalOpen = false;
+            };
+
+            vm.addNewWallet = function () {
+                const name = (vm.newWalletForm.name || '').trim();
+                if (!name) return;
+                const rate = vm.currencies[vm.selectedCurrency].rate;
+                const initialEUR = vm.newWalletForm.initialBalance ? (parseFloat(vm.newWalletForm.initialBalance) / rate) : 0;
+
+                let icon = 'wallet';
+                if (vm.newWalletForm.type === 'bank') icon = 'landmark';
+                else if (vm.newWalletForm.type === 'cash') icon = 'banknote';
+                else if (vm.newWalletForm.type === 'mobile_money') icon = 'smartphone';
+
+                let color = 'emerald';
+                if (vm.newWalletForm.type === 'bank') color = 'indigo';
+                else if (vm.newWalletForm.type === 'mobile_money') color = 'amber';
+                else if (vm.newWalletForm.type === 'other') color = 'purple';
+
+                const newId = 'wallet_' + Date.now();
+                const newWallet = {
+                    id: newId,
+                    name: name,
+                    type: vm.newWalletForm.type,
+                    icon: icon,
+                    color: color,
+                    initialBalanceEUR: initialEUR
+                };
+
+                vm.wallets.push(newWallet);
+                vm.saveWallets();
+
+                if (supabaseClient && vm.auth.currentUser) {
+                    supabaseClient.from('wallets').insert([{
+                        id: newId,
+                        user_id: vm.auth.currentUser.id,
+                        name: name,
+                        type: newWallet.type,
+                        initial_balance_eur: initialEUR,
+                        icon: icon,
+                        color: color
+                    }]).then();
+                }
+
+                vm.newWalletForm = { name: '', type: 'mobile_money', initialBalance: null };
+                vm.showToast(vm.t('walletCreated'));
+                vm.recalculate();
+                $timeout(() => lucide.createIcons(), 50);
+            };
+
+            vm.deleteWallet = function (id) {
+                if (id === 'wallet_cash' || id === 'wallet_bank' || id === 'wallet_momo') {
+                    vm.showToast(vm.currentLang === 'fr' ? 'Ce portefeuille de base ne peut pas être supprimé.' : 'Default wallet cannot be deleted.', 'error');
+                    return;
+                }
+                const w = vm.wallets.find(x => x.id === id);
+                const name = w ? w.name : id;
+                if (confirm(vm.currentLang === 'fr' ? `Supprimer le portefeuille "${name}" ?` : `Delete wallet "${name}"?`)) {
+                    vm.wallets = vm.wallets.filter(x => x.id !== id);
+                    vm.saveWallets();
+                    if (supabaseClient && vm.auth.currentUser) {
+                        supabaseClient.from('wallets').delete().eq('id', id).then();
+                    }
+                    vm.showToast(vm.currentLang === 'fr' ? 'Portefeuille supprimé.' : 'Wallet deleted.');
+                    vm.recalculate();
+                }
+            };
+
+            vm.filterByWalletAndGo = function (walletId) {
+                vm.walletFilter = walletId;
+                vm.setTab('transactions');
             };
 
             // Supabase Config & Auth
@@ -1767,16 +2327,21 @@
                                 if (session && session.user) {
                                     vm.auth.currentUser = session.user;
                                     vm.auth.guestMode = false;
+                                    vm.loadSupabaseCategories();
+                                    vm.loadSupabaseWallets();
                                     vm.loadSupabaseTransactions();
                                 } else {
+                                    vm.loadWallets();
                                     vm.loadLocalTransactions();
                                 }
                             });
                         });
                     } else {
+                        vm.loadWallets();
                         vm.loadLocalTransactions();
                     }
                 } catch (e) {
+                    vm.loadWallets();
                     vm.loadLocalTransactions();
                 }
             };
@@ -1796,6 +2361,7 @@
                 vm.auth.guestMode = true;
                 vm.auth.showAuthModal = false;
                 localStorage.setItem('geo_guest_mode', 'true');
+                vm.loadWallets();
                 vm.loadLocalTransactions();
                 vm.showToast(vm.currentLang === 'fr' ? 'Mode Hors-Ligne (Invité) activé.' : 'Offline Guest Mode activated.');
             };
@@ -1824,6 +2390,8 @@
                                     vm.auth.guestMode = false;
                                     vm.auth.showAuthModal = false;
                                     localStorage.removeItem('geo_guest_mode');
+                                    vm.loadSupabaseCategories();
+                                    vm.loadSupabaseWallets();
                                     vm.loadSupabaseTransactions();
                                 }
                                 vm.showToast(vm.currentLang === 'fr' ? 'Compte créé avec succès !' : 'Account created successfully!');
@@ -1845,6 +2413,8 @@
                                     vm.auth.guestMode = false;
                                     vm.auth.showAuthModal = false;
                                     localStorage.removeItem('geo_guest_mode');
+                                    vm.loadSupabaseCategories();
+                                    vm.loadSupabaseWallets();
                                     vm.loadSupabaseTransactions();
                                 }
                                 vm.showToast(vm.currentLang === 'fr' ? 'Connexion réussie !' : 'Signed in successfully!');
@@ -1875,9 +2445,12 @@
                                 id: r.id,
                                 type: r.type,
                                 amountEUR: parseFloat(r.amount_eur),
+                                feeEUR: parseFloat(r.fee_eur || 0),
                                 description: r.description,
                                 category: r.category,
-                                date: r.date
+                                date: r.date,
+                                walletId: r.wallet_id || 'wallet_cash',
+                                walletToId: r.wallet_to_id || null
                             }));
                             vm.saveToStorage();
                             vm.buildAvailablePeriods();
@@ -1890,16 +2463,26 @@
             };
 
             vm.loadLocalTransactions = function () {
+                vm.loadWallets();
                 const saved = localStorage.getItem('geo_salung_txs_v2');
                 const todayStr = formatLocalDate(new Date());
                 if (saved) {
-                    vm.transactions = JSON.parse(saved);
+                    try {
+                        vm.transactions = JSON.parse(saved).map(t => ({
+                            ...t,
+                            walletId: t.walletId || 'wallet_cash',
+                            walletToId: t.walletToId || null,
+                            feeEUR: parseFloat(t.feeEUR || 0)
+                        }));
+                    } catch (e) {
+                        vm.transactions = [];
+                    }
                 } else {
                     vm.transactions = [
-                        { id: '1', type: 'income', amountEUR: 1500, description: 'Salaire Mensuel', category: 'Salaire', date: todayStr },
-                        { id: '2', type: 'expense', amountEUR: 120, description: 'Courses alimentaires', category: 'Alimentation & Courses', date: todayStr },
-                        { id: '3', type: 'expense', amountEUR: 45, description: 'Carburant et transport', category: 'Transport & Carburant', date: todayStr },
-                        { id: '4', type: 'expense', amountEUR: 60, description: 'Facture électricité', category: 'Factures & Énergie', date: todayStr }
+                        { id: '1', type: 'income', amountEUR: 1500, feeEUR: 0, description: 'Salaire Mensuel', category: 'Salaire', date: todayStr, walletId: 'wallet_bank' },
+                        { id: '2', type: 'expense', amountEUR: 120, feeEUR: 0, description: 'Courses alimentaires', category: 'Alimentation & Courses', date: todayStr, walletId: 'wallet_cash' },
+                        { id: '3', type: 'expense', amountEUR: 45, feeEUR: 0, description: 'Carburant et transport', category: 'Transport & Carburant', date: todayStr, walletId: 'wallet_momo' },
+                        { id: '4', type: 'expense', amountEUR: 60, feeEUR: 0, description: 'Facture électricité', category: 'Factures & Énergie', date: todayStr, walletId: 'wallet_bank' }
                     ];
                 }
                 vm.buildAvailablePeriods();
@@ -1915,18 +2498,37 @@
             };
 
             $scope.$watch(() => vm.formData.type, function (n) {
-                if (n && vm.categories[n] && !vm.categories[n].includes(vm.formData.category)) {
+                if (n && n !== 'transfer' && vm.categories[n] && !vm.categories[n].includes(vm.formData.category)) {
                     vm.formData.category = vm.categories[n][0];
                 }
             });
 
-            vm.openModal = function (type) {
+            vm.setFormType = function (type) {
+                vm.formData.type = type;
+                if (type !== 'transfer') {
+                    const catList = vm.categories[type] || [];
+                    if (!catList.includes(vm.formData.category)) {
+                        vm.formData.category = catList[0] || 'Autre';
+                    }
+                } else {
+                    vm.formData.category = 'Transfert';
+                    if (vm.formData.walletId === vm.formData.walletToId) {
+                        const other = (vm.wallets || []).find(w => w.id !== vm.formData.walletId);
+                        if (other) vm.formData.walletToId = other.id;
+                    }
+                }
+            };
+
+            vm.openModal = function (type, fromWalletId, toWalletId) {
                 vm.editingTxId = null;
                 vm.formData.type = type || 'expense';
                 vm.formData.amount = null;
+                vm.formData.fee = null;
                 vm.formData.description = '';
                 vm.formData.dateObj = new Date();
-                vm.formData.category = vm.categories[vm.formData.type][0];
+                vm.formData.walletId = fromWalletId || (vm.wallets[0] ? vm.wallets[0].id : 'wallet_cash');
+                vm.formData.walletToId = toWalletId || (vm.wallets[1] ? vm.wallets[1].id : (vm.wallets[0] ? vm.wallets[0].id : 'wallet_cash'));
+                vm.setFormType(vm.formData.type);
                 vm.isModalOpen = true;
                 $timeout(() => lucide.createIcons(), 50);
             };
@@ -1936,8 +2538,11 @@
                 vm.formData.type = tx.type;
                 const rate = vm.currencies[vm.selectedCurrency].rate;
                 vm.formData.amount = parseFloat((tx.amountEUR * rate).toFixed(2));
-                vm.formData.description = tx.description;
-                vm.formData.category = tx.category;
+                vm.formData.fee = tx.feeEUR ? parseFloat((tx.feeEUR * rate).toFixed(2)) : null;
+                vm.formData.description = tx.description || '';
+                vm.formData.category = tx.category || 'Autre';
+                vm.formData.walletId = tx.walletId || (vm.wallets[0] ? vm.wallets[0].id : 'wallet_cash');
+                vm.formData.walletToId = tx.walletToId || (vm.wallets[1] ? vm.wallets[1].id : 'wallet_cash');
 
                 if (tx.date) {
                     const [y, m, d] = tx.date.split('-');
@@ -1957,9 +2562,31 @@
 
             vm.saveTransaction = function () {
                 if (!vm.formData.amount || vm.formData.amount <= 0) return;
+                if (vm.formData.type === 'transfer' && vm.formData.walletId === vm.formData.walletToId) {
+                    vm.showToast(vm.t('diffWalletsRequired'), 'error');
+                    return;
+                }
+
                 const rate = vm.currencies[vm.selectedCurrency].rate;
                 const amountEUR = vm.formData.amount / rate;
+                const feeEUR = (vm.formData.type === 'transfer' && vm.formData.fee > 0) ? (parseFloat(vm.formData.fee) / rate) : 0;
                 const dateStr = formatLocalDate(vm.formData.dateObj);
+
+                // Description optionnelle : si vide, description auto
+                let desc = (vm.formData.description || '').trim();
+                if (!desc) {
+                    if (vm.formData.type === 'transfer') {
+                        const wFrom = vm.getWalletName(vm.formData.walletId);
+                        const wTo = vm.getWalletName(vm.formData.walletToId);
+                        desc = `Transfert: ${wFrom} ➔ ${wTo}`;
+                    } else if (vm.formData.type === 'income') {
+                        desc = vm.formData.category || (vm.currentLang === 'fr' ? 'Entrée' : 'Income');
+                    } else {
+                        desc = vm.formData.category || (vm.currentLang === 'fr' ? 'Dépense' : 'Expense');
+                    }
+                }
+
+                const txCategory = (vm.formData.type === 'transfer') ? 'Transfert' : vm.formData.category;
 
                 if (vm.editingTxId) {
                     // Modification
@@ -1967,18 +2594,35 @@
                     if (tx) {
                         tx.type = vm.formData.type;
                         tx.amountEUR = amountEUR;
-                        tx.description = vm.formData.description;
-                        tx.category = vm.formData.category;
+                        tx.feeEUR = feeEUR;
+                        tx.description = desc;
+                        tx.category = txCategory;
                         tx.date = dateStr;
+                        tx.walletId = vm.formData.walletId;
+                        tx.walletToId = (vm.formData.type === 'transfer') ? vm.formData.walletToId : null;
 
                         if (supabaseClient && vm.auth.currentUser) {
-                            supabaseClient.from('transactions').update({
+                            const payload = {
                                 type: tx.type,
                                 amount_eur: tx.amountEUR,
                                 description: tx.description,
                                 category: tx.category,
-                                date: tx.date
-                            }).eq('id', tx.id).then();
+                                date: tx.date,
+                                wallet_id: tx.walletId,
+                                wallet_to_id: tx.walletToId,
+                                fee_eur: tx.feeEUR
+                            };
+                            supabaseClient.from('transactions').update(payload).eq('id', tx.id).then(({ error }) => {
+                                if (error) {
+                                    supabaseClient.from('transactions').update({
+                                        type: tx.type,
+                                        amount_eur: tx.amountEUR,
+                                        description: tx.description,
+                                        category: tx.category,
+                                        date: tx.date
+                                    }).eq('id', tx.id).then();
+                                }
+                            });
                         }
                     }
                     vm.showToast(vm.currentLang === 'fr' ? 'Opération modifiée avec succès !' : 'Transaction updated successfully!');
@@ -1989,25 +2633,44 @@
                         id: newId,
                         type: vm.formData.type,
                         amountEUR: amountEUR,
-                        description: vm.formData.description,
-                        category: vm.formData.category,
-                        date: dateStr
+                        feeEUR: feeEUR,
+                        description: desc,
+                        category: txCategory,
+                        date: dateStr,
+                        walletId: vm.formData.walletId,
+                        walletToId: (vm.formData.type === 'transfer') ? vm.formData.walletToId : null
                     };
 
                     vm.transactions.unshift(newTx);
 
                     if (supabaseClient && vm.auth.currentUser) {
-                        supabaseClient.from('transactions').insert([{
+                        const insertPayload = {
                             id: newId,
                             user_id: vm.auth.currentUser.id,
                             type: newTx.type,
                             amount_eur: newTx.amountEUR,
                             description: newTx.description,
                             category: newTx.category,
-                            date: newTx.date
-                        }]).then();
+                            date: newTx.date,
+                            wallet_id: newTx.walletId,
+                            wallet_to_id: newTx.walletToId,
+                            fee_eur: newTx.feeEUR
+                        };
+                        supabaseClient.from('transactions').insert([insertPayload]).then(({ error }) => {
+                            if (error) {
+                                supabaseClient.from('transactions').insert([{
+                                    id: newId,
+                                    user_id: vm.auth.currentUser.id,
+                                    type: newTx.type,
+                                    amount_eur: newTx.amountEUR,
+                                    description: newTx.description,
+                                    category: newTx.category,
+                                    date: newTx.date
+                                }]).then();
+                            }
+                        });
                     }
-                    vm.showToast(vm.currentLang === 'fr' ? 'Opération enregistrée !' : 'Transaction saved!');
+                    vm.showToast(vm.formData.type === 'transfer' ? vm.t('transferCompleted') : (vm.currentLang === 'fr' ? 'Opération enregistrée !' : 'Transaction saved!'));
                 }
 
                 vm.saveToStorage();
@@ -2088,8 +2751,10 @@
                     return vm.categories.expense || [];
                 } else if (vm.typeFilter === 'income') {
                     return vm.categories.income || [];
+                } else if (vm.typeFilter === 'transfer') {
+                    return ['Transfert'];
                 } else {
-                    return Array.from(new Set([...(vm.categories.expense || []), ...(vm.categories.income || [])]));
+                    return Array.from(new Set([...(vm.categories.expense || []), ...(vm.categories.income || []), 'Transfert']));
                 }
             };
 
@@ -2097,10 +2762,23 @@
                 return vm.transactions.filter(t => {
                     if (vm.typeFilter !== 'all' && t.type !== vm.typeFilter) return false;
                     if (vm.categoryFilter !== 'all' && t.category !== vm.categoryFilter) return false;
+                    if (vm.walletFilter && vm.walletFilter !== 'all') {
+                        if (t.type === 'transfer') {
+                            if (t.walletId !== vm.walletFilter && t.walletToId !== vm.walletFilter) return false;
+                        } else {
+                            const wId = t.walletId || (vm.wallets[0] ? vm.wallets[0].id : 'wallet_cash');
+                            if (wId !== vm.walletFilter) return false;
+                        }
+                    }
                     if (vm.selectedMonthYear !== 'all' && t.date && !t.date.startsWith(vm.selectedMonthYear)) return false;
                     if (vm.searchQuery) {
                         const q = vm.searchQuery.toLowerCase();
-                        return (t.description && t.description.toLowerCase().includes(q)) || (t.category && t.category.toLowerCase().includes(q));
+                        const wName = vm.getWalletName(t.walletId).toLowerCase();
+                        const wToName = t.walletToId ? vm.getWalletName(t.walletToId).toLowerCase() : '';
+                        return (t.description && t.description.toLowerCase().includes(q)) ||
+                               (t.category && t.category.toLowerCase().includes(q)) ||
+                               wName.includes(q) ||
+                               wToName.includes(q);
                     }
                     return true;
                 });
@@ -2111,19 +2789,37 @@
 
             // Moteur de calcul statistique & Graphique 12 Mois complet
             vm.recalculate = function () {
-                let allInc = 0, allExp = 0;
-                let pInc = 0, pExp = 0;
-                let pIncCount = 0, pExpCount = 0;
+                // Initialisation des soldes de chaque portefeuille avec leur solde de départ
+                const walletBalances = {};
+                (vm.wallets || []).forEach(w => {
+                    walletBalances[w.id] = (w.initialBalanceEUR || 0);
+                });
+
+                const defaultWalletId = (vm.wallets && vm.wallets[0]) ? vm.wallets[0].id : 'wallet_cash';
+
+                let allInc = 0, allExp = 0, allFees = 0;
+                let pInc = 0, pExp = 0, pFees = 0;
+                let pIncCount = 0, pExpCount = 0, pTransferCount = 0;
                 const pCatMap = {};
 
                 const hasPeriodFilter = (vm.selectedMonthYear !== 'all');
 
-                vm.transactions.forEach(t => {
-                    // Calcul Global
+                (vm.transactions || []).forEach(t => {
+                    const wFrom = t.walletId || defaultWalletId;
+                    const wTo = t.walletToId || defaultWalletId;
+                    const fee = parseFloat(t.feeEUR || 0);
+
+                    // Mouvement sur les portefeuilles (All-Time)
                     if (t.type === 'income') {
+                        if (walletBalances[wFrom] !== undefined) walletBalances[wFrom] += t.amountEUR;
                         allInc += t.amountEUR;
-                    } else {
+                    } else if (t.type === 'expense') {
+                        if (walletBalances[wFrom] !== undefined) walletBalances[wFrom] -= t.amountEUR;
                         allExp += t.amountEUR;
+                    } else if (t.type === 'transfer') {
+                        if (walletBalances[wFrom] !== undefined) walletBalances[wFrom] -= (t.amountEUR + fee);
+                        if (walletBalances[wTo] !== undefined) walletBalances[wTo] += t.amountEUR;
+                        allFees += fee;
                     }
 
                     // Calcul Filtré pour la période
@@ -2132,24 +2828,39 @@
                         if (t.type === 'income') {
                             pInc += t.amountEUR;
                             pIncCount++;
-                        } else {
+                        } else if (t.type === 'expense') {
                             pExp += t.amountEUR;
                             pExpCount++;
                             pCatMap[t.category] = (pCatMap[t.category] || 0) + t.amountEUR;
+                        } else if (t.type === 'transfer') {
+                            pTransferCount++;
+                            if (fee > 0) {
+                                pFees += fee;
+                                pCatMap['Frais de transfert'] = (pCatMap['Frais de transfert'] || 0) + fee;
+                            }
                         }
                     }
                 });
 
+                // Calcul du solde disponible total sur tous les portefeuilles
+                let totalWalletsBalance = 0;
+                (vm.wallets || []).forEach(w => {
+                    w.currentBalanceEUR = walletBalances[w.id] !== undefined ? walletBalances[w.id] : 0;
+                    totalWalletsBalance += w.currentBalanceEUR;
+                });
+                vm.totalWalletsBalance = totalWalletsBalance;
+
                 vm.stats = {
-                    allTimeNet: allInc - allExp,
+                    allTimeNet: totalWalletsBalance,
                     allTimeIncome: allInc,
-                    allTimeExpense: allExp,
-                    periodNet: pInc - pExp,
+                    allTimeExpense: allExp + allFees,
+                    periodNet: pInc - (pExp + pFees),
                     totalIncome: pInc,
-                    totalExpense: pExp,
+                    totalExpense: pExp + pFees,
                     incomeCount: pIncCount,
                     expenseCount: pExpCount,
-                    periodSavingRate: pInc > 0 ? Math.max(0, Math.round(((pInc - pExp) / pInc) * 100)) : 0
+                    transferCount: pTransferCount,
+                    periodSavingRate: pInc > 0 ? Math.max(0, Math.round(((pInc - (pExp + pFees)) / pInc) * 100)) : 0
                 };
 
                 // Calcul Mensuel : 12 Mois complets (Janvier à Décembre) pour selectedYear
@@ -2169,7 +2880,7 @@
 
                 const targetYearStr = String(vm.selectedYear);
 
-                vm.transactions.forEach(t => {
+                (vm.transactions || []).forEach(t => {
                     if (t.date) {
                         const [y, m] = t.date.split('-');
                         const mIdx = parseInt(m, 10) - 1;
@@ -2178,6 +2889,8 @@
                                 monthlyExpenses[mIdx] += t.amountEUR;
                             } else if (t.type === 'income') {
                                 monthlyIncomes[mIdx] += t.amountEUR;
+                            } else if (t.type === 'transfer' && t.feeEUR > 0) {
+                                monthlyExpenses[mIdx] += t.feeEUR;
                             }
                         }
                     }
@@ -2246,10 +2959,11 @@
                     let dayExp = 0;
                     let dayInc = 0;
 
-                    vm.transactions.forEach(t => {
+                    (vm.transactions || []).forEach(t => {
                         if (t.date === dStr) {
                             if (t.type === 'expense') dayExp += t.amountEUR;
                             else if (t.type === 'income') dayInc += t.amountEUR;
+                            else if (t.type === 'transfer' && t.feeEUR > 0) dayExp += t.feeEUR;
                         }
                     });
 
@@ -2333,9 +3047,12 @@
             vm.exportCSV = function () {
                 const curr = vm.currencies[vm.selectedCurrency];
                 const listToExport = vm.getFilteredTransactions();
-                let csv = "data:text/csv;charset=utf-8,Date,Type,Description,Categorie,Montant_" + vm.selectedCurrency + "\n";
+                let csv = "data:text/csv;charset=utf-8,Date,Type,Description,Categorie,Portefeuille_Source,Portefeuille_Cible,Frais_" + vm.selectedCurrency + ",Montant_" + vm.selectedCurrency + "\n";
                 listToExport.forEach(t => {
-                    csv += `"${t.date}","${t.type}","${t.description}","${t.category}","${(t.amountEUR * curr.rate).toFixed(2)}"\n`;
+                    const wFrom = vm.getWalletName(t.walletId);
+                    const wTo = t.walletToId ? vm.getWalletName(t.walletToId) : '';
+                    const fee = t.feeEUR ? (t.feeEUR * curr.rate).toFixed(2) : '0';
+                    csv += `"${t.date}","${t.type}","${t.description}","${t.category}","${wFrom}","${wTo}","${fee}","${(t.amountEUR * curr.rate).toFixed(2)}"\n`;
                 });
                 const link = document.createElement("a");
                 link.setAttribute("href", encodeURI(csv));
@@ -2511,6 +3228,7 @@
             };
 
             $timeout(() => {
+                vm.loadWallets();
                 vm.loadCustomCategories();
                 vm.initSupabase();
                 vm.recalculate();
