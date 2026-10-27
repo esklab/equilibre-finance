@@ -14,6 +14,8 @@ Application moderne de gestion financière personnelle et de comptabilité avec 
 - 💳 **Multi-Portefeuilles & Comptes** : Gestion distincte de vos comptes (Banque, Espèces, Mobile Money Wave/Orange/MTN, etc.) avec solde individuel et part dans le patrimoine total.
 - ⇄ **Virements & Transferts Inter-Comptes** : Déplacement d'argent d'un portefeuille à un autre avec gestion des frais éventuels (retraits, rechargements) sans fausser vos revenus/dépenses réels.
 - 🏷 **Catégories Synchronisées Cloud** : Création et suppression de catégories personnalisées enregistrées directement en base de données Supabase.
+- 🎯 **Objectifs d'Épargne & Projets Cloud** : Suivi des cagnottes, projets vacances ou fonds d'urgence avec jauge de progression et contribution rapide.
+- 📐 **Allocation Budgétaire & Méthodes (70/20/10, 50/30/20, Sur-mesure)** : Répartition automatique des revenus entre charges indispensables, épargne/investissements et loisirs avec détection de surconsommation en temps réel.
 - ✍️ **Saisie Rapide & Description Optionnelle** : La description n'est plus obligatoire ; une valeur par défaut intelligente est automatiquement assignée.
 - 📊 **Onglet Bilan & Totaux** : Grands cartouches Total Entrées, Total Sorties, Solde Net Résultant, taux d'épargne et jauge de consommation du budget.
 - 🗓 **Filtres Dynamiques Mois & Année** : Navigation intuitive d'un mois à l'autre avec recalcul instantané des indicateurs et graphiques.
@@ -77,6 +79,36 @@ create table if not exists wallets (
 
 alter table wallets enable row level security;
 create policy "User can manage their own wallets" on wallets for all using (auth.uid() = user_id);
+
+-- 4. Table des objectifs d'épargne (Goals)
+create table if not exists goals (
+  id text primary key,
+  user_id uuid references auth.users not null,
+  title text not null,
+  subtitle text default '',
+  icon text default '🏖',
+  current_eur numeric not null default 0,
+  target_eur numeric not null default 0,
+  days_left integer default 30,
+  bar_color text default 'bg-emerald-500',
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+alter table goals enable row level security;
+create policy "User can manage their own goals" on goals for all using (auth.uid() = user_id);
+
+-- 5. Table des règles d'allocation budgétaire
+create table if not exists budget_allocations (
+  id text default gen_random_uuid()::text primary key,
+  user_id uuid references auth.users not null unique,
+  active_method text not null default '70_20_10',
+  benchmark_income_eur numeric default 0,
+  methods_config jsonb,
+  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+alter table budget_allocations enable row level security;
+create policy "User can manage their own budget allocations" on budget_allocations for all using (auth.uid() = user_id);
 ```
 
 ---

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Salung Équilibre | Modern Finance & Goals</title>
+    <title>Équilibre Finance | Finance & Goals</title>
 
     <!-- AngularJS -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
@@ -24,9 +24,9 @@
 
     <style>
         body {
-            background-color: #f3f4f8;
+            background-color: #f8fafc;
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            color: #111827;
+            color: #0f172a;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -34,61 +34,59 @@
             font-family: 'JetBrains Mono', monospace;
         }
 
-        /* Cartes Fintech Modernes */
+        /* Cartes Minimalistes Épurées */
         .fintech-card {
             background: #ffffff;
-            border-radius: 1.75rem;
-            border: 1px solid rgba(229, 231, 235, 0.8);
-            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 1.125rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.03);
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
         }
 
-        /* Carte Hero Sombre Luxe */
+        .fintech-card:hover {
+            border-color: #cbd5e1;
+        }
+
+        /* Carte Hero Minimaliste Obsidian */
         .hero-wallet-card {
-            background: radial-gradient(circle at 85% 15%, #2a2e39 0%, #121317 100%);
-            border-radius: 2rem;
-            box-shadow: 0 20px 40px -10px rgba(17, 24, 39, 0.35);
+            background: linear-gradient(180deg, #11141c 0%, #090b10 100%);
+            border-radius: 1.25rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.1);
             position: relative;
-            overflow: hidden;
         }
 
-        .hero-wallet-card::after {
-            content: '';
-            position: absolute;
-            top: -40%;
-            right: -20%;
-            width: 280px;
-            height: 280px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
-        /* Bouton d'action circulaire */
+        /* Bouton d'action circulaire minimaliste */
         .action-circle-btn {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            background: #ffffff;
-            color: #111827;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            transition: all 0.15s ease;
+        }
+
+        .action-circle-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
         }
 
         .action-circle-btn:active {
-            transform: scale(0.92);
+            transform: scale(0.95);
         }
 
-        /* Floating Nav Dock */
+        /* Floating Nav Dock Minimaliste */
         .floating-nav-dock {
-            background: rgba(18, 20, 26, 0.95);
+            background: rgba(15, 23, 42, 0.92);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 30px -4px rgba(0, 0, 0, 0.25);
         }
 
         .pill-bar {
@@ -99,11 +97,10 @@
         .custom-pill-select {
             background: #ffffff;
             border-radius: 9999px;
-            border: 1px solid #e5e7eb;
-            padding: 5px 12px;
-            font-weight: 700;
+            border: 1px solid #e2e8f0;
+            padding: 4px 10px;
+            font-weight: 600;
             font-size: 11px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
             outline: none;
             cursor: pointer;
         }
@@ -113,8 +110,8 @@
         }
 
         ::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
+            width: 4px;
+            height: 4px;
         }
 
         ::-webkit-scrollbar-track {
@@ -122,8 +119,12 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
+            background: #e2e8f0;
             border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #cbd5e1;
         }
     </style>
 </head>
@@ -233,28 +234,30 @@
     <!-- ========================================== -->
     <!-- TOP HEADER : PROFIL, NAVIGATION & RÉGLAGES -->
     <!-- ========================================== -->
-    <header class="bg-white/90 backdrop-blur-md border-b border-slate-200/70 sticky top-0 z-30 mb-4">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-4">
+    <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/60 sticky top-0 z-30 mb-5">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 h-14 sm:h-15 flex items-center justify-between gap-2 sm:gap-4">
 
             <!-- Salutation & Avatar Cliquable pour Options Profil -->
-            <div class="flex items-center gap-2.5 sm:gap-3 cursor-pointer group select-none relative" ng-click="fc.toggleProfileMenu()" title="Ouvrir le menu de profil (Déconnexion, Hors-Ligne...)">
+            <div class="flex items-center gap-2.5 cursor-pointer group select-none relative"
+                ng-click="fc.toggleProfileMenu()" title="Ouvrir le menu de profil (Déconnexion, Hors-Ligne...)">
                 <div class="relative flex-shrink-0">
-                    <div
-                        class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-slate-950 text-white flex items-center justify-center font-extrabold text-sm shadow-md ring-3 sm:ring-4 transition-all"
-                        ng-class="fc.auth.currentUser ? 'ring-emerald-200 group-hover:ring-emerald-300' : 'ring-amber-200 group-hover:ring-amber-300'">
+                    <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xs shadow-xs border border-slate-200"
+                        ng-class="fc.auth.currentUser ? 'border-emerald-400' : 'border-amber-400'">
                         {{(fc.auth.currentUser ? (fc.auth.currentUser.user_metadata.display_name ||
                         fc.auth.currentUser.email) : 'Salung')[0] | uppercase}}
                     </div>
                     <!-- Pastille d'état (Vert = Cloud Connecté, Orange = Invité Hors-ligne) -->
-                    <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white"
+                    <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white"
                         ng-class="fc.auth.currentUser ? 'bg-emerald-500' : 'bg-amber-500'"></span>
                 </div>
                 <div>
                     <div class="flex items-center gap-1">
-                        <p class="text-[10px] sm:text-[11px] font-semibold text-slate-400">{{fc.t('welcomePrefix')}},</p>
-                        <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400 group-hover:text-slate-900 transition-transform" ng-class="{'rotate-180': fc.isProfileMenuOpen}"></i>
+                        <p class="text-[10px] font-medium text-slate-400">{{fc.t('welcomePrefix')}},</p>
+                        <i data-lucide="chevron-down"
+                            class="w-3 h-3 text-slate-400 group-hover:text-slate-900 transition-transform"
+                            ng-class="{'rotate-180': fc.isProfileMenuOpen}"></i>
                     </div>
-                    <h1 class="text-sm sm:text-base font-black tracking-tight text-slate-900 -mt-0.5 max-w-[120px] sm:max-w-[200px] truncate">
+                    <h1 class="text-xs sm:text-sm font-bold tracking-tight text-slate-900 -mt-0.5 max-w-[120px] sm:max-w-[200px] truncate">
                         {{fc.auth.currentUser ? (fc.auth.currentUser.user_metadata.display_name ||
                         fc.auth.currentUser.email.split('@')[0]) : (fc.auth.guestMode ? fc.t('guestUser') : 'Salung')}}
                     </h1>
@@ -262,25 +265,30 @@
             </div>
 
             <!-- Navigation Desktop -->
-            <nav class="hidden md:flex items-center space-x-1 bg-slate-100 p-1 rounded-2xl text-xs font-bold">
+            <nav class="hidden md:flex items-center space-x-0.5 bg-slate-100/80 p-0.5 rounded-xl text-xs font-semibold">
                 <button ng-click="fc.setTab('dashboard')"
-                    class="px-4 py-2 rounded-xl transition-all flex items-center gap-1.5"
-                    ng-class="fc.currentTab === 'dashboard' ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-500 hover:text-slate-900'">
+                    class="px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5"
+                    ng-class="fc.currentTab === 'dashboard' ? 'bg-white text-slate-950 shadow-xs' : 'text-slate-500 hover:text-slate-900'">
                     <i data-lucide="home" class="w-3.5 h-3.5"></i> {{fc.t('navHome')}}
                 </button>
                 <button ng-click="fc.setTab('goals')"
-                    class="px-4 py-2 rounded-xl transition-all flex items-center gap-1.5"
-                    ng-class="fc.currentTab === 'goals' ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-500 hover:text-slate-900'">
+                    class="px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5"
+                    ng-class="fc.currentTab === 'goals' ? 'bg-white text-slate-950 shadow-xs' : 'text-slate-500 hover:text-slate-900'">
                     <i data-lucide="target" class="w-3.5 h-3.5"></i> {{fc.t('navGoals')}}
                 </button>
+                <button ng-click="fc.setTab('allocation')"
+                    class="px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5"
+                    ng-class="fc.currentTab === 'allocation' ? 'bg-white text-slate-950 shadow-xs' : 'text-slate-500 hover:text-slate-900'">
+                    <i data-lucide="sliders" class="w-3.5 h-3.5"></i> {{fc.t('navAllocation')}}
+                </button>
                 <button ng-click="fc.setTab('transactions')"
-                    class="px-4 py-2 rounded-xl transition-all flex items-center gap-1.5"
-                    ng-class="fc.currentTab === 'transactions' ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-500 hover:text-slate-900'">
+                    class="px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5"
+                    ng-class="fc.currentTab === 'transactions' ? 'bg-white text-slate-950 shadow-xs' : 'text-slate-500 hover:text-slate-900'">
                     <i data-lucide="receipt" class="w-3.5 h-3.5"></i> {{fc.t('navHistory')}}
                 </button>
                 <button ng-click="fc.setTab('analytics')"
-                    class="px-4 py-2 rounded-xl transition-all flex items-center gap-1.5"
-                    ng-class="fc.currentTab === 'analytics' ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-500 hover:text-slate-900'">
+                    class="px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5"
+                    ng-class="fc.currentTab === 'analytics' ? 'bg-white text-slate-950 shadow-xs' : 'text-slate-500 hover:text-slate-900'">
                     <i data-lucide="pie-chart" class="w-3.5 h-3.5"></i> {{fc.t('navAnalytics')}}
                 </button>
             </nav>
@@ -289,16 +297,16 @@
             <div class="flex items-center gap-1.5 sm:gap-2">
                 <!-- Sélecteur Langue FR / EN -->
                 <button ng-click="fc.toggleLanguage()"
-                    class="px-2 sm:px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-[11px] sm:text-xs font-bold text-slate-800 hover:bg-slate-200 transition-colors"
+                    class="px-2 sm:px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200/80 text-[11px] font-semibold text-slate-700 hover:bg-slate-100 transition-colors"
                     title="Changer de langue">
                     {{fc.currentLang === 'fr' ? '🇫🇷 FR' : '🇬🇧 EN'}}
                 </button>
 
                 <!-- Sélecteur Devise (XOF par défaut) -->
-                <div class="bg-slate-100 px-2 sm:px-3 py-1 rounded-full border border-slate-200 flex items-center gap-1">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0"></span>
+                <div class="bg-slate-50 px-2 sm:px-2.5 py-1 rounded-lg border border-slate-200/80 flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0"></span>
                     <select ng-model="fc.selectedCurrency" ng-change="fc.onCurrencyChange()"
-                        class="text-[11px] sm:text-xs font-bold bg-transparent outline-none cursor-pointer text-slate-800 pr-0.5">
+                        class="text-[11px] font-semibold bg-transparent outline-none cursor-pointer text-slate-800 pr-0.5">
                         <option value="XOF">FCFA (XOF)</option>
                         <option value="EUR">Euro (€)</option>
                         <option value="USD">Dollar ($)</option>
@@ -310,9 +318,9 @@
 
                 <!-- Bouton Catégories -->
                 <button ng-click="fc.openCategoryModal()"
-                    class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:text-slate-950 transition-all"
+                    class="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200/80 flex items-center justify-center text-slate-600 hover:text-slate-950 hover:bg-slate-100 transition-all cursor-pointer"
                     title="Gérer les Catégories">
-                    <i data-lucide="tag" class="w-4 h-4"></i>
+                    <i data-lucide="tag" class="w-3.5 h-3.5"></i>
                 </button>
             </div>
         </div>
@@ -321,25 +329,32 @@
     <!-- ==================================================== -->
     <!-- MODALE / MENU DE PROFIL (DÉCONNEXION & HORS-LIGNE)   -->
     <!-- ==================================================== -->
-    <div ng-show="fc.isProfileMenuOpen" class="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-xs flex items-start sm:items-center justify-center p-4 pt-20 sm:pt-4" ng-click="fc.isProfileMenuOpen = false">
-        <div class="fintech-card bg-white w-full max-w-sm p-6 relative shadow-2xl space-y-4" ng-click="$event.stopPropagation()">
+    <div ng-show="fc.isProfileMenuOpen"
+        class="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-xs flex items-start sm:items-center justify-center p-4 pt-20 sm:pt-4"
+        ng-click="fc.isProfileMenuOpen = false">
+        <div class="fintech-card bg-white w-full max-w-sm p-6 relative shadow-2xl space-y-4"
+            ng-click="$event.stopPropagation()">
             <!-- En-tête du profil -->
             <div class="flex items-center justify-between border-b border-slate-100 pb-3.5">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-full bg-slate-950 text-white flex items-center justify-center font-black text-base shadow-md ring-4"
                         ng-class="fc.auth.currentUser ? 'ring-emerald-100' : 'ring-amber-100'">
-                        {{(fc.auth.currentUser ? (fc.auth.currentUser.user_metadata.display_name || fc.auth.currentUser.email) : 'Salung')[0] | uppercase}}
+                        {{(fc.auth.currentUser ? (fc.auth.currentUser.user_metadata.display_name ||
+                        fc.auth.currentUser.email) : 'Salung')[0] | uppercase}}
                     </div>
                     <div>
                         <h3 class="text-sm font-black text-slate-900">
-                            {{fc.auth.currentUser ? (fc.auth.currentUser.user_metadata.display_name || fc.auth.currentUser.email.split('@')[0]) : (fc.auth.guestMode ? fc.t('guestUser') : 'Salung')}}
+                            {{fc.auth.currentUser ? (fc.auth.currentUser.user_metadata.display_name ||
+                            fc.auth.currentUser.email.split('@')[0]) : (fc.auth.guestMode ? fc.t('guestUser') :
+                            'Salung')}}
                         </h3>
                         <p class="text-[11px] text-slate-400 font-medium truncate max-w-[170px]">
                             {{fc.auth.currentUser ? fc.auth.currentUser.email : 'Stockage local (navigateur)'}}
                         </p>
                     </div>
                 </div>
-                <button ng-click="fc.isProfileMenuOpen = false" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-900 font-bold">✕</button>
+                <button ng-click="fc.isProfileMenuOpen = false"
+                    class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-900 font-bold">✕</button>
             </div>
 
             <!-- Statut de synchronisation -->
@@ -349,7 +364,8 @@
                     ng-class="fc.auth.currentUser ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'"></span>
                 <div class="text-xs">
                     <p class="font-extrabold">{{fc.auth.currentUser ? fc.t('statusOnline') : fc.t('statusOffline')}}</p>
-                    <p class="text-[11px] opacity-80">{{fc.auth.currentUser ? fc.t('statusOnlineDesc') : fc.t('statusOfflineDesc')}}</p>
+                    <p class="text-[11px] opacity-80">{{fc.auth.currentUser ? fc.t('statusOnlineDesc') :
+                        fc.t('statusOfflineDesc')}}</p>
                 </div>
             </div>
 
@@ -358,7 +374,8 @@
                 <!-- Si connecté : Basculer en mode hors-ligne -->
                 <button ng-if="fc.auth.currentUser" ng-click="fc.switchToGuestMode()"
                     class="w-full py-2.5 px-3.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-2xl flex items-center gap-3 transition-colors text-left">
-                    <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0">
+                    <div
+                        class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0">
                         <i data-lucide="wifi-off" class="w-4 h-4"></i>
                     </div>
                     <div>
@@ -370,7 +387,8 @@
                 <!-- Si hors-ligne : Se connecter au Cloud -->
                 <button ng-if="!fc.auth.currentUser" ng-click="fc.openAuthModal()"
                     class="w-full py-3 px-3.5 bg-slate-950 hover:bg-slate-800 text-white rounded-2xl flex items-center gap-3 transition-colors text-left shadow-md">
-                    <div class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0">
+                    <div
+                        class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0">
                         <i data-lucide="cloud" class="w-4 h-4"></i>
                     </div>
                     <div>
@@ -382,7 +400,8 @@
                 <!-- Configuration Supabase -->
                 <button ng-click="fc.isProfileMenuOpen = false; fc.openSupabaseConfigModal()"
                     class="w-full py-2.5 px-3.5 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-2xl flex items-center gap-3 transition-colors text-left">
-                    <div class="w-8 h-8 rounded-xl bg-slate-200 text-slate-700 flex items-center justify-center flex-shrink-0">
+                    <div
+                        class="w-8 h-8 rounded-xl bg-slate-200 text-slate-700 flex items-center justify-center flex-shrink-0">
                         <i data-lucide="database" class="w-4 h-4"></i>
                     </div>
                     <span>{{fc.t('supabaseConfig')}}</span>
@@ -391,7 +410,8 @@
                 <!-- Déconnexion (si connecté) -->
                 <button ng-if="fc.auth.currentUser" ng-click="fc.logout()"
                     class="w-full py-2.5 px-3.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-2xl flex items-center gap-3 transition-colors text-left mt-1">
-                    <div class="w-8 h-8 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center flex-shrink-0">
+                    <div
+                        class="w-8 h-8 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center flex-shrink-0">
                         <i data-lucide="log-out" class="w-4 h-4"></i>
                     </div>
                     <span>{{fc.t('btnSignOut')}}</span>
@@ -408,39 +428,37 @@
         <!-- ========================================== -->
         <!-- SÉLECTEUR DE PÉRIODE & FILTRE TEMPOREL     -->
         <!-- ========================================== -->
-        <div
-            class="fintech-card p-3 sm:p-4 bg-white/90 backdrop-blur-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm border border-slate-200/80">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-2xl bg-slate-900 text-white flex items-center justify-center shadow-sm">
-                    <i data-lucide="calendar" class="w-5 h-5"></i>
-                </div>
-                <div>
-                    <span
-                        class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">{{fc.t('periodFilter')}}</span>
-                    <h2 class="text-sm sm:text-base font-black text-slate-900 leading-tight">{{fc.getPeriodLabel()}}
-                    </h2>
+        <!-- ========================================== -->
+        <!-- SÉLECTEUR DE PÉRIODE & FILTRE TEMPOREL     -->
+        <!-- ========================================== -->
+        <div class="fintech-card p-3 sm:p-3.5 bg-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+                <i data-lucide="calendar" class="w-4 h-4 text-slate-400"></i>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-xs font-bold text-slate-900">{{fc.getPeriodLabel()}}</span>
+                    <span class="text-[10px] text-slate-400 font-medium">({{fc.t('periodFilter')}})</span>
                 </div>
             </div>
 
             <!-- Contrôles Mois Précédent / Liste / Suivant -->
             <div class="flex items-center gap-1.5 w-full sm:w-auto justify-end">
                 <button type="button" ng-click="fc.prevMonth()"
-                    class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center font-bold transition-all"
+                    class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-all cursor-pointer"
                     title="Mois précédent">
-                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                    <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
                 </button>
                 <select ng-model="fc.selectedMonthYear" ng-change="fc.onPeriodChange()"
-                    class="px-3 py-2 bg-slate-100 hover:bg-slate-200 border-0 rounded-xl text-xs font-black text-slate-900 outline-none cursor-pointer">
+                    class="px-2.5 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-lg text-xs font-semibold text-slate-800 outline-none cursor-pointer">
                     <option value="all">{{fc.t('allTime')}}</option>
                     <option ng-repeat="p in fc.availablePeriods" value="{{p.value}}">{{p.label}}</option>
                 </select>
                 <button type="button" ng-click="fc.nextMonth()"
-                    class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center font-bold transition-all"
+                    class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-all cursor-pointer"
                     title="Mois suivant">
-                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
                 </button>
                 <button type="button" ng-if="fc.selectedMonthYear !== 'all'" ng-click="fc.setPeriod('all')"
-                    class="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-xl text-xs transition-all">
+                    class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-xs transition-all cursor-pointer">
                     {{fc.t('resetFilter')}}
                 </button>
             </div>
@@ -452,63 +470,60 @@
         <div ng-show="fc.currentTab === 'dashboard'" class="space-y-6">
 
             <!-- 1. CARTE HERO SOMBRE (Solde Principal) -->
-            <div class="hero-wallet-card p-7 text-white">
-                <div class="flex items-center justify-between mb-4">
-                    <div
-                        class="flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-[11px] font-semibold">
-                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                        <span class="font-mono">{{fc.selectedMonthYear === 'all' ? fc.t('allTime') :
-                            fc.getPeriodLabel()}}</span>
+            <div class="hero-wallet-card p-6 sm:p-7 text-white">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/[0.08] text-[11px] font-medium text-slate-300">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                        <span class="font-mono text-xs">{{fc.selectedMonthYear === 'all' ? fc.t('allTime') : fc.getPeriodLabel()}}</span>
                     </div>
-                    <span class="text-xs font-semibold text-slate-300 uppercase tracking-wide">
+                    <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
                         {{fc.selectedMonthYear === 'all' ? fc.t('cardSoldeGlobal') : fc.t('periodBalance')}}
                     </span>
                 </div>
 
                 <!-- Montant Principal -->
-                <div class="text-center my-3">
-                    <div class="text-xs text-slate-400 font-semibold uppercase tracking-widest mb-1">
+                <div class="text-center my-4">
+                    <div class="text-[11px] text-slate-400 font-semibold uppercase tracking-widest mb-1">
                         {{fc.selectedMonthYear === 'all' ? fc.t('myBalance') : fc.t('periodNetResult')}}
                     </div>
-                    <div class="text-3xl sm:text-5xl font-black font-mono tracking-tight text-white"
+                    <div class="text-3xl sm:text-4xl font-extrabold font-mono tracking-tight"
                         ng-class="fc.stats.periodNet < 0 ? 'text-rose-400' : 'text-white'">
                         {{fc.stats.periodNet | geoFormat:fc.selectedCurrency:fc.currencies}}
                     </div>
                     <!-- Solde Global si filtré par mois -->
-                    <div ng-if="fc.selectedMonthYear !== 'all'" class="mt-2 text-xs font-semibold text-slate-400">
-                        {{fc.t('cardSoldeGlobal')}} : <span class="font-mono text-white font-bold">{{fc.stats.allTimeNet
-                            | geoFormat:fc.selectedCurrency:fc.currencies}}</span>
+                    <div ng-if="fc.selectedMonthYear !== 'all'" class="mt-2 text-xs text-slate-400">
+                        {{fc.t('cardSoldeGlobal')}} : <span class="font-mono text-slate-200 font-semibold">{{fc.stats.allTimeNet | geoFormat:fc.selectedCurrency:fc.currencies}}</span>
                     </div>
                 </div>
 
-                <!-- 4 BOUTONS RONDS D'ACTION -->
-                <div class="grid grid-cols-4 gap-2 pt-4 mt-2 border-t border-white/10 text-center">
-                    <div class="flex flex-col items-center gap-1.5 cursor-pointer" ng-click="fc.openModal('income')">
-                        <div class="action-circle-btn hover:bg-slate-100">
-                            <i data-lucide="arrow-down-left" class="w-5 h-5 text-emerald-600"></i>
+                <!-- 4 BOUTONS D'ACTION MINIMALISTES -->
+                <div class="grid grid-cols-4 gap-2 pt-4 mt-2 border-t border-white/[0.08] text-center">
+                    <div class="flex flex-col items-center gap-1.5 cursor-pointer group" ng-click="fc.openModal('income')">
+                        <div class="action-circle-btn">
+                            <i data-lucide="arrow-down-left" class="w-4 h-4 text-emerald-400"></i>
                         </div>
-                        <span class="text-[11px] font-semibold text-slate-300">{{fc.t('btnTopUp')}}</span>
+                        <span class="text-[11px] font-medium text-slate-300 group-hover:text-white transition-colors">{{fc.t('btnTopUp')}}</span>
                     </div>
 
-                    <div class="flex flex-col items-center gap-1.5 cursor-pointer" ng-click="fc.openModal('expense')">
-                        <div class="action-circle-btn hover:bg-slate-100">
-                            <i data-lucide="arrow-up-right" class="w-5 h-5 text-rose-600"></i>
+                    <div class="flex flex-col items-center gap-1.5 cursor-pointer group" ng-click="fc.openModal('expense')">
+                        <div class="action-circle-btn">
+                            <i data-lucide="arrow-up-right" class="w-4 h-4 text-rose-400"></i>
                         </div>
-                        <span class="text-[11px] font-semibold text-slate-300">{{fc.t('btnSend')}}</span>
+                        <span class="text-[11px] font-medium text-slate-300 group-hover:text-white transition-colors">{{fc.t('btnSend')}}</span>
                     </div>
 
-                    <div class="flex flex-col items-center gap-1.5 cursor-pointer" ng-click="fc.openCategoryModal()">
-                        <div class="action-circle-btn hover:bg-slate-100">
-                            <i data-lucide="tags" class="w-5 h-5 text-slate-900"></i>
+                    <div class="flex flex-col items-center gap-1.5 cursor-pointer group" ng-click="fc.openCategoryModal()">
+                        <div class="action-circle-btn">
+                            <i data-lucide="tags" class="w-4 h-4 text-slate-300"></i>
                         </div>
-                        <span class="text-[11px] font-semibold text-slate-300">{{fc.t('btnCategories')}}</span>
+                        <span class="text-[11px] font-medium text-slate-300 group-hover:text-white transition-colors">{{fc.t('btnCategories')}}</span>
                     </div>
 
-                    <div class="flex flex-col items-center gap-1.5 cursor-pointer" ng-click="fc.setTab('transactions')">
-                        <div class="action-circle-btn hover:bg-slate-100">
-                            <i data-lucide="file-text" class="w-5 h-5 text-slate-900"></i>
+                    <div class="flex flex-col items-center gap-1.5 cursor-pointer group" ng-click="fc.setTab('transactions')">
+                        <div class="action-circle-btn">
+                            <i data-lucide="file-text" class="w-4 h-4 text-slate-300"></i>
                         </div>
-                        <span class="text-[11px] font-semibold text-slate-300">{{fc.t('btnHistory')}}</span>
+                        <span class="text-[11px] font-medium text-slate-300 group-hover:text-white transition-colors">{{fc.t('btnHistory')}}</span>
                     </div>
                 </div>
             </div>
@@ -521,7 +536,8 @@
                     <div>
                         <div class="flex items-center gap-2">
                             <h3 class="text-base font-black text-slate-900 tracking-tight">{{fc.t('wallets')}}</h3>
-                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200/80 text-slate-700 font-mono">
+                            <span
+                                class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200/80 text-slate-700 font-mono">
                                 {{fc.wallets.length}}
                             </span>
                         </div>
@@ -548,8 +564,7 @@
 
                 <!-- Grille des Cartes Portefeuilles -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                    <div ng-repeat="w in fc.wallets"
-                        ng-click="fc.filterByWalletAndGo(w.id)"
+                    <div ng-repeat="w in fc.wallets" ng-click="fc.filterByWalletAndGo(w.id)"
                         class="fintech-card p-4 bg-white hover:border-slate-400 hover:shadow-md cursor-pointer transition-all relative overflow-hidden group">
                         <div class="flex items-start justify-between mb-2">
                             <div class="flex items-center gap-2.5">
@@ -563,11 +578,13 @@
                                     <i data-lucide="{{w.icon || 'wallet'}}" class="w-5 h-5"></i>
                                 </div>
                                 <div>
-                                    <h4 class="text-xs font-black text-slate-900 group-hover:text-indigo-600 transition-colors">
+                                    <h4
+                                        class="text-xs font-black text-slate-900 group-hover:text-indigo-600 transition-colors">
                                         {{fc.getWalletName(w.id)}}
                                     </h4>
                                     <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                                        {{w.type === 'bank' ? fc.t('typeBank') : (w.type === 'mobile_money' ? fc.t('typeMomo') : (w.type === 'cash' ? fc.t('typeCash') : fc.t('typeOther')))}}
+                                        {{w.type === 'bank' ? fc.t('typeBank') : (w.type === 'mobile_money' ?
+                                        fc.t('typeMomo') : (w.type === 'cash' ? fc.t('typeCash') : fc.t('typeOther')))}}
                                     </span>
                                 </div>
                             </div>
@@ -582,7 +599,8 @@
                                 ng-class="w.currentBalanceEUR < 0 ? 'text-rose-600' : 'text-slate-900'">
                                 {{w.currentBalanceEUR | geoFormat:fc.selectedCurrency:fc.currencies}}
                             </div>
-                            <span class="text-[10px] font-semibold text-slate-400 group-hover:text-slate-700 flex items-center gap-0.5 transition-colors">
+                            <span
+                                class="text-[10px] font-semibold text-slate-400 group-hover:text-slate-700 flex items-center gap-0.5 transition-colors">
                                 {{fc.t('btnHistory')}} <i data-lucide="chevron-right" class="w-3 h-3"></i>
                             </span>
                         </div>
@@ -590,51 +608,33 @@
                 </div>
             </div>
 
-            <!-- 2. TOTAL DES CHOSES DÉPENSÉES & REVENUS (SYNTHÈSE DU MOIS / PÉRIODE) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- 2. TOTAL DES DÉPENSES & REVENUS (SYNTHÈSE DU MOIS / PÉRIODE) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
 
                 <!-- TOTAL SORTIES / DÉPENSES -->
-                <div class="fintech-card p-5 bg-white border-l-4 border-l-rose-500">
-                    <div class="flex items-center justify-between mb-2">
-                        <div class="flex items-center gap-2.5">
-                            <div
-                                class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold">
-                                ↘
-                            </div>
-                            <div>
-                                <span
-                                    class="text-xs font-bold text-slate-500 uppercase tracking-wider">{{fc.t('totalExpenses')}}</span>
-                                <h3 class="text-xs text-slate-400 font-medium">{{fc.stats.expenseCount}}
-                                    {{fc.t('txRecorded')}}</h3>
-                            </div>
+                <div class="fintech-card p-5 bg-white">
+                    <div class="flex items-center justify-between mb-2.5">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">{{fc.t('totalExpenses')}}</span>
                         </div>
-                        <span
-                            class="text-[10px] font-black px-2 py-0.5 rounded-full bg-rose-100 text-rose-700">DÉPENSÉ</span>
+                        <span class="text-[11px] font-medium text-slate-400">{{fc.stats.expenseCount}} {{fc.t('txRecorded')}}</span>
                     </div>
-                    <div class="text-2xl font-black font-mono text-rose-600 mt-2">
+                    <div class="text-2xl font-bold font-mono text-slate-900">
                         -{{fc.stats.totalExpense | geoFormat:fc.selectedCurrency:fc.currencies}}
                     </div>
                 </div>
 
                 <!-- TOTAL ENTRÉES / REVENUS -->
-                <div class="fintech-card p-5 bg-white border-l-4 border-l-emerald-500">
-                    <div class="flex items-center justify-between mb-2">
-                        <div class="flex items-center gap-2.5">
-                            <div
-                                class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-                                ↗
-                            </div>
-                            <div>
-                                <span
-                                    class="text-xs font-bold text-slate-500 uppercase tracking-wider">{{fc.t('totalIncome')}}</span>
-                                <h3 class="text-xs text-slate-400 font-medium">{{fc.stats.incomeCount}}
-                                    {{fc.t('txRecorded')}}</h3>
-                            </div>
+                <div class="fintech-card p-5 bg-white">
+                    <div class="flex items-center justify-between mb-2.5">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">{{fc.t('totalIncome')}}</span>
                         </div>
-                        <span
-                            class="text-[10px] font-black px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">ENCAISSÉ</span>
+                        <span class="text-[11px] font-medium text-slate-400">{{fc.stats.incomeCount}} {{fc.t('txRecorded')}}</span>
                     </div>
-                    <div class="text-2xl font-black font-mono text-emerald-600 mt-2">
+                    <div class="text-2xl font-bold font-mono text-slate-900">
                         +{{fc.stats.totalIncome | geoFormat:fc.selectedCurrency:fc.currencies}}
                     </div>
                 </div>
@@ -643,13 +643,16 @@
 
             <!-- 3. GRAPHIQUE HEBDOMADAIRE (LUNDI À DIMANCHE) -->
             <div class="fintech-card p-6 space-y-4">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                <div
+                    class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
                     <div>
                         <h3 class="text-base font-black text-slate-900 tracking-tight">{{fc.t('weeklyAnalytics')}}</h3>
-                        <p class="text-xs text-slate-400 font-medium">{{fc.weekRangeLabel || fc.t('weeklyOverview')}}</p>
+                        <p class="text-xs text-slate-400 font-medium">{{fc.weekRangeLabel || fc.t('weeklyOverview')}}
+                        </p>
                     </div>
 
-                    <div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-xs font-black self-start sm:self-auto shadow-xs">
+                    <div
+                        class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-xs font-black self-start sm:self-auto shadow-xs">
                         <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-rose-600"></i>
                         <span>-{{fc.weekTotalExpense | geoFormat:fc.selectedCurrency:fc.currencies}}</span>
                     </div>
@@ -660,7 +663,7 @@
                     <div ng-repeat="item in fc.weeklyPillBars"
                         class="flex flex-col items-center gap-1.5 justify-end cursor-pointer group"
                         title="{{item.fullDate}}: Dépenses -{{item.expense | geoFormat:fc.selectedCurrency:fc.currencies}} | Entrées +{{item.income | geoFormat:fc.selectedCurrency:fc.currencies}}">
-                        
+
                         <!-- Montant au hover / tooltips en ROUGE pour dépense -->
                         <span class="text-[9px] sm:text-[10px] font-mono font-bold transition-colors"
                             ng-class="item.expense > 0 ? 'text-rose-600 font-black' : 'text-slate-400'">
@@ -687,10 +690,15 @@
                     </div>
                 </div>
 
-                <div class="text-[11px] text-slate-400 flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                <div
+                    class="text-[11px] text-slate-400 flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
                     <div class="flex items-center gap-3">
-                        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span> {{fc.t('todayLabel')}}</span>
-                        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-rose-500 inline-block"></span> {{fc.t('expenseType')}}</span>
+                        <span class="flex items-center gap-1.5"><span
+                                class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+                            {{fc.t('todayLabel')}}</span>
+                        <span class="flex items-center gap-1.5"><span
+                                class="w-2 h-2 rounded-full bg-rose-500 inline-block"></span>
+                            {{fc.t('expenseType')}}</span>
                     </div>
                     <span class="italic text-[10px] text-slate-400">⚡ {{fc.t('weeklyOverview')}}</span>
                 </div>
@@ -783,7 +791,8 @@
                                         {{tx.category}} • {{fc.getWalletName(tx.walletId)}}
                                     </span>
                                     • {{tx.date | date:'dd MMM yyyy'}}
-                                    <span ng-if="tx.type === 'transfer' && tx.feeEUR > 0" class="text-rose-500 font-bold ml-1">
+                                    <span ng-if="tx.type === 'transfer' && tx.feeEUR > 0"
+                                        class="text-rose-500 font-bold ml-1">
                                         (Frais: {{tx.feeEUR | geoFormat:fc.selectedCurrency:fc.currencies}})
                                     </span>
                                 </p>
@@ -792,22 +801,22 @@
 
                         <div class="flex items-center gap-3">
                             <div class="text-right">
-                                <div class="text-sm font-black font-mono"
-                                    ng-class="{
+                                <div class="text-sm font-black font-mono" ng-class="{
                                         'text-emerald-600': tx.type === 'income',
                                         'text-rose-600': tx.type === 'expense',
                                         'text-indigo-600': tx.type === 'transfer'
                                     }">
-                                    {{tx.type === 'income' ? '+' : (tx.type === 'expense' ? '-' : '⇄ ')}}{{tx.amountEUR |
+                                    {{tx.type === 'income' ? '+' : (tx.type === 'expense' ? '-' : '⇄ ')}}{{tx.amountEUR
+                                    |
                                     geoFormat:fc.selectedCurrency:fc.currencies}}
                                 </div>
-                                <span class="text-[10px] font-bold uppercase"
-                                    ng-class="{
+                                <span class="text-[10px] font-bold uppercase" ng-class="{
                                         'text-emerald-600': tx.type === 'income',
                                         'text-rose-500': tx.type === 'expense',
                                         'text-indigo-600': tx.type === 'transfer'
                                     }">
-                                    {{tx.type === 'income' ? fc.t('incomeType') : (tx.type === 'expense' ? fc.t('expenseType') : fc.t('transfer'))}}
+                                    {{tx.type === 'income' ? fc.t('incomeType') : (tx.type === 'expense' ?
+                                    fc.t('expenseType') : fc.t('transfer'))}}
                                 </span>
                             </div>
                             <button ng-click="fc.openEditModal(tx)"
@@ -975,7 +984,8 @@
                                     {{tx.category}} • {{fc.getWalletName(tx.walletId)}}
                                 </span>
                                 • {{tx.date | date:'dd MMM yyyy'}}
-                                <span ng-if="tx.type === 'transfer' && tx.feeEUR > 0" class="text-rose-500 font-bold ml-1">
+                                <span ng-if="tx.type === 'transfer' && tx.feeEUR > 0"
+                                    class="text-rose-500 font-bold ml-1">
                                     (Frais: {{tx.feeEUR | geoFormat:fc.selectedCurrency:fc.currencies}})
                                 </span>
                             </p>
@@ -984,8 +994,7 @@
 
                     <div class="flex items-center gap-3 sm:gap-4">
                         <div class="text-right">
-                            <div class="text-sm font-black font-mono"
-                                ng-class="{
+                            <div class="text-sm font-black font-mono" ng-class="{
                                     'text-emerald-600': tx.type === 'income',
                                     'text-rose-600': tx.type === 'expense',
                                     'text-indigo-600': tx.type === 'transfer'
@@ -993,13 +1002,13 @@
                                 {{tx.type === 'income' ? '+' : (tx.type === 'expense' ? '-' : '⇄ ')}}{{tx.amountEUR |
                                 geoFormat:fc.selectedCurrency:fc.currencies}}
                             </div>
-                            <span class="text-[10px] font-bold uppercase"
-                                ng-class="{
+                            <span class="text-[10px] font-bold uppercase" ng-class="{
                                     'text-emerald-600': tx.type === 'income',
                                     'text-rose-500': tx.type === 'expense',
                                     'text-indigo-600': tx.type === 'transfer'
                                 }">
-                                {{tx.type === 'income' ? fc.t('incomeType') : (tx.type === 'expense' ? fc.t('expenseType') : fc.t('transfer'))}}
+                                {{tx.type === 'income' ? fc.t('incomeType') : (tx.type === 'expense' ?
+                                fc.t('expenseType') : fc.t('transfer'))}}
                             </span>
                         </div>
                         <button ng-click="fc.openEditModal(tx)"
@@ -1028,13 +1037,16 @@
 
             <!-- 1. GRAPHIQUE MENSUEL DYNAMIQUE : 12 MOIS COMPLETS (JANVIER À DÉCEMBRE) -->
             <div class="fintech-card p-6 space-y-4">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                <div
+                    class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
                     <div>
                         <h3 class="text-base font-black text-slate-900 tracking-tight">{{fc.t('savingAnalytics')}}</h3>
-                        <p class="text-xs text-slate-400 font-medium">{{fc.t('monthlyEvolution')}} (12 Mois - {{fc.selectedYear}})</p>
+                        <p class="text-xs text-slate-400 font-medium">{{fc.t('monthlyEvolution')}} (12 Mois -
+                            {{fc.selectedYear}})</p>
                     </div>
 
-                    <div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-black self-start sm:self-auto">
+                    <div
+                        class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-black self-start sm:self-auto">
                         <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
                         <span>{{fc.stats.periodSavingRate}}% {{fc.t('savingsRate')}}</span>
                     </div>
@@ -1052,17 +1064,23 @@
                                 style="height: {{item.percentage}}%;">
                             </div>
                         </div>
-                        <span class="text-[7.5px] sm:text-[10px] font-bold uppercase transition-colors text-center w-full truncate tracking-tighter sm:tracking-normal"
+                        <span
+                            class="text-[7.5px] sm:text-[10px] font-bold uppercase transition-colors text-center w-full truncate tracking-tighter sm:tracking-normal"
                             ng-class="item.isSelected ? 'text-slate-950 font-black' : (item.isCurrentMonth ? 'text-emerald-600 font-black underline' : 'text-slate-400 group-hover:text-slate-700')">
                             {{item.label}}
                         </span>
                     </div>
                 </div>
 
-                <div class="text-[11px] text-slate-400 flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                <div
+                    class="text-[11px] text-slate-400 flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
                     <div class="flex items-center gap-3">
-                        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span> {{fc.t('currentMonth')}}</span>
-                        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-slate-950 inline-block"></span> {{fc.t('selectedMonth')}}</span>
+                        <span class="flex items-center gap-1.5"><span
+                                class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+                            {{fc.t('currentMonth')}}</span>
+                        <span class="flex items-center gap-1.5"><span
+                                class="w-2 h-2 rounded-full bg-slate-950 inline-block"></span>
+                            {{fc.t('selectedMonth')}}</span>
                     </div>
                     <span class="italic text-[10px] text-slate-400">💡 {{fc.t('chartHint')}}</span>
                 </div>
@@ -1083,7 +1101,371 @@
                         <h3 class="text-sm font-black text-slate-900">{{fc.t('categoryBreakdown')}}</h3>
                         <span class="text-xs font-bold text-slate-400">{{fc.getPeriodLabel()}}</span>
                     </div>
-                    <div class="h-64 flex items-center justify-center"><canvas id="analyticsDoughnutChart"></canvas></div>
+                    <div class="h-64 flex items-center justify-center"><canvas id="analyticsDoughnutChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================== -->
+        <!-- ONGLET 5 : ALLOCATION & RÈGLES DE BUDGET   -->
+        <!-- ========================================== -->
+        <div ng-show="fc.currentTab === 'allocation'" class="space-y-6">
+
+            <!-- En-tête : Titre & Sélecteur de méthode -->
+            <div class="fintech-card p-6 space-y-5">
+                <div
+                    class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span
+                                class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-slate-900 text-white">
+                                {{fc.t('budgetMethods')}}
+                            </span>
+                            <span class="text-xs font-bold text-slate-400">{{fc.getPeriodLabel()}}</span>
+                        </div>
+                        <h2 class="text-xl font-black text-slate-900 mt-1">{{fc.t('allocationTitle')}}</h2>
+                        <p class="text-xs text-slate-500 font-medium">{{fc.t('allocationSubtitle')}}</p>
+                    </div>
+
+                    <!-- Bouton Configuration des Règles & Catégories -->
+                    <button type="button" ng-click="fc.allocation.showConfig = !fc.allocation.showConfig"
+                        class="px-4 py-2.5 rounded-2xl flex items-center gap-2 text-xs font-bold transition-all shadow-sm self-start sm:self-auto cursor-pointer"
+                        ng-class="fc.allocation.showConfig ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'">
+                        <i data-lucide="sliders" class="w-4 h-4"></i>
+                        <span>{{fc.allocation.showConfig ? fc.t('hideConfig') : fc.t('configRules')}}</span>
+                    </button>
+                </div>
+
+                <!-- Sélecteur visuel des 3 méthodes (70/20/10, 50/30/20, Personnalisée) -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <!-- 70/20/10 -->
+                    <div ng-click="fc.setAllocationMethod('70_20_10')"
+                        class="p-4 rounded-2xl border-2 cursor-pointer transition-all flex flex-col justify-between"
+                        ng-class="fc.allocation.activeMethod === '70_20_10' ? 'border-slate-900 bg-slate-950 text-white shadow-lg' : 'border-slate-200/80 bg-white hover:border-slate-300 text-slate-800'">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-black tracking-tight"
+                                    ng-class="fc.allocation.activeMethod === '70_20_10' ? 'text-emerald-400' : 'text-emerald-600'">
+                                    70 / 20 / 10
+                                </span>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                                    ng-class="fc.allocation.activeMethod === '70_20_10' ? 'bg-white/10 text-white' : 'bg-slate-100 text-slate-600'">
+                                    Afrique & Prévoyance
+                                </span>
+                            </div>
+                            <h4 class="font-extrabold text-sm mb-1">Règle 70 / 20 / 10</h4>
+                            <p class="text-[11px] font-normal leading-relaxed"
+                                ng-class="fc.allocation.activeMethod === '70_20_10' ? 'text-slate-300' : 'text-slate-500'">
+                                70% Vivre & Besoins • 20% Famille & Imprévus • 10% Épargne.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 50/30/20 -->
+                    <div ng-click="fc.setAllocationMethod('50_30_20')"
+                        class="p-4 rounded-2xl border-2 cursor-pointer transition-all flex flex-col justify-between"
+                        ng-class="fc.allocation.activeMethod === '50_30_20' ? 'border-slate-900 bg-slate-950 text-white shadow-lg' : 'border-slate-200/80 bg-white hover:border-slate-300 text-slate-800'">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-black tracking-tight"
+                                    ng-class="fc.allocation.activeMethod === '50_30_20' ? 'text-indigo-400' : 'text-indigo-600'">
+                                    50 / 30 / 20
+                                </span>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                                    ng-class="fc.allocation.activeMethod === '50_30_20' ? 'bg-white/10 text-white' : 'bg-slate-100 text-slate-600'">
+                                    Règle Universelle
+                                </span>
+                            </div>
+                            <h4 class="font-extrabold text-sm mb-1">Règle 50 / 30 / 20</h4>
+                            <p class="text-[11px] font-normal leading-relaxed"
+                                ng-class="fc.allocation.activeMethod === '50_30_20' ? 'text-slate-300' : 'text-slate-500'">
+                                50% Besoins vitaux • 30% Envies & Loisirs • 20% Épargne & Dettes.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Personnalisée -->
+                    <div ng-click="fc.setAllocationMethod('custom')"
+                        class="p-4 rounded-2xl border-2 cursor-pointer transition-all flex flex-col justify-between"
+                        ng-class="fc.allocation.activeMethod === 'custom' ? 'border-slate-900 bg-slate-950 text-white shadow-lg' : 'border-slate-200/80 bg-white hover:border-slate-300 text-slate-800'">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-black tracking-tight"
+                                    ng-class="fc.allocation.activeMethod === 'custom' ? 'text-amber-400' : 'text-amber-600'">
+                                    Sur-Mesure
+                                </span>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                                    ng-class="fc.allocation.activeMethod === 'custom' ? 'bg-white/10 text-white' : 'bg-slate-100 text-slate-600'">
+                                    100% Modulable
+                                </span>
+                            </div>
+                            <h4 class="font-extrabold text-sm mb-1">Règle Personnalisée</h4>
+                            <p class="text-[11px] font-normal leading-relaxed"
+                                ng-class="fc.allocation.activeMethod === 'custom' ? 'text-slate-300' : 'text-slate-500'">
+                                Ajustez vos propres piliers, pourcentages et affectations.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bandeau Base Revenus du Mois & Revenu de Référence -->
+                <div
+                    class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center font-bold text-slate-800 shadow-sm flex-shrink-0">
+                            <i data-lucide="wallet" class="w-5 h-5 text-slate-700"></i>
+                        </div>
+                        <div>
+                            <span
+                                class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">{{fc.t('basisIncomeTitle')}}</span>
+                            <div class="text-base font-black text-slate-900">
+                                {{fc.allocation.effectiveIncomeEUR | geoFormat:fc.selectedCurrency:fc.currencies}}
+                                <span ng-if="fc.stats.totalIncome <= 0 && fc.allocation.benchmarkIncomeEUR > 0"
+                                    class="text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200 ml-1">
+                                    {{fc.t('benchmarkUsed')}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Référence optionnelle si mois vide -->
+                    <div class="flex items-center gap-2">
+                        <span class="text-slate-500 font-semibold text-[11px]">{{fc.t('customBenchmarkIncome')}}:</span>
+                        <input type="number" ng-model="fc.allocation.rawBenchmarkInput"
+                            ng-change="fc.onBenchmarkIncomeChange()" placeholder="Ex: 500000"
+                            class="w-28 sm:w-32 px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900 outline-none focus:border-slate-900 transition-all">
+                        <span
+                            class="text-slate-400 font-bold text-[10px]">{{fc.currencies[fc.selectedCurrency].symbol}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION : TABLEAU DE BORD DES PILIERS AVEC SIGNAUX D'ALERTE -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div ng-repeat="p in fc.allocation.results"
+                    class="fintech-card p-6 flex flex-col justify-between transition-all" ng-class="{
+                        'border-rose-400 bg-rose-50/20 shadow-md ring-2 ring-rose-300/40': p.isOverbudget,
+                        'border-amber-300 bg-amber-50/15 shadow-sm': p.isWarning,
+                        'border-slate-200/80 bg-white': !p.isOverbudget && !p.isWarning
+                    }">
+
+                    <div>
+                        <!-- En-tête du Pilier -->
+                        <div class="flex items-start justify-between gap-2 mb-3">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-white shadow-sm flex-shrink-0"
+                                    ng-class="{
+                                        'bg-emerald-600': p.color === 'emerald',
+                                        'bg-indigo-600': p.color === 'indigo',
+                                        'bg-amber-600': p.color === 'amber',
+                                        'bg-purple-600': p.color === 'purple',
+                                        'bg-rose-600': p.color === 'rose'
+                                    }">
+                                    <i data-lucide="{{p.icon || 'shield-check'}}" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-black text-slate-900 leading-tight">{{p.name}}</h3>
+                                    <span class="text-[11px] font-extrabold text-slate-400">{{p.percent}}% du
+                                        revenu</span>
+                                </div>
+                            </div>
+
+                            <!-- Badge d'État Global -->
+                            <span
+                                class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-1"
+                                ng-class="{
+                                    'bg-rose-100 text-rose-700 border border-rose-300 animate-pulse': p.isOverbudget,
+                                    'bg-amber-100 text-amber-700 border border-amber-300': p.isWarning,
+                                    'bg-emerald-100 text-emerald-700 border border-emerald-300': !p.isOverbudget && !p.isWarning
+                                }">
+                                <i data-lucide="{{p.isOverbudget ? 'alert-triangle' : (p.isWarning ? 'alert-circle' : 'check-circle-2')}}"
+                                    class="w-3 h-3"></i>
+                                <span>{{p.isOverbudget ? fc.t('overbudgetTag') : (p.isWarning ? fc.t('warningTag') :
+                                    fc.t('okTag'))}}</span>
+                            </span>
+                        </div>
+
+                        <!-- Chiffres Clés : Budget Alloué vs Réel Dépensé -->
+                        <div class="space-y-1.5 my-4">
+                            <div class="flex items-baseline justify-between">
+                                <span class="text-xs font-semibold text-slate-400">{{fc.t('budgetSpent')}}</span>
+                                <span class="text-lg font-black text-slate-900"
+                                    ng-class="{'text-rose-600': p.isOverbudget}">
+                                    {{p.spentEUR | geoFormat:fc.selectedCurrency:fc.currencies}}
+                                </span>
+                            </div>
+                            <div
+                                class="flex items-center justify-between text-xs text-slate-500 font-bold border-t border-slate-100 pt-1.5">
+                                <span>{{fc.t('budgetCap')}} ({{p.percent}}%) :</span>
+                                <span class="font-extrabold text-slate-700">{{p.allocatedEUR |
+                                    geoFormat:fc.selectedCurrency:fc.currencies}}</span>
+                            </div>
+                        </div>
+
+                        <!-- Barre de Progression Dynamique avec seuils de couleur -->
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between text-[11px] font-extrabold">
+                                <span ng-class="p.isOverbudget ? 'text-rose-600' : 'text-slate-500'">
+                                    {{p.spentPercent}}% consommé
+                                </span>
+                                <span class="text-slate-400">100%</span>
+                            </div>
+                            <div
+                                class="w-full h-3 rounded-full bg-slate-100 overflow-hidden relative border border-slate-200/50">
+                                <div class="h-full rounded-full transition-all duration-500"
+                                    ng-style="{'width': p.barPercentage + '%'}" ng-class="{
+                                        'bg-rose-500': p.isOverbudget,
+                                        'bg-amber-500': p.isWarning,
+                                        'bg-emerald-500': !p.isOverbudget && !p.isWarning
+                                    }">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SIGNAL D'ALERTE DÉPASSEMENT OU RESTE DISPONIBLE -->
+                        <div class="mt-4">
+                            <!-- Cas 1 : Dépassement critique -->
+                            <div ng-if="p.isOverbudget"
+                                class="p-3 bg-rose-100/80 border border-rose-300 rounded-2xl flex items-start gap-2.5 text-rose-800 text-xs font-bold shadow-sm">
+                                <i data-lucide="alert-octagon" class="w-4 h-4 text-rose-600 flex-shrink-0 mt-0.5"></i>
+                                <div>
+                                    <p class="font-extrabold text-[12px] leading-tight">Attention, budget dépassé !</p>
+                                    <p class="text-[11px] font-medium text-rose-700 mt-0.5">
+                                        Surcoût de <strong>+{{p.overAmountEUR |
+                                            geoFormat:fc.selectedCurrency:fc.currencies}}</strong> (+{{p.overPercent}}%
+                                        au-dessus du plafond).
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Cas 2 : Attention 85%+ -->
+                            <div ng-if="p.isWarning"
+                                class="p-3 bg-amber-100/70 border border-amber-300 rounded-2xl flex items-start gap-2.5 text-amber-800 text-xs font-bold">
+                                <i data-lucide="alert-circle" class="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5"></i>
+                                <div>
+                                    <p class="font-extrabold text-[12px] leading-tight">Seuil de vigilance atteint</p>
+                                    <p class="text-[11px] font-medium text-amber-700 mt-0.5">
+                                        Il ne vous reste que <strong>{{p.remainingEUR |
+                                            geoFormat:fc.selectedCurrency:fc.currencies}}</strong> sur ce pilier.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Cas 3 : Sous le budget -->
+                            <div ng-if="!p.isOverbudget && !p.isWarning"
+                                class="p-3 bg-emerald-50 border border-emerald-200/80 rounded-2xl flex items-center justify-between text-emerald-800 text-xs font-bold">
+                                <span class="flex items-center gap-1.5">
+                                    <i data-lucide="check" class="w-4 h-4 text-emerald-600"></i>
+                                    <span>Reste disponible</span>
+                                </span>
+                                <span class="font-extrabold text-emerald-700">
+                                    {{p.remainingEUR | geoFormat:fc.selectedCurrency:fc.currencies}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Catégories associées à ce pilier -->
+                    <div class="mt-4 pt-3 border-t border-slate-100">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Catégories liées
+                            ({{p.categories.length}})</p>
+                        <div class="flex flex-wrap gap-1.5">
+                            <span ng-repeat="cat in p.categories"
+                                class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[10px] font-semibold flex items-center gap-1">
+                                <span>{{cat}}</span>
+                                <span class="text-slate-400 font-bold" ng-if="p.categoryExpenses[cat]">
+                                    ({{p.categoryExpenses[cat] | geoFormat:fc.selectedCurrency:fc.currencies}})
+                                </span>
+                            </span>
+                            <span ng-if="!p.categories || p.categories.length === 0"
+                                class="text-[11px] text-slate-400 italic">
+                                Aucune catégorie assignée
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- SECTION : CONFIGURATION & PERSONNALISATION DES RÈGLES (Visible si showConfig === true) -->
+            <div ng-show="fc.allocation.showConfig"
+                class="fintech-card p-6 space-y-6 border-2 border-indigo-200 bg-indigo-50/15">
+                <div
+                    class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-indigo-100 pb-4">
+                    <div>
+                        <h3 class="text-base font-black text-slate-900 flex items-center gap-2">
+                            <i data-lucide="sliders" class="w-4 h-4 text-indigo-600"></i>
+                            <span>Personnalisation des Piliers & Catégories</span>
+                        </h3>
+                        <p class="text-xs text-slate-500 font-medium">
+                            Ajustez les pourcentages de chaque pilier et cochez les catégories de dépenses à rattacher.
+                        </p>
+                    </div>
+
+                    <button type="button" ng-click="fc.resetAllocationToDefault()"
+                        class="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-slate-900 text-xs font-bold shadow-sm transition-all cursor-pointer self-start sm:self-auto">
+                        Rétablir les valeurs par défaut
+                    </button>
+                </div>
+
+                <!-- Somme des pourcentages -->
+                <div class="p-3.5 rounded-2xl flex items-center justify-between text-xs font-bold"
+                    ng-class="fc.getAllocationTotalPercent() === 100 ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-rose-50 text-rose-800 border border-rose-200'">
+                    <span>Total alloué : {{fc.getAllocationTotalPercent()}}% / 100%</span>
+                    <span ng-if="fc.getAllocationTotalPercent() === 100">✓ Parfait, budget équilibré à 100%</span>
+                    <span ng-if="fc.getAllocationTotalPercent() !== 100">⚠️ La somme doit être égale à 100% (écart de
+                        {{100 - fc.getAllocationTotalPercent()}}%)</span>
+                </div>
+
+                <!-- Édition de chaque pilier -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div ng-repeat="p in fc.getCurrentPillars()"
+                        class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm space-y-3">
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Nom
+                                du pilier</label>
+                            <input type="text" ng-model="p.name" ng-change="fc.saveAllocationConfig()"
+                                class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 outline-none focus:border-slate-900 transition-all">
+                        </div>
+
+                        <div>
+                            <label
+                                class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Pourcentage
+                                alloué (%)</label>
+                            <div class="flex items-center gap-2">
+                                <input type="number" min="0" max="100" ng-model="p.percent"
+                                    ng-change="fc.saveAllocationConfig()"
+                                    class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 outline-none focus:border-slate-900 transition-all">
+                                <span class="font-extrabold text-xs text-slate-500">%</span>
+                            </div>
+                        </div>
+
+                        <!-- Gestion des catégories rattachées -->
+                        <div>
+                            <label
+                                class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Catégories
+                                de dépenses rattachées</label>
+                            <div class="space-y-1 max-h-48 overflow-y-auto pr-1">
+                                <label ng-repeat="cat in fc.categories.expense"
+                                    class="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-slate-50 text-xs font-semibold text-slate-700 cursor-pointer select-none">
+                                    <input type="checkbox" ng-checked="fc.isCategoryInPillar(p, cat)"
+                                        ng-click="fc.toggleCategoryInPillar(p, cat)"
+                                        class="rounded text-indigo-600 focus:ring-0">
+                                    <span class="truncate">{{cat}}</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end pt-2">
+                    <button type="button" ng-click="fc.allocation.showConfig = false"
+                        class="px-5 py-2.5 bg-slate-950 text-white rounded-xl text-xs font-bold shadow-md hover:bg-slate-800 transition-all cursor-pointer">
+                        Enregistrer & Fermer
+                    </button>
                 </div>
             </div>
 
@@ -1094,33 +1476,41 @@
     <!-- ==================================================== -->
     <!-- FLOATING BOTTOM DOCK NAVIGATION                     -->
     <!-- ==================================================== -->
-    <div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40">
-        <nav class="floating-nav-dock px-6 py-3 rounded-full flex items-center gap-6 sm:gap-8 text-slate-400">
+    <div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 max-w-[95vw]">
+        <nav
+            class="floating-nav-dock px-3.5 sm:px-6 py-2.5 sm:py-3 rounded-full flex items-center gap-3.5 sm:gap-7 text-slate-400">
             <!-- Home -->
             <button ng-click="fc.setTab('dashboard')" class="flex flex-col items-center gap-0.5 transition-all"
                 ng-class="fc.currentTab === 'dashboard' ? 'text-white scale-105' : 'hover:text-slate-200'">
-                <i data-lucide="home" class="w-5 h-5"></i>
+                <i data-lucide="home" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                 <span class="text-[9px] font-bold">{{fc.t('navHome')}}</span>
             </button>
 
             <!-- Goals -->
             <button ng-click="fc.setTab('goals')" class="flex flex-col items-center gap-0.5 transition-all"
                 ng-class="fc.currentTab === 'goals' ? 'text-white scale-105' : 'hover:text-slate-200'">
-                <i data-lucide="target" class="w-5 h-5"></i>
+                <i data-lucide="target" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                 <span class="text-[9px] font-bold">{{fc.t('navGoals')}}</span>
+            </button>
+
+            <!-- Allocation (Nouveau) -->
+            <button ng-click="fc.setTab('allocation')" class="flex flex-col items-center gap-0.5 transition-all"
+                ng-class="fc.currentTab === 'allocation' ? 'text-white scale-105' : 'hover:text-slate-200'">
+                <i data-lucide="sliders" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                <span class="text-[9px] font-bold">{{fc.t('navAllocation')}}</span>
             </button>
 
             <!-- Transactions -->
             <button ng-click="fc.setTab('transactions')" class="flex flex-col items-center gap-0.5 transition-all"
                 ng-class="fc.currentTab === 'transactions' ? 'text-white scale-105' : 'hover:text-slate-200'">
-                <i data-lucide="receipt" class="w-5 h-5"></i>
+                <i data-lucide="receipt" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                 <span class="text-[9px] font-bold">{{fc.t('navHistory')}}</span>
             </button>
 
             <!-- Analytics -->
             <button ng-click="fc.setTab('analytics')" class="flex flex-col items-center gap-0.5 transition-all"
                 ng-class="fc.currentTab === 'analytics' ? 'text-white scale-105' : 'hover:text-slate-200'">
-                <i data-lucide="pie-chart" class="w-5 h-5"></i>
+                <i data-lucide="pie-chart" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                 <span class="text-[9px] font-bold">{{fc.t('navAnalytics')}}</span>
             </button>
         </nav>
@@ -1134,7 +1524,9 @@
         <div class="fintech-card bg-white w-full max-w-md p-7 relative shadow-2xl">
             <div class="flex items-center justify-between mb-6">
                 <h3 class="text-lg font-black text-slate-900">
-                    {{fc.editingTxId ? fc.t('modalEditTitle') : (fc.formData.type === 'transfer' ? fc.t('modalTransferTitle') : (fc.formData.type === 'income' ? fc.t('modalIncomeTitle') : fc.t('modalExpenseTitle')))}}
+                    {{fc.editingTxId ? fc.t('modalEditTitle') : (fc.formData.type === 'transfer' ?
+                    fc.t('modalTransferTitle') : (fc.formData.type === 'income' ? fc.t('modalIncomeTitle') :
+                    fc.t('modalExpenseTitle')))}}
                 </h3>
                 <button ng-click="fc.closeModal()"
                     class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-900">✕</button>
@@ -1175,8 +1567,10 @@
                             <label class="block text-slate-500 mb-1 pl-1">{{fc.t('transferFrom')}}</label>
                             <select ng-model="fc.formData.walletId" required
                                 class="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold outline-none cursor-pointer">
-                                <option ng-repeat="w in fc.wallets" value="{{w.id}}" ng-disabled="w.id === fc.formData.walletToId">
-                                    {{fc.getWalletName(w.id)}} ({{w.currentBalanceEUR | geoFormat:fc.selectedCurrency:fc.currencies}})
+                                <option ng-repeat="w in fc.wallets" value="{{w.id}}"
+                                    ng-disabled="w.id === fc.formData.walletToId">
+                                    {{fc.getWalletName(w.id)}} ({{w.currentBalanceEUR |
+                                    geoFormat:fc.selectedCurrency:fc.currencies}})
                                 </option>
                             </select>
                         </div>
@@ -1184,8 +1578,10 @@
                             <label class="block text-slate-500 mb-1 pl-1">{{fc.t('transferTo')}}</label>
                             <select ng-model="fc.formData.walletToId" required
                                 class="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold outline-none cursor-pointer">
-                                <option ng-repeat="w in fc.wallets" value="{{w.id}}" ng-disabled="w.id === fc.formData.walletId">
-                                    {{fc.getWalletName(w.id)}} ({{w.currentBalanceEUR | geoFormat:fc.selectedCurrency:fc.currencies}})
+                                <option ng-repeat="w in fc.wallets" value="{{w.id}}"
+                                    ng-disabled="w.id === fc.formData.walletId">
+                                    {{fc.getWalletName(w.id)}} ({{w.currentBalanceEUR |
+                                    geoFormat:fc.selectedCurrency:fc.currencies}})
                                 </option>
                             </select>
                         </div>
@@ -1194,7 +1590,8 @@
                     <!-- Frais de Transfert -->
                     <div>
                         <div class="flex items-center justify-between mb-1 pl-1">
-                            <label class="text-slate-500">{{fc.t('transferFees')}} ({{fc.currencies[fc.selectedCurrency].symbol}})</label>
+                            <label class="text-slate-500">{{fc.t('transferFees')}}
+                                ({{fc.currencies[fc.selectedCurrency].symbol}})</label>
                             <span class="text-[10px] text-slate-400">{{fc.t('feesHint')}}</span>
                         </div>
                         <input type="number" step="any" min="0" ng-model="fc.formData.fee" placeholder="0.00"
@@ -1211,7 +1608,8 @@
                         <select ng-model="fc.formData.walletId" required
                             class="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold outline-none cursor-pointer">
                             <option ng-repeat="w in fc.wallets" value="{{w.id}}">
-                                {{fc.getWalletName(w.id)}} ({{w.currentBalanceEUR | geoFormat:fc.selectedCurrency:fc.currencies}})
+                                {{fc.getWalletName(w.id)}} ({{w.currentBalanceEUR |
+                                geoFormat:fc.selectedCurrency:fc.currencies}})
                             </option>
                         </select>
                     </div>
@@ -1244,7 +1642,8 @@
 
                 <button type="submit"
                     class="w-full py-4 bg-slate-950 text-white rounded-2xl font-bold text-sm shadow-lg hover:bg-slate-800 transition-all mt-2">
-                    {{fc.editingTxId ? fc.t('btnUpdate') : (fc.formData.type === 'transfer' ? fc.t('btnTransfer') : fc.t('saveOperation'))}}
+                    {{fc.editingTxId ? fc.t('btnUpdate') : (fc.formData.type === 'transfer' ? fc.t('btnTransfer') :
+                    fc.t('saveOperation'))}}
                 </button>
             </form>
         </div>
@@ -1324,14 +1723,16 @@
             </div>
 
             <!-- Formulaire d'ajout d'un portefeuille -->
-            <form ng-submit="fc.addNewWallet()" class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-100 mb-5">
+            <form ng-submit="fc.addNewWallet()"
+                class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-100 mb-5">
                 <div class="text-xs font-bold text-slate-700 flex items-center gap-1.5 mb-1">
                     <i data-lucide="plus-circle" class="w-4 h-4 text-emerald-600"></i>
                     <span>{{fc.t('newWalletTitle')}}</span>
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-semibold text-slate-500 mb-1 pl-1">{{fc.t('walletName')}}</label>
+                    <label
+                        class="block text-[11px] font-semibold text-slate-500 mb-1 pl-1">{{fc.t('walletName')}}</label>
                     <input type="text" ng-model="fc.newWalletForm.name" required
                         placeholder="Ex: Wave, Orange Money, Ecobank, Coffre..."
                         class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-bold outline-none focus:border-slate-900">
@@ -1339,7 +1740,8 @@
 
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="block text-[11px] font-semibold text-slate-500 mb-1 pl-1">{{fc.t('walletType')}}</label>
+                        <label
+                            class="block text-[11px] font-semibold text-slate-500 mb-1 pl-1">{{fc.t('walletType')}}</label>
                         <select ng-model="fc.newWalletForm.type"
                             class="w-full px-2.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-bold outline-none">
                             <option value="mobile_money">📱 {{fc.t('typeMomo')}}</option>
@@ -1350,8 +1752,11 @@
                     </div>
 
                     <div>
-                        <label class="block text-[11px] font-semibold text-slate-500 mb-1 pl-1">{{fc.t('initialBalance')}} ({{fc.currencies[fc.selectedCurrency].symbol}})</label>
-                        <input type="number" step="any" min="0" ng-model="fc.newWalletForm.initialBalance" placeholder="0"
+                        <label
+                            class="block text-[11px] font-semibold text-slate-500 mb-1 pl-1">{{fc.t('initialBalance')}}
+                            ({{fc.currencies[fc.selectedCurrency].symbol}})</label>
+                        <input type="number" step="any" min="0" ng-model="fc.newWalletForm.initialBalance"
+                            placeholder="0"
                             class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-black font-mono outline-none focus:border-slate-900">
                     </div>
                 </div>
@@ -1369,8 +1774,7 @@
             </div>
 
             <div class="divide-y divide-slate-100 max-h-60 overflow-y-auto">
-                <div ng-repeat="w in fc.wallets"
-                    class="py-3 flex items-center justify-between text-xs font-bold">
+                <div ng-repeat="w in fc.wallets" class="py-3 flex items-center justify-between text-xs font-bold">
                     <div class="flex items-center gap-2.5">
                         <div class="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs shadow-xs"
                             ng-class="{
@@ -1384,7 +1788,8 @@
                         <div>
                             <div class="text-slate-900 font-black">{{fc.getWalletName(w.id)}}</div>
                             <div class="text-[10px] text-slate-400 font-mono">
-                                Solde : <span class="font-bold text-slate-700">{{w.currentBalanceEUR | geoFormat:fc.selectedCurrency:fc.currencies}}</span>
+                                Solde : <span class="font-bold text-slate-700">{{w.currentBalanceEUR |
+                                    geoFormat:fc.selectedCurrency:fc.currencies}}</span>
                             </div>
                         </div>
                     </div>
@@ -1675,7 +2080,21 @@
                     diffWalletsRequired: 'Veuillez sélectionner deux portefeuilles distincts.',
                     categorySynced: 'Catégorie enregistrée dans la base de données !',
                     walletCreated: 'Portefeuille créé avec succès !',
-                    transferCompleted: 'Transfert réalisé avec succès !'
+                    transferCompleted: 'Transfert réalisé avec succès !',
+                    navAllocation: 'Allocation',
+                    allocationTitle: 'Répartition & Méthodes Budgétaires',
+                    allocationSubtitle: 'Pilotez vos finances selon les règles 70/20/10, 50/30/20 ou vos propres piliers',
+                    budgetMethods: 'Budgets & Méthodes',
+                    hideConfig: 'Masquer la configuration',
+                    configRules: 'Configurer les règles & catégories',
+                    basisIncomeTitle: 'Base de calcul des revenus (Mois en cours)',
+                    benchmarkUsed: 'Revenu de référence appliqué',
+                    customBenchmarkIncome: 'Revenu de référence (si mois vierge)',
+                    overbudgetTag: 'Dépassement',
+                    warningTag: 'Vigilance',
+                    okTag: 'Maîtrisé',
+                    budgetSpent: 'Dépensé',
+                    budgetCap: 'Budget Alloué'
                 },
                 en: {
                     fintechWallet: 'Fintech Wallet',
@@ -1706,6 +2125,20 @@
                     navGoals: 'Goals',
                     navHistory: 'History',
                     navAnalytics: 'Analytics',
+                    navAllocation: 'Allocation',
+                    allocationTitle: 'Budget Rules & Allocation',
+                    allocationSubtitle: 'Manage your finances using 70/20/10, 50/30/20 or custom pillars',
+                    budgetMethods: 'Budgets & Methods',
+                    hideConfig: 'Hide configuration',
+                    configRules: 'Configure rules & categories',
+                    basisIncomeTitle: 'Income Calculation Basis (Current Month)',
+                    benchmarkUsed: 'Benchmark income applied',
+                    customBenchmarkIncome: 'Benchmark income (if month empty)',
+                    overbudgetTag: 'Over budget',
+                    warningTag: 'Warning',
+                    okTag: 'On Track',
+                    budgetSpent: 'Spent',
+                    budgetCap: 'Allocated Cap',
                     cardSoldeGlobal: 'Total Net Balance',
                     myBalance: 'MY BALANCE',
                     periodBalance: 'Month Balance',
@@ -1838,7 +2271,7 @@
                 vm.currentTab = tabName;
                 $timeout(() => {
                     lucide.createIcons();
-                    if (tabName === 'analytics' || tabName === 'dashboard') {
+                    if (tabName === 'analytics' || tabName === 'dashboard' || tabName === 'allocation') {
                         vm.recalculate();
                     }
                 }, 50);
@@ -1948,6 +2381,278 @@
             }
 
             vm.newGoal = { title: '', target: null, current: 0, icon: '🏖', daysLeft: 30 };
+
+            // ==========================================
+            // MODULE ALLOCATION & BUDGETS (70/20/10, etc.)
+            // ==========================================
+            const defaultAllocationMethods = {
+                '70_20_10': {
+                    id: '70_20_10',
+                    name: '70 / 20 / 10',
+                    tag: 'Afrique & Prévoyance',
+                    pillars: [
+                        {
+                            id: 'living',
+                            name: 'Vivre & Besoins Vitaux',
+                            percent: 70,
+                            color: 'emerald',
+                            icon: 'shopping-cart',
+                            categories: ['Alimentation & Courses', 'Logement & Loyer', 'Factures & Énergie', 'Transport & Carburant']
+                        },
+                        {
+                            id: 'family',
+                            name: 'Famille, Entraide & Imprévus',
+                            percent: 20,
+                            color: 'amber',
+                            icon: 'heart-handshake',
+                            categories: ['Santé & Soins', 'Loisirs & Sorties', 'Achats & Shopping', 'Autre Dépense']
+                        },
+                        {
+                            id: 'savings',
+                            name: 'Épargne & Avenir',
+                            percent: 10,
+                            color: 'indigo',
+                            icon: 'piggy-bank',
+                            categories: ['Investissement & Rendements']
+                        }
+                    ]
+                },
+                '50_30_20': {
+                    id: '50_30_20',
+                    name: '50 / 30 / 20',
+                    tag: 'Règle Universelle',
+                    pillars: [
+                        {
+                            id: 'needs',
+                            name: 'Besoins Essentiels (50%)',
+                            percent: 50,
+                            color: 'emerald',
+                            icon: 'shield-check',
+                            categories: ['Alimentation & Courses', 'Logement & Loyer', 'Factures & Énergie', 'Transport & Carburant', 'Santé & Soins']
+                        },
+                        {
+                            id: 'wants',
+                            name: 'Envies & Loisirs (30%)',
+                            percent: 30,
+                            color: 'purple',
+                            icon: 'sparkles',
+                            categories: ['Loisirs & Sorties', 'Achats & Shopping', 'Autre Dépense']
+                        },
+                        {
+                            id: 'savings',
+                            name: 'Épargne & Futur (20%)',
+                            percent: 20,
+                            color: 'indigo',
+                            icon: 'trending-up',
+                            categories: ['Investissement & Rendements']
+                        }
+                    ]
+                },
+                'custom': {
+                    id: 'custom',
+                    name: '100% Personnalisée',
+                    tag: 'Sur-mesure',
+                    pillars: [
+                        {
+                            id: 'cust_1',
+                            name: 'Besoins Fixes',
+                            percent: 50,
+                            color: 'emerald',
+                            icon: 'home',
+                            categories: ['Logement & Loyer', 'Factures & Énergie', 'Alimentation & Courses']
+                        },
+                        {
+                            id: 'cust_2',
+                            name: 'Vie Quotidienne & Loisirs',
+                            percent: 30,
+                            color: 'amber',
+                            icon: 'coffee',
+                            categories: ['Transport & Carburant', 'Loisirs & Sorties', 'Achats & Shopping']
+                        },
+                        {
+                            id: 'cust_3',
+                            name: 'Épargne & Projets',
+                            percent: 20,
+                            color: 'indigo',
+                            icon: 'wallet',
+                            categories: ['Santé & Soins', 'Autre Dépense']
+                        }
+                    ]
+                }
+            };
+
+            vm.allocation = {
+                activeMethod: '70_20_10',
+                showConfig: false,
+                benchmarkIncomeEUR: 0,
+                rawBenchmarkInput: null,
+                effectiveIncomeEUR: 0,
+                methods: angular.copy(defaultAllocationMethods),
+                results: []
+            };
+
+            vm.loadAllocationConfig = function () {
+                const saved = localStorage.getItem('geo_budget_allocation_v2');
+                if (saved) {
+                    try {
+                        const parsed = JSON.parse(saved);
+                        if (parsed.activeMethod) vm.allocation.activeMethod = parsed.activeMethod;
+                        if (parsed.methods) vm.allocation.methods = parsed.methods;
+                        if (parsed.benchmarkIncomeEUR) {
+                            vm.allocation.benchmarkIncomeEUR = parsed.benchmarkIncomeEUR;
+                            const rate = vm.currencies[vm.selectedCurrency] ? vm.currencies[vm.selectedCurrency].rate : 655.957;
+                            vm.allocation.rawBenchmarkInput = Math.round(parsed.benchmarkIncomeEUR * rate);
+                        }
+                    } catch (e) {
+                        vm.allocation.methods = angular.copy(defaultAllocationMethods);
+                    }
+                }
+            };
+
+            vm.saveAllocationConfig = function () {
+                const payload = {
+                    activeMethod: vm.allocation.activeMethod,
+                    methods: vm.allocation.methods,
+                    benchmarkIncomeEUR: vm.allocation.benchmarkIncomeEUR
+                };
+                localStorage.setItem('geo_budget_allocation_v2', JSON.stringify(payload));
+
+                if (supabaseClient && vm.auth.currentUser) {
+                    supabaseClient.from('budget_allocations').upsert({
+                        user_id: vm.auth.currentUser.id,
+                        active_method: vm.allocation.activeMethod,
+                        benchmark_income_eur: vm.allocation.benchmarkIncomeEUR || 0,
+                        methods_config: vm.allocation.methods,
+                        updated_at: new Date().toISOString()
+                    }, { onConflict: 'user_id' }).then();
+                }
+                vm.recalculate();
+            };
+
+            vm.loadSupabaseAllocation = function () {
+                if (!supabaseClient || !vm.auth.currentUser) return;
+                supabaseClient.from('budget_allocations').select('*').eq('user_id', vm.auth.currentUser.id).maybeSingle().then(({ data, error }) => {
+                    $timeout(() => {
+                        if (!error && data) {
+                            if (data.active_method) vm.allocation.activeMethod = data.active_method;
+                            if (data.methods_config) vm.allocation.methods = data.methods_config;
+                            if (data.benchmark_income_eur !== null && data.benchmark_income_eur !== undefined) {
+                                vm.allocation.benchmarkIncomeEUR = parseFloat(data.benchmark_income_eur) || 0;
+                                const rate = vm.currencies[vm.selectedCurrency] ? vm.currencies[vm.selectedCurrency].rate : 655.957;
+                                vm.allocation.rawBenchmarkInput = vm.allocation.benchmarkIncomeEUR > 0 ? Math.round(vm.allocation.benchmarkIncomeEUR * rate) : null;
+                            }
+                            localStorage.setItem('geo_budget_allocation_v2', JSON.stringify({
+                                activeMethod: vm.allocation.activeMethod,
+                                methods: vm.allocation.methods,
+                                benchmarkIncomeEUR: vm.allocation.benchmarkIncomeEUR
+                            }));
+                            vm.recalculate();
+                        } else {
+                            vm.loadAllocationConfig();
+                        }
+                    });
+                });
+            };
+
+            vm.setAllocationMethod = function (methodKey) {
+                vm.allocation.activeMethod = methodKey;
+                vm.saveAllocationConfig();
+                $timeout(() => lucide.createIcons(), 50);
+            };
+
+            vm.getCurrentPillars = function () {
+                const m = vm.allocation.methods[vm.allocation.activeMethod] || vm.allocation.methods['70_20_10'];
+                return m.pillars || [];
+            };
+
+            vm.getAllocationTotalPercent = function () {
+                const pillars = vm.getCurrentPillars();
+                return pillars.reduce((acc, p) => acc + (parseInt(p.percent, 10) || 0), 0);
+            };
+
+            vm.isCategoryInPillar = function (pillar, category) {
+                return (pillar.categories || []).includes(category);
+            };
+
+            vm.toggleCategoryInPillar = function (pillar, category) {
+                if (!pillar.categories) pillar.categories = [];
+                const idx = pillar.categories.indexOf(category);
+                if (idx > -1) {
+                    pillar.categories.splice(idx, 1);
+                } else {
+                    vm.getCurrentPillars().forEach(otherPillar => {
+                        if (otherPillar.id !== pillar.id && otherPillar.categories) {
+                            otherPillar.categories = otherPillar.categories.filter(c => c !== category);
+                        }
+                    });
+                    pillar.categories.push(category);
+                }
+                vm.saveAllocationConfig();
+            };
+
+            vm.resetAllocationToDefault = function () {
+                if (confirm(vm.currentLang === 'fr' ? 'Rétablir les méthodes de budget par défaut ?' : 'Reset budget allocation methods to defaults?')) {
+                    vm.allocation.methods = angular.copy(defaultAllocationMethods);
+                    vm.saveAllocationConfig();
+                    vm.showToast(vm.currentLang === 'fr' ? 'Règles réinitialisées.' : 'Rules reset to default.');
+                }
+            };
+
+            vm.onBenchmarkIncomeChange = function () {
+                const rate = vm.currencies[vm.selectedCurrency] ? vm.currencies[vm.selectedCurrency].rate : 655.957;
+                const inputVal = parseFloat(vm.allocation.rawBenchmarkInput);
+                if (!isNaN(inputVal) && inputVal > 0) {
+                    vm.allocation.benchmarkIncomeEUR = inputVal / rate;
+                } else {
+                    vm.allocation.benchmarkIncomeEUR = 0;
+                }
+                vm.saveAllocationConfig();
+            };
+
+            vm.calculateAllocation = function (periodIncomeEUR, pCatMap) {
+                const effInc = (periodIncomeEUR > 0) ? periodIncomeEUR : (vm.allocation.benchmarkIncomeEUR || 0);
+                vm.allocation.effectiveIncomeEUR = effInc;
+                const pillars = vm.getCurrentPillars();
+
+                vm.allocation.results = pillars.map(p => {
+                    const allocatedEUR = (effInc * (parseFloat(p.percent) || 0)) / 100;
+                    let spentEUR = 0;
+                    const catExpenses = {};
+
+                    (p.categories || []).forEach(cat => {
+                        const amt = pCatMap[cat] || 0;
+                        catExpenses[cat] = amt;
+                        spentEUR += amt;
+                    });
+
+                    const spentPercent = (allocatedEUR > 0) ? Math.round((spentEUR / allocatedEUR) * 100) : (spentEUR > 0 ? 100 : 0);
+                    const isOverbudget = (spentEUR > allocatedEUR) && (allocatedEUR > 0);
+                    const isWarning = (spentPercent >= 85) && !isOverbudget;
+                    const overAmountEUR = Math.max(0, spentEUR - allocatedEUR);
+                    const overPercent = (allocatedEUR > 0 && spentEUR > allocatedEUR) ? Math.round(((spentEUR - allocatedEUR) / allocatedEUR) * 100) : 0;
+                    const remainingEUR = Math.max(0, allocatedEUR - spentEUR);
+                    const barPercentage = Math.min(100, spentPercent);
+
+                    return {
+                        id: p.id,
+                        name: p.name,
+                        percent: p.percent,
+                        color: p.color || 'emerald',
+                        icon: p.icon || 'shield-check',
+                        categories: p.categories || [],
+                        categoryExpenses: catExpenses,
+                        allocatedEUR: allocatedEUR,
+                        spentEUR: spentEUR,
+                        spentPercent: spentPercent,
+                        isOverbudget: isOverbudget,
+                        isWarning: isWarning,
+                        overAmountEUR: overAmountEUR,
+                        overPercent: overPercent,
+                        remainingEUR: remainingEUR,
+                        barPercentage: barPercentage
+                    };
+                });
+            };
 
             // Toast
             vm.toast = { show: false, message: '', type: 'success' };
@@ -2330,19 +3035,24 @@
                                     vm.loadSupabaseCategories();
                                     vm.loadSupabaseWallets();
                                     vm.loadSupabaseTransactions();
+                                    vm.loadSupabaseGoals();
+                                    vm.loadSupabaseAllocation();
                                 } else {
                                     vm.loadWallets();
                                     vm.loadLocalTransactions();
+                                    vm.loadAllocationConfig();
                                 }
                             });
                         });
                     } else {
                         vm.loadWallets();
                         vm.loadLocalTransactions();
+                        vm.loadAllocationConfig();
                     }
                 } catch (e) {
                     vm.loadWallets();
                     vm.loadLocalTransactions();
+                    vm.loadAllocationConfig();
                 }
             };
 
@@ -2363,6 +3073,7 @@
                 localStorage.setItem('geo_guest_mode', 'true');
                 vm.loadWallets();
                 vm.loadLocalTransactions();
+                vm.loadAllocationConfig();
                 vm.showToast(vm.currentLang === 'fr' ? 'Mode Hors-Ligne (Invité) activé.' : 'Offline Guest Mode activated.');
             };
 
@@ -2393,6 +3104,8 @@
                                     vm.loadSupabaseCategories();
                                     vm.loadSupabaseWallets();
                                     vm.loadSupabaseTransactions();
+                                    vm.loadSupabaseGoals();
+                                    vm.loadSupabaseAllocation();
                                 }
                                 vm.showToast(vm.currentLang === 'fr' ? 'Compte créé avec succès !' : 'Account created successfully!');
                             }
@@ -2416,6 +3129,8 @@
                                     vm.loadSupabaseCategories();
                                     vm.loadSupabaseWallets();
                                     vm.loadSupabaseTransactions();
+                                    vm.loadSupabaseGoals();
+                                    vm.loadSupabaseAllocation();
                                 }
                                 vm.showToast(vm.currentLang === 'fr' ? 'Connexion réussie !' : 'Signed in successfully!');
                             }
@@ -2692,7 +3407,28 @@
                 }
             };
 
-            // Goals
+            // Goals & Synchronisation Supabase
+            vm.loadSupabaseGoals = function () {
+                if (!supabaseClient || !vm.auth.currentUser) return;
+                supabaseClient.from('goals').select('*').order('created_at', { ascending: true }).then(({ data, error }) => {
+                    if (data && !error && data.length > 0) {
+                        $timeout(() => {
+                            vm.goals = data.map(g => ({
+                                id: g.id,
+                                title: g.title,
+                                subtitle: g.subtitle || (vm.currentLang === 'fr' ? 'Objectif d\'épargne' : 'Saving Goal'),
+                                icon: g.icon || '🏖',
+                                currentEUR: parseFloat(g.current_eur) || 0,
+                                targetEUR: parseFloat(g.target_eur) || 0,
+                                daysLeft: g.days_left || 30,
+                                barColor: g.bar_color || 'bg-emerald-500'
+                            }));
+                            localStorage.setItem('geo_salung_goals_v2', JSON.stringify(vm.goals));
+                        });
+                    }
+                });
+            };
+
             vm.openGoalModal = function () {
                 vm.newGoal = { title: '', target: null, current: 0, icon: '🏖', daysLeft: 30 };
                 vm.isGoalModalOpen = true;
@@ -2716,6 +3452,21 @@
 
                 vm.goals.push(goalItem);
                 localStorage.setItem('geo_salung_goals_v2', JSON.stringify(vm.goals));
+
+                if (supabaseClient && vm.auth.currentUser) {
+                    supabaseClient.from('goals').insert([{
+                        id: goalItem.id,
+                        user_id: vm.auth.currentUser.id,
+                        title: goalItem.title,
+                        subtitle: goalItem.subtitle,
+                        icon: goalItem.icon,
+                        current_eur: goalItem.currentEUR,
+                        target_eur: goalItem.targetEUR,
+                        days_left: goalItem.daysLeft,
+                        bar_color: goalItem.barColor
+                    }]).then();
+                }
+
                 vm.isGoalModalOpen = false;
                 vm.showToast(vm.currentLang === 'fr' ? 'Objectif ajouté !' : 'Goal created!');
             };
@@ -2733,6 +3484,13 @@
                         const rate = vm.currencies[vm.selectedCurrency].rate;
                         goal.currentEUR += (addVal / rate);
                         localStorage.setItem('geo_salung_goals_v2', JSON.stringify(vm.goals));
+
+                        if (supabaseClient && vm.auth.currentUser) {
+                            supabaseClient.from('goals').update({
+                                current_eur: goal.currentEUR
+                            }).eq('id', goal.id).then();
+                        }
+
                         vm.showToast(`+${addVal} ${vm.selectedCurrency} !`);
                     }
                 }
@@ -2742,6 +3500,11 @@
                 if (confirm(vm.currentLang === 'fr' ? 'Supprimer cet objectif ?' : 'Delete goal?')) {
                     vm.goals = vm.goals.filter(g => g.id !== id);
                     localStorage.setItem('geo_salung_goals_v2', JSON.stringify(vm.goals));
+
+                    if (supabaseClient && vm.auth.currentUser) {
+                        supabaseClient.from('goals').delete().eq('id', id).then();
+                    }
+
                     vm.showToast(vm.currentLang === 'fr' ? 'Objectif supprimé.' : 'Goal deleted.');
                 }
             };
@@ -2776,9 +3539,9 @@
                         const wName = vm.getWalletName(t.walletId).toLowerCase();
                         const wToName = t.walletToId ? vm.getWalletName(t.walletToId).toLowerCase() : '';
                         return (t.description && t.description.toLowerCase().includes(q)) ||
-                               (t.category && t.category.toLowerCase().includes(q)) ||
-                               wName.includes(q) ||
-                               wToName.includes(q);
+                            (t.category && t.category.toLowerCase().includes(q)) ||
+                            wName.includes(q) ||
+                            wToName.includes(q);
                     }
                     return true;
                 });
@@ -2992,6 +3755,8 @@
                 vm.weekTotalExpense = weekExpTotal;
                 vm.weekTotalIncome = weekIncTotal;
 
+                vm.calculateAllocation(pInc, pCatMap);
+
                 $timeout(() => {
                     vm.renderCharts(pInc, pExp, pCatMap);
                     lucide.createIcons();
@@ -3041,6 +3806,10 @@
 
             vm.onCurrencyChange = function () {
                 localStorage.setItem('geo_curr_salung', vm.selectedCurrency);
+                if (vm.allocation && vm.allocation.benchmarkIncomeEUR > 0) {
+                    const rate = vm.currencies[vm.selectedCurrency] ? vm.currencies[vm.selectedCurrency].rate : 1;
+                    vm.allocation.rawBenchmarkInput = Math.round(vm.allocation.benchmarkIncomeEUR * rate);
+                }
                 vm.recalculate();
             };
 
@@ -3200,8 +3969,8 @@
                                 supabaseClient.from('transactions').insert(rowsToInsert).then();
                             }
 
-                            vm.showToast(vm.currentLang === 'fr' 
-                                ? `✅ ${newTransactions.length} opérations importées avec succès !` 
+                            vm.showToast(vm.currentLang === 'fr'
+                                ? `✅ ${newTransactions.length} opérations importées avec succès !`
                                 : `✅ ${newTransactions.length} transactions imported successfully!`);
                         } else {
                             vm.showToast(vm.currentLang === 'fr' ? 'Aucune opération valide trouvée dans le CSV.' : 'No valid transactions found in CSV.', 'error');
@@ -3230,6 +3999,7 @@
             $timeout(() => {
                 vm.loadWallets();
                 vm.loadCustomCategories();
+                vm.loadAllocationConfig();
                 vm.initSupabase();
                 vm.recalculate();
                 lucide.createIcons();
