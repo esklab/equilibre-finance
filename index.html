@@ -612,29 +612,39 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
 
                 <!-- TOTAL SORTIES / DÉPENSES -->
-                <div class="fintech-card p-5 bg-white">
-                    <div class="flex items-center justify-between mb-2.5">
+                <div class="rounded-2xl p-5 bg-gradient-to-br from-rose-800 via-rose-900 to-rose-950 text-white shadow-lg shadow-rose-950/20 border border-rose-800/60 relative overflow-hidden transition-all hover:shadow-xl hover:border-rose-700">
+                    <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-rose-500/10 rounded-full blur-xl pointer-events-none"></div>
+                    <div class="flex items-center justify-between mb-2.5 relative z-10">
                         <div class="flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">{{fc.t('totalExpenses')}}</span>
+                            <span class="w-6 h-6 rounded-lg bg-white/10 backdrop-blur-xs flex items-center justify-center text-rose-200 border border-white/10">
+                                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                            </span>
+                            <span class="text-xs font-bold text-rose-200 uppercase tracking-wider">{{fc.t('totalExpenses')}}</span>
                         </div>
-                        <span class="text-[11px] font-medium text-slate-400">{{fc.stats.expenseCount}} {{fc.t('txRecorded')}}</span>
+                        <span class="text-[11px] font-semibold text-rose-200 bg-white/10 backdrop-blur-xs px-2.5 py-0.5 rounded-full border border-white/10">
+                            {{fc.stats.expenseCount}} {{fc.t('txRecorded')}}
+                        </span>
                     </div>
-                    <div class="text-2xl font-bold font-mono text-slate-900">
+                    <div class="text-2xl sm:text-3xl font-extrabold font-mono tracking-tight text-white relative z-10">
                         -{{fc.stats.totalExpense | geoFormat:fc.selectedCurrency:fc.currencies}}
                     </div>
                 </div>
 
                 <!-- TOTAL ENTRÉES / REVENUS -->
-                <div class="fintech-card p-5 bg-white">
-                    <div class="flex items-center justify-between mb-2.5">
+                <div class="rounded-2xl p-5 bg-gradient-to-br from-emerald-800 via-emerald-900 to-emerald-950 text-white shadow-lg shadow-emerald-950/20 border border-emerald-800/60 relative overflow-hidden transition-all hover:shadow-xl hover:border-emerald-700">
+                    <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-emerald-500/10 rounded-full blur-xl pointer-events-none"></div>
+                    <div class="flex items-center justify-between mb-2.5 relative z-10">
                         <div class="flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">{{fc.t('totalIncome')}}</span>
+                            <span class="w-6 h-6 rounded-lg bg-white/10 backdrop-blur-xs flex items-center justify-center text-emerald-200 border border-white/10">
+                                <i data-lucide="arrow-down-left" class="w-3.5 h-3.5"></i>
+                            </span>
+                            <span class="text-xs font-bold text-emerald-200 uppercase tracking-wider">{{fc.t('totalIncome')}}</span>
                         </div>
-                        <span class="text-[11px] font-medium text-slate-400">{{fc.stats.incomeCount}} {{fc.t('txRecorded')}}</span>
+                        <span class="text-[11px] font-semibold text-emerald-200 bg-white/10 backdrop-blur-xs px-2.5 py-0.5 rounded-full border border-white/10">
+                            {{fc.stats.incomeCount}} {{fc.t('txRecorded')}}
+                        </span>
                     </div>
-                    <div class="text-2xl font-bold font-mono text-slate-900">
+                    <div class="text-2xl sm:text-3xl font-extrabold font-mono tracking-tight text-white relative z-10">
                         +{{fc.stats.totalIncome | geoFormat:fc.selectedCurrency:fc.currencies}}
                     </div>
                 </div>
